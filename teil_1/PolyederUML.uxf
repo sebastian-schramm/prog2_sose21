@@ -1,32 +1,99 @@
-<diagram program="umletino" version="14.3.0"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>118</x><y>160</y><w>210</w><h>90</h></coordinates><panel_attributes>Class: Polyeder
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>80</x>
+      <y>70</y>
+      <w>340</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>Package::Model
+Class: Polyeder
 --
 - triangleList: ArrayList&lt;Triangle&gt;
+- surface: float
+- volume: float
 --
-+ calcSurface: void
-+ calcVolume: void
-+ getTriangleList: ArrayList&lt;Triangle&gt; 
++ Polyeder(triangleList: ArrayList&lt;Triangle&gt;)
+- calcSurface(): void
+- calcVolume(): void
++ getSurface(): float
++ getVolume(): float
++ getTriangleList(): ArrayList&lt;Triangle&gt; 
 
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>118</x><y>300</y><w>210</w><h>160</h></coordinates><panel_attributes>Class:Triangle
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>100</x>
+      <y>310</y>
+      <w>300</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>Package::Model
+Class:Triangle
 --
-- vertecies: Vertex[]
+- vertices: Vertex[]
 - normale: Vertex
 - area: float
 --
-+ calcEdge(): void
-+ calcArea(): void
-+ getVertecies(): Vertex[]
++ Triangle(vertices: Vertex[])
+- calcEdge(p1: Vertex, p2: Vertex): float
+- calcArea(): void
++ getVertices(): Vertex[]
 + getNormal(): Vertex
 + getArea(): float
 
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>118</x><y>520</y><w>210</w><h>130</h></coordinates><panel_attributes>Class: Vertex
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>100</x>
+      <y>540</y>
+      <w>300</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>Package::Model
+Class: Vertex
 --
 - x: float
 - y: float
 - z: float
 --
++ Vertex(x: float, y: float, z: float)
 + getX(): float
 + getY(): float
 + getZ(): float
 
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>208</x><y>240</y><w>30</w><h>80</h></coordinates><panel_attributes>lt=&lt;-
-</panel_attributes><additional_attributes>10;60;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>208</x><y>450</y><w>30</w><h>90</h></coordinates><panel_attributes>lt=&lt;-</panel_attributes><additional_attributes>10;70;10;10</additional_attributes></element></diagram>
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>240</x>
+      <y>250</y>
+      <w>30</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>240</x>
+      <y>480</y>
+      <w>30</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+</diagram>
