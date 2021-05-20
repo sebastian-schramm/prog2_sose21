@@ -1,0 +1,226 @@
+solid "LochASCII"
+  facet normal 0 1 -0
+    outer loop
+      vertex 70 25 30.0000019073
+      vertex -70 25 30.0000019073
+      vertex 70 -25 30.0000019073
+    endloop
+  endfacet
+  facet normal 0 1 0
+    outer loop
+      vertex 70 -25 30.0000019073
+      vertex -70 25 30.0000019073
+      vertex -70 -25 30.0000019073
+    endloop
+  endfacet
+  facet normal 1 0 0
+    outer loop
+      vertex -70 25 30.0000019073
+      vertex -70 25 170
+      vertex -70 -25 30.0000019073
+    endloop
+  endfacet
+  facet normal 1 -0 0
+    outer loop
+      vertex -70 -25 30.0000019073
+      vertex -70 25 170
+      vertex -70 -25 170
+    endloop
+  endfacet
+  facet normal 0 -1 0
+    outer loop
+      vertex -70 25 170
+      vertex 70 25 170
+      vertex -70 -25 170
+    endloop
+  endfacet
+  facet normal 0 -1 0
+    outer loop
+      vertex -70 -25 170
+      vertex 70 25 170
+      vertex 70 -25 170
+    endloop
+  endfacet
+  facet normal -1 0 0
+    outer loop
+      vertex 70 25 170
+      vertex 70 25 30.0000019073
+      vertex 70 -25 170
+    endloop
+  endfacet
+  facet normal -1 -0 0
+    outer loop
+      vertex 70 -25 170
+      vertex 70 25 30.0000019073
+      vertex 70 -25 30.0000019073
+    endloop
+  endfacet
+  facet normal 0 0 1
+    outer loop
+      vertex 70 -25 170
+      vertex 70 -25 30.0000019073
+      vertex 100 -25 1.53080844662e-15
+    endloop
+  endfacet
+  facet normal 0 0 1
+    outer loop
+      vertex 100 -25 1.53080844662e-15
+      vertex 70 -25 30.0000019073
+      vertex -70 -25 30.0000019073
+    endloop
+  endfacet
+  facet normal 0 0 1
+    outer loop
+      vertex 100 -25 1.53080844662e-15
+      vertex -70 -25 30.0000019073
+      vertex -100 -25 1.53080844662e-15
+    endloop
+  endfacet
+  facet normal 0 0 1
+    outer loop
+      vertex -100 -25 1.53080844662e-15
+      vertex -70 -25 30.0000019073
+      vertex -70 -25 170
+    endloop
+  endfacet
+  facet normal 0 0 1
+    outer loop
+      vertex -100 -25 1.53080844662e-15
+      vertex -70 -25 170
+      vertex -100 -25 200
+    endloop
+  endfacet
+  facet normal 0 0 1
+    outer loop
+      vertex -100 -25 200
+      vertex -70 -25 170
+      vertex 70 -25 170
+    endloop
+  endfacet
+  facet normal -0 0 1
+    outer loop
+      vertex -100 -25 200
+      vertex 70 -25 170
+      vertex 100 -25 200
+    endloop
+  endfacet
+  facet normal 0 0 1
+    outer loop
+      vertex 100 -25 200
+      vertex 70 -25 170
+      vertex 100 -25 1.53080844662e-15
+    endloop
+  endfacet
+  facet normal -1 0 0
+    outer loop
+      vertex -100 25 -1.53080844662e-15
+      vertex -100 -25 1.53080844662e-15
+      vertex -100 25 200
+    endloop
+  endfacet
+  facet normal -1 0 0
+    outer loop
+      vertex -100 25 200
+      vertex -100 -25 1.53080844662e-15
+      vertex -100 -25 200
+    endloop
+  endfacet
+  facet normal 0 -0 -1
+    outer loop
+      vertex -70 25 170
+      vertex -70 25 30.0000019073
+      vertex -100 25 -1.53080844662e-15
+    endloop
+  endfacet
+  facet normal 0 0 -1
+    outer loop
+      vertex -100 25 -1.53080844662e-15
+      vertex -70 25 30.0000019073
+      vertex 70 25 30.0000019073
+    endloop
+  endfacet
+  facet normal 0 0 -1
+    outer loop
+      vertex -100 25 -1.53080844662e-15
+      vertex 70 25 30.0000019073
+      vertex 100 25 -1.53080844662e-15
+    endloop
+  endfacet
+  facet normal 0 0 -1
+    outer loop
+      vertex 100 25 -1.53080844662e-15
+      vertex 70 25 30.0000019073
+      vertex 70 25 170
+    endloop
+  endfacet
+  facet normal 0 0 -1
+    outer loop
+      vertex 100 25 -1.53080844662e-15
+      vertex 70 25 170
+      vertex 100 25 200
+    endloop
+  endfacet
+  facet normal 0 0 -1
+    outer loop
+      vertex 100 25 200
+      vertex 70 25 170
+      vertex -70 25 170
+    endloop
+  endfacet
+  facet normal -0 0 -1
+    outer loop
+      vertex 100 25 200
+      vertex -70 25 170
+      vertex -100 25 200
+    endloop
+  endfacet
+  facet normal 0 0 -1
+    outer loop
+      vertex -100 25 200
+      vertex -70 25 170
+      vertex -100 25 -1.53080844662e-15
+    endloop
+  endfacet
+  facet normal 1 -0 0
+    outer loop
+      vertex 100 -25 1.53080844662e-15
+      vertex 100 25 -1.53080844662e-15
+      vertex 100 -25 200
+    endloop
+  endfacet
+  facet normal 1 0 0
+    outer loop
+      vertex 100 -25 200
+      vertex 100 25 -1.53080844662e-15
+      vertex 100 25 200
+    endloop
+  endfacet
+  facet normal 0 1 -0
+    outer loop
+      vertex 100 25 200
+      vertex -100 25 200
+      vertex 100 -25 200
+    endloop
+  endfacet
+  facet normal 0 1 0
+    outer loop
+      vertex 100 -25 200
+      vertex -100 25 200
+      vertex -100 -25 200
+    endloop
+  endfacet
+  facet normal -0 -1 -0
+    outer loop
+      vertex 100 -25 1.53080844662e-15
+      vertex -100 -25 1.53080844662e-15
+      vertex 100 25 -1.53080844662e-15
+    endloop
+  endfacet
+  facet normal 0 -1 0
+    outer loop
+      vertex 100 25 -1.53080844662e-15
+      vertex -100 -25 1.53080844662e-15
+      vertex -100 25 -1.53080844662e-15
+    endloop
+  endfacet
+endsolid "LochASCII"
