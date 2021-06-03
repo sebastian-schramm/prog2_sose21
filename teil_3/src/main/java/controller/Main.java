@@ -10,6 +10,6 @@ public class Main {
 //        PolyederController.getInstance().init("Fantasy_CastleASCII");
 //        PolyederController.getInstance().init("LochASCII");
 //        PolyederController.getInstance().init("Loch");
-        PolyederController.getInstance().init("PyramideBinary");
+        PolyederController.getInstance().init("PyramideBinary2");
     }
 }
