@@ -1,44 +1,44 @@
-solid "PyramideASCII"
-  facet normal 0 0.447213590145 0.89442718029
+solid ASCII
+  facet normal 0.000000e+00 4.472136e-01 8.944272e-01
     outer loop
-      vertex 0 25 50
-      vertex -25 0 0
-      vertex 25 0 0
+      vertex   0.000000e+00 5.000000e+01 0.000000e+00
+      vertex   -2.500000e+01 0.000000e+00 2.500000e+01
+      vertex   2.500000e+01 0.000000e+00 2.500000e+01
     endloop
   endfacet
-  facet normal 0 0.447213590145 -0.89442718029
+  facet normal 0.000000e+00 4.472136e-01 -8.944272e-01
     outer loop
-      vertex 0 25 50
-      vertex 25 50 -3.06161689323e-15
-      vertex -25 50 -3.06161689323e-15
+      vertex   0.000000e+00 5.000000e+01 0.000000e+00
+      vertex   2.500000e+01 0.000000e+00 -2.500000e+01
+      vertex   -2.500000e+01 0.000000e+00 -2.500000e+01
     endloop
   endfacet
-  facet normal -0.89442718029 0.447213590145 0
+  facet normal -8.944272e-01 4.472136e-01 0.000000e+00
     outer loop
-      vertex -25 0 0
-      vertex 0 25 50
-      vertex -25 50 -3.06161689323e-15
+      vertex   -2.500000e+01 0.000000e+00 2.500000e+01
+      vertex   0.000000e+00 5.000000e+01 0.000000e+00
+      vertex   -2.500000e+01 0.000000e+00 -2.500000e+01
     endloop
   endfacet
-  facet normal 0.89442718029 0.447213590145 0
+  facet normal 8.944272e-01 4.472136e-01 0.000000e+00
     outer loop
-      vertex 0 25 50
-      vertex 25 0 0
-      vertex 25 50 -3.06161689323e-15
+      vertex   0.000000e+00 5.000000e+01 0.000000e+00
+      vertex   2.500000e+01 0.000000e+00 2.500000e+01
+      vertex   2.500000e+01 0.000000e+00 -2.500000e+01
     endloop
   endfacet
-  facet normal 0 -1 0
+  facet normal 0.000000e+00 -1.000000e+00 0.000000e+00
     outer loop
-      vertex -25 50 -3.06161689323e-15
-      vertex 25 50 -3.06161689323e-15
-      vertex -25 0 0
+      vertex   -2.500000e+01 0.000000e+00 -2.500000e+01
+      vertex   2.500000e+01 0.000000e+00 -2.500000e+01
+      vertex   -2.500000e+01 0.000000e+00 2.500000e+01
     endloop
   endfacet
-  facet normal 0 -1 0
+  facet normal 0.000000e+00 -1.000000e+00 0.000000e+00
     outer loop
-      vertex -25 0 0
-      vertex 25 50 -3.06161689323e-15
-      vertex 25 0 0
+      vertex   -2.500000e+01 0.000000e+00 2.500000e+01
+      vertex   2.500000e+01 0.000000e+00 -2.500000e+01
+      vertex   2.500000e+01 0.000000e+00 2.500000e+01
     endloop
   endfacet
-endsolid "PyramideASCII"
+endsolid
