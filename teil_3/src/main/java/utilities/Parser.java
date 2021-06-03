@@ -27,33 +27,20 @@ public class Parser {
             String block = readBlock(firstBlock);
             System.out.println(block);
             if (block.contains("solid"))
-//                readASCIIFile(filePath);
-                readASCIIFile("solid");
+                readASCIIFile(filePath);
+//                readASCIIFile("solid");
             else
                 readBinaryFile(filePath);
-
             ArrayList<Triangle> triangles = TriangleController.getInstance().getTriangleList();
-
-//            for (int i = 0; i < triangles.size(); ++i) {
-//                System.out.print(triangles.get(i).getNormal().getX() + " ");
-//                System.out.print(triangles.get(i).getNormal().getY() + " ");
-//                System.out.print(triangles.get(i).getNormal().getZ() + "\n");
-//                for (int n = 0; n < 3; ++n) {
-//                    System.out.print(triangles.get(i).getVertex(n).getX() + " ");
-//                    System.out.print(triangles.get(i).getVertex(n).getY() + " ");
-//                    System.out.print(triangles.get(i).getVertex(n).getZ() + "\n");
-//                }
-//                System.out.println();
-//            }
-
             System.out.println(StringKonstanten_DE.FILE_LOADING_DONE);
+            return triangles;
         } catch (FileNotFoundException e) {
             System.out.println(StringKonstanten_DE.FILE_LOADING_FAILED);
         } catch (IOException e) {
             System.out.println(StringKonstanten_DE.FILE_LOADING_FAILED);
         }
 
-        return TriangleController.getInstance().getTriangleList();
+        return null;
     }
 
     private static String readBlock(byte[] firstBlock) {
@@ -140,3 +127,14 @@ public class Parser {
         }
     }
 }
+//            for (int i = 0; i < triangles.size(); ++i) {
+//                System.out.print(triangles.get(i).getNormal().getX() + " ");
+//                System.out.print(triangles.get(i).getNormal().getY() + " ");
+//                System.out.print(triangles.get(i).getNormal().getZ() + "\n");
+//                for (int n = 0; n < 3; ++n) {
+//                    System.out.print(triangles.get(i).getVertex(n).getX() + " ");
+//                    System.out.print(triangles.get(i).getVertex(n).getY() + " ");
+//                    System.out.print(triangles.get(i).getVertex(n).getZ() + "\n");
+//                }
+//                System.out.println();
+//            }

@@ -38,10 +38,16 @@ public class TriangleController {
         }
 
         triangles.add(new Triangle(vertices[0], vertices[1], vertices[2], vertices[3]));
+//        System.out.println("Anzahl der Dreiecke: " + getTriangleCount());
     }
 
     public ArrayList<Triangle> getTriangleList() {
         return this.triangles;
+    }
+
+    public int getTriangleCount ()
+    {
+        return  triangles.size();
     }
 
 }

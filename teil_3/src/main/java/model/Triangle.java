@@ -1,6 +1,6 @@
 package model;
 
-public class Triangle {
+public class Triangle implements Comparable<Triangle> {
     private final Vertex normal;
     private final Vertex[] vertices;
     private float area;
@@ -23,13 +23,12 @@ public class Triangle {
         float c = getSide(vertices[0], vertices[1]);
         float p = a + b + c;
         float s = p / 2;
-        area = (float) Math.sqrt(s * (s - a) * (s - b) * (s - c));
+        this.area = (float) Math.sqrt(s * (s - a) * (s - b) * (s - c));
     }
 
     public float getArea() {
-        area = 0f;
 
-        return area;
+        return this.area;
     }
 
     public Vertex getNormal() {
@@ -39,4 +38,12 @@ public class Triangle {
     public Vertex getVertex(int position) {
         return vertices[position];
     }
+
+
+    @Override
+    public int compareTo(Triangle triangle) {
+        return (this.getArea() < (triangle.getArea()) ? -1 : (this.getArea() == triangle.getArea() ? 0:1));
+    }
+
+
 }
