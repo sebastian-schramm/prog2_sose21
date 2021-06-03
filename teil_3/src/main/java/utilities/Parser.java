@@ -1,129 +1,142 @@
 package utilities;
 
-import controller.PolyederController;
 import controller.TriangleController;
 import model.Triangle;
 import model.interfaces.AllgemeineKonstanten;
 import resources.StringKonstanten_DE;
 
 import java.io.*;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.CharBuffer;
+import java.nio.FloatBuffer;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class Parser {
 
-    public static Triangle[] erzeugePolyeder(String dateiName, int flag)
-    {
-        if (flag == 0){
-            return ladeStlAusDatei(dateiName);
-        }
-        else
-        {
-            return readAsciiFile(dateiName);
-        }
-    }
-
-    private static Triangle[] ladeStlAusDatei(String dateiName) {
+    public static ArrayList<Triangle> ladeStlAusDatei(String dateiName) {
         String filePath = AllgemeineKonstanten.DEFAULT_RESOURCES_LOCATION + "" + dateiName + ".stl";
         try (FileInputStream inputStream = new FileInputStream(filePath)){
+            System.out.println(StringKonstanten_DE.FILE_LOADING);
             DataInputStream input = new DataInputStream(inputStream);
 
             boolean isASCII = false;
-
-            byte[] firstBlock = new byte[512];
+            byte[] firstBlock = new byte[128];
             input.read(firstBlock);
-            Charset charset = Charset.forName("UTF-8");
-            CharBuffer decode = charset.decode(ByteBuffer.wrap(firstBlock, 0, 512));
-            String buf = decode.toString().toLowerCase();
-            StringBuffer sb = new StringBuffer();
+            String block = readBlock(firstBlock);
+            System.out.println(block);
+            if (block.contains("solid"))
+//                readASCIIFile(filePath);
+                readASCIIFile("solid");
+            else
+                readBinaryFile(filePath);
 
+            ArrayList<Triangle> triangles = TriangleController.getInstance().getTriangleList();
 
+//            for (int i = 0; i < triangles.size(); ++i) {
+//                System.out.print(triangles.get(i).getNormal().getX() + " ");
+//                System.out.print(triangles.get(i).getNormal().getY() + " ");
+//                System.out.print(triangles.get(i).getNormal().getZ() + "\n");
+//                for (int n = 0; n < 3; ++n) {
+//                    System.out.print(triangles.get(i).getVertex(n).getX() + " ");
+//                    System.out.print(triangles.get(i).getVertex(n).getY() + " ");
+//                    System.out.print(triangles.get(i).getVertex(n).getZ() + "\n");
+//                }
+//                System.out.println();
+//            }
 
-            System.out.println(buf); // Ausgabe
-
-//            byte[] header = new byte[80];
-//            byte[] b4=new byte[4];
-//            byte[] attribute=new byte[2];
-//            byte[] normal = new byte[12];
-//            input.read(header);
-//            System.out.println(header[0]);
-//            int numberTriangles = Integer.reverseBytes(input.readInt());
-//            System.out.println(numberTriangles);
-
-            System.out.println(StringKonstanten_DE.FILE_LOADING);
             System.out.println(StringKonstanten_DE.FILE_LOADING_DONE);
         } catch (FileNotFoundException e) {
-//            e.printStackTrace();
             System.out.println(StringKonstanten_DE.FILE_LOADING_FAILED);
         } catch (IOException e) {
-//            e.printStackTrace();
             System.out.println(StringKonstanten_DE.FILE_LOADING_FAILED);
         }
 
-//        try (FileReader reader = new FileReader(AllgemeineKonstanten.DEFAULT_RESOURCES_LOCATION + "" + dateiName + ".stl");
-//            BufferedReader bufferedReader = new BufferedReader((reader))) {
-//            String line;
-//            while ((line = bufferedReader.readLine()) != null) {
-//                System.out.println("Line: " + line);
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
-        return null;
+        return TriangleController.getInstance().getTriangleList();
     }
 
-    private static Triangle[] readAsciiFile(String dateiName)
-    {
-        String filePath = AllgemeineKonstanten.DEFAULT_RESOURCES_LOCATION + "" + dateiName + ".stl";
-        String word;
-        File file = new File(filePath);
-        ArrayList <String> relevantData = new ArrayList();
-        String vertex = AllgemeineKonstanten.VERTEX;
-        String facetNormal = AllgemeineKonstanten.FACET_NORMAL;
-        int count = 0;
-        if (file.canRead() && file.isFile())
-        {
-            try {
-                BufferedReader input = new BufferedReader(new FileReader(file));
-                while ((word = input.readLine()) != null)
-                {
-                    word = word.stripLeading();
-                    if (word.contains(vertex) || word.contains(facetNormal))
-                    {
-                        if (count < 4)
-                        {
-                            count += 1;
-                            relevantData.add(word);
-                        }
-                        else
-                        {
-                            TriangleController.getInstance().constructTriangle(relevantData);
-                            relevantData.clear();
-                            relevantData.add(word);
-                            count = 1;
-                        }
-                    }
+    private static String readBlock(byte[] firstBlock) {
+        Charset charset = Charset.forName("UTF-8");
+        CharBuffer decode = charset.decode(ByteBuffer.wrap(firstBlock, 0, 128));
+        return decode.toString().toLowerCase();
+    }
+
+    private static boolean isValidASCII(String filePath) throws IOException {
+        try (FileReader reader = new FileReader(filePath);
+            BufferedReader bufferedReader = new BufferedReader((reader))) {
+            String line;
+            int lineCounter = 0;
+            while ((line = bufferedReader.readLine()) != null) {
+                ++lineCounter;
+            }
+            bufferedReader.lines();
+        System.out.println(bufferedReader.lines());
+        }
+        return false;
+    }
+
+    private static void readBinaryFile(String filePath) throws IOException {
+        FileInputStream inputStream = new FileInputStream(filePath);
+        DataInputStream input = new DataInputStream(inputStream);
+        System.out.println("Start reading Binary!");
+
+        byte[] header = new byte[80];
+        byte[] b4=new byte[4];
+        byte[] attribute=new byte[2];
+        byte[] normal = new byte[12];
+
+        input.read(header);
+
+//        int triangleNumber = Integer.reverseBytes(input.readInt());
+//        System.out.println("Dreiecke gefunden: " + triangleNumber);
+        input.read(b4);
+        int temp = ByteBuffer.wrap(b4).order(ByteOrder.LITTLE_ENDIAN).getInt();
+        System.out.println("Dreiecke gefunden: " + temp);
+        float temp2;
+
+        String[] relevantData = new String[4];
+
+        while (input.available() > 0) {
+
+
+            for (int i = 0; i < 4; ++i) {
+                for (int n = 0; n < 3; ++n) {
+                    input.read(b4);
+                    temp2 = ByteBuffer.wrap(b4).order(ByteOrder.LITTLE_ENDIAN).getFloat();
+                    System.out.print(temp2 + " ");
                 }
-                input.close();
-                TriangleController.getInstance().constructTriangle(relevantData);
-            } catch (IOException e)
-            {
-                System.err.println(e.getMessage());
+                System.out.println();
+            }
+            System.out.println();
+
+            input.read(attribute);
+        }
+    }
+
+    private static Float binaryToStringPoint(byte[] bytes) throws IOException {
+        ByteBuffer bb = ByteBuffer.wrap(bytes);
+        bb.order(ByteOrder.LITTLE_ENDIAN);
+
+        return bb.getFloat();
+    }
+
+    private static void readASCIIFile(String filePath) throws IOException {
+        try (FileReader reader = new FileReader(filePath);
+             BufferedReader bufferedReader = new BufferedReader((reader))) {
+            String line;
+            String[] relevantData = new String[4];
+
+            int counter = 0;
+            while ((line = bufferedReader.readLine()) != null) {
+                if (line.contains(AllgemeineKonstanten.FACET_NORMAL) || line.contains(AllgemeineKonstanten.VERTEX)) {
+                    relevantData[counter++] = line;
+                }
+                if (counter >= 4) {
+                    TriangleController.getInstance().constructTriangle(relevantData);
+                    counter = 0;
+                }
             }
         }
-        else
-        {
-            System.err.println("Die Datei ist nicht korrekt angeben");
-            System.exit(0);
-        }
-        return null;
     }
 }

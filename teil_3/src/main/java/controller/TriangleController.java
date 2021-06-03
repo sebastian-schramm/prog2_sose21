@@ -2,6 +2,7 @@ package controller;
 
 import model.Triangle;
 import model.Vertex;
+import model.interfaces.AllgemeineKonstanten;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.List;
 
 public class TriangleController {
     private Triangle triangle = null;
+    private ArrayList<Triangle> triangles = new ArrayList<>();
 
     public void init(String dateiName) {
 
@@ -28,43 +30,18 @@ public class TriangleController {
     }
 
     //Interpretiere Daten
-    public void constructTriangle(ArrayList<String> relevantData)
-    {
-        int count = 0;
-
-        for (String s:relevantData)
-        {
-            if (count == 0)
-            {
-                int i = 0;
-                String numberOnly = s.replaceAll("[^-?0-9]+", " ");
-                List<String> test = Arrays.asList(numberOnly.trim().split(" "));
-                Float.parseFloat(s);
-                System.out.println(test);
-                float x = Float.parseFloat(test.get(i));
-                float y = Float.parseFloat(test.get(i+1));
-                float z = Float.parseFloat(test.get(i+2));
-                Vertex normal = new Vertex(x,y,z);
-                count += 1;
-                continue;
-            }
-            if (count == 1)
-            {
-                System.out.println("baum");
-                String numberOnly = s.replaceAll("[^-?0-9.]+", " ");
-                List<String> test = Arrays.asList(numberOnly.trim().split(" "));
-                System.out.println(test);
-            }
-
+    public void constructTriangle(String[] relevantData) {
+        Vertex[] vertices = new Vertex[4];
+        for (int i = 0; i < relevantData.length; ++i) {
+            String coord[] = relevantData[i].replaceAll(AllgemeineKonstanten.FACET_NORMAL, "").replaceAll(AllgemeineKonstanten.VERTEX, "").stripLeading().split(" ");
+            vertices[i] = new Vertex(Float.parseFloat(coord[0]), Float.parseFloat(coord[1]), Float.parseFloat(coord[2]));
         }
 
-        for (String s:relevantData)
-        {
-            System.out.println(s);
-        }
-        System.out.println("----------------------------");
-
+        triangles.add(new Triangle(vertices[0], vertices[1], vertices[2], vertices[3]));
     }
 
+    public ArrayList<Triangle> getTriangleList() {
+        return this.triangles;
+    }
 
 }

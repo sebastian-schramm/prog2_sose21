@@ -3,9 +3,9 @@ package model;
 import java.util.ArrayList;
 
 public class Polyeder {
-    ArrayList<Triangle> triangleList;
+    private ArrayList<Triangle> triangleList;
 
-    public Polyeder(Triangle[] triangles) {
-        triangleList = new ArrayList<>();
+    public Polyeder(ArrayList<Triangle> triangleList) {
+        this.triangleList = triangleList;
     }
 }

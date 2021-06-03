@@ -10,7 +10,7 @@ public class PolyederController {
     private Polyeder polyeder = null;
 
     public void init(String dateiName) {
-        this.polyeder = new Polyeder(Parser.erzeugePolyeder(dateiName));
+        this.polyeder = new Polyeder(Parser.ladeStlAusDatei(dateiName));
     }
 
     private PolyederController() {

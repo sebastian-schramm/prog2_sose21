@@ -1,0 +1,44 @@
+solid "PyramideASCII"
+  facet normal 0 0.447213590145 0.89442718029
+    outer loop
+      vertex 0 25 50
+      vertex -25 0 0
+      vertex 25 0 0
+    endloop
+  endfacet
+  facet normal 0 0.447213590145 -0.89442718029
+    outer loop
+      vertex 0 25 50
+      vertex 25 50 -3.06161689323e-15
+      vertex -25 50 -3.06161689323e-15
+    endloop
+  endfacet
+  facet normal -0.89442718029 0.447213590145 0
+    outer loop
+      vertex -25 0 0
+      vertex 0 25 50
+      vertex -25 50 -3.06161689323e-15
+    endloop
+  endfacet
+  facet normal 0.89442718029 0.447213590145 0
+    outer loop
+      vertex 0 25 50
+      vertex 25 0 0
+      vertex 25 50 -3.06161689323e-15
+    endloop
+  endfacet
+  facet normal 0 -1 0
+    outer loop
+      vertex -25 50 -3.06161689323e-15
+      vertex 25 50 -3.06161689323e-15
+      vertex -25 0 0
+    endloop
+  endfacet
+  facet normal 0 -1 0
+    outer loop
+      vertex -25 0 0
+      vertex 25 50 -3.06161689323e-15
+      vertex 25 0 0
+    endloop
+  endfacet
+endsolid "PyramideASCII"
