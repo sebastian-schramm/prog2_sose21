@@ -4,43 +4,50 @@ import controller.TriangleController;
 import model.Triangle;
 import model.interfaces.AllgemeineKonstanten;
 import resources.StringKonstanten_DE;
+import view.Ausgabe;
 
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.CharBuffer;
-import java.nio.FloatBuffer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class Parser {
 
     public static ArrayList<Triangle> ladeStlAusDatei(String dateiName) {
         String filePath = AllgemeineKonstanten.DEFAULT_RESOURCES_LOCATION + "" + dateiName + ".stl";
+
         try (FileInputStream inputStream = new FileInputStream(filePath)){
-            System.out.println(StringKonstanten_DE.FILE_LOADING);
+            Ausgabe.loadingFile();
             DataInputStream input = new DataInputStream(inputStream);
 
             boolean isASCII = false;
             byte[] firstBlock = new byte[128];
             input.read(firstBlock);
             String block = readBlock(firstBlock);
-            System.out.println(block);
-            if (block.contains("solid"))
+
+            if (block.contains(AllgemeineKonstanten.SOLID))
                 readASCIIFile(filePath);
-//                readASCIIFile("solid");
             else
                 readBinaryFile(filePath);
+
             ArrayList<Triangle> triangles = TriangleController.getInstance().getTriangleList();
-            System.out.println(StringKonstanten_DE.FILE_LOADING_DONE);
+
+            Ausgabe.loadingFileComplete();
+            Ausgabe.trianglesFound(triangles.size());
+
             return triangles;
         } catch (FileNotFoundException e) {
-            System.out.println(StringKonstanten_DE.FILE_LOADING_FAILED);
+            Ausgabe.loadingFileFailed();
         } catch (IOException e) {
-            System.out.println(StringKonstanten_DE.FILE_LOADING_FAILED);
+            Ausgabe.loadingFileFailed();
         }
 
-        return null;
+        return TriangleController.getInstance().getTriangleList();
     }
 
     private static String readBlock(byte[] firstBlock) {
@@ -49,6 +56,7 @@ public class Parser {
         return decode.toString().toLowerCase();
     }
 
+    //TODO
     private static boolean isValidASCII(String filePath) throws IOException {
         try (FileReader reader = new FileReader(filePath);
             BufferedReader bufferedReader = new BufferedReader((reader))) {
@@ -58,7 +66,7 @@ public class Parser {
                 ++lineCounter;
             }
             bufferedReader.lines();
-        System.out.println(bufferedReader.lines());
+            System.out.println(bufferedReader.lines());
         }
         return false;
     }
@@ -66,7 +74,7 @@ public class Parser {
     private static void readBinaryFile(String filePath) throws IOException {
         FileInputStream inputStream = new FileInputStream(filePath);
         DataInputStream input = new DataInputStream(inputStream);
-        System.out.println("Start reading Binary!");
+        Ausgabe.foundBinaryFile();
 
         byte[] header = new byte[80];
         byte[] b4=new byte[4];
@@ -85,35 +93,28 @@ public class Parser {
         String[] relevantData = new String[4];
 
         while (input.available() > 0) {
-
-
             for (int i = 0; i < 4; ++i) {
                 for (int n = 0; n < 3; ++n) {
                     input.read(b4);
                     temp2 = ByteBuffer.wrap(b4).order(ByteOrder.LITTLE_ENDIAN).getFloat();
-                    System.out.print(temp2 + " ");
+//                    System.out.print(temp2 + " ");
                 }
-                System.out.println();
+//                System.out.println();
             }
-            System.out.println();
+//            System.out.println();
 
             input.read(attribute);
         }
     }
 
-    private static Float binaryToStringPoint(byte[] bytes) throws IOException {
-        ByteBuffer bb = ByteBuffer.wrap(bytes);
-        bb.order(ByteOrder.LITTLE_ENDIAN);
-
-        return bb.getFloat();
-    }
-
     private static void readASCIIFile(String filePath) throws IOException {
         try (FileReader reader = new FileReader(filePath);
-             BufferedReader bufferedReader = new BufferedReader((reader))) {
+            BufferedReader bufferedReader = new BufferedReader((reader))) {
+            Ausgabe.foundASCIIFile();
+
             String line;
             String[] relevantData = new String[4];
-
+            
             int counter = 0;
             while ((line = bufferedReader.readLine()) != null) {
                 if (line.contains(AllgemeineKonstanten.FACET_NORMAL) || line.contains(AllgemeineKonstanten.VERTEX)) {
@@ -125,6 +126,18 @@ public class Parser {
                 }
             }
         }
+    }
+
+    private static int getTrianglesNumber(String filePath) throws IOException {
+        int counter = 0;
+        try (FileReader reader = new FileReader(filePath);
+             BufferedReader bufferedReader = new BufferedReader((reader))) {
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                ++counter;
+            }
+        }
+        return counter/7;
     }
 }
 //            for (int i = 0; i < triangles.size(); ++i) {

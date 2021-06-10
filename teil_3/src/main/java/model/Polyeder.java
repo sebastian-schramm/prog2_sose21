@@ -4,6 +4,8 @@ import model.interfaces.AllgemeineKonstanten;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.*;
 
 public class Polyeder extends Thread {
     private ArrayList<Triangle> triangleList;
@@ -43,52 +45,33 @@ public class Polyeder extends Thread {
         {
             triangle.calcArea();
         }
-        //sortTriangles();
+//        sortTriangles();
         calcSurface();
         return this.surface;
 
     }
-
-
-
-    public float getSurfaceThreads()
-    {
-        int threadAmount = AllgemeineKonstanten.THREAD_AMOUNT;
-        int[] range = new int[threadAmount + 1];
+    public float getSurfaceThreads() {
+        ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(AllgemeineKonstanten.THREAD_AMOUNT);
+        int[] range = new int[AllgemeineKonstanten.THREAD_AMOUNT + 1];
         for (int i = 1; i < range.length - 1; ++i) {
-            range[i] = range[i - 1] + triangleList.size() / threadAmount;
+            range[i] = range[i - 1] + triangleList.size() / AllgemeineKonstanten.THREAD_AMOUNT;
         }
         range[range.length - 1] = triangleList.size();
 
-
-        Thread[] threads = new Thread[threadAmount];;
-
-        for (int i = 0; i < threads.length; i++) {
+        for (int i = 0; i < AllgemeineKonstanten.THREAD_AMOUNT; ++i) {
             int start = range[i];
             int end = range[i + 1];
-            int tmp = i;
-            threads[i] = new Thread()
-            {
-                public void run()
-                {
-                    for (int j = start; j < end; j++) {
-                        triangleList.get(j).calcArea();
-                    }
-                    System.out.println("Thread Nummer: " + tmp + " beendet");
-                    //TODO: lese den scheiß -> https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/CountDownLatch.html
+            executor.submit(() -> {
+                //TODO: lese den scheiß -> https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/CountDownLatch.html
+                for (int j = start; j < end; j++) {
+                    triangleList.get(j).calcArea();
                 }
-            };
-            threads[i].start();
+                return null;
+            });
         }
+        executor.shutdown();
 
-        /*for (Thread thread : threads) {
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }*/
-        //sortTriangles();
+//        sortTriangles();
         calcSurface();
         return this.surface;
     }
