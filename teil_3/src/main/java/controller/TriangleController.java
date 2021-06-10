@@ -37,7 +37,8 @@ public class TriangleController {
             vertices[i] = new Vertex(Float.parseFloat(coord[0]), Float.parseFloat(coord[1]), Float.parseFloat(coord[2]));
         }
 
-        triangles.add(new Triangle(vertices[0], vertices[1], vertices[2], vertices[3]));
+//        for (int i = 0; i < 1; ++i)
+            triangles.add(new Triangle(vertices[0], vertices[1], vertices[2], vertices[3]));
 //        System.out.println("Anzahl der Dreiecke: " + getTriangleCount());
     }
 

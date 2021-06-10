@@ -10,13 +10,11 @@ public class PolyederController {
     private Polyeder polyeder = null;
 
     public void init(String dateiName) {
-        long time;
-        time = System.currentTimeMillis();
+        long time = System.currentTimeMillis();
         this.polyeder = new Polyeder(Parser.ladeStlAusDatei(dateiName));
+        System.out.println("Dauer des einlesens : " + (System.currentTimeMillis()-time));
 
-        System.out.println(time);
         time = System.currentTimeMillis();
-
         System.out.println(this.polyeder.getSurfaceSerial());
         System.out.println(System.currentTimeMillis()-time);
         time = System.currentTimeMillis();
