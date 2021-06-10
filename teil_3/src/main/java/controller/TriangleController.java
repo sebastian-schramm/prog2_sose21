@@ -34,10 +34,11 @@ public class TriangleController {
         Vertex[] vertices = new Vertex[4];
         for (int i = 0; i < relevantData.length; ++i) {
             String coord[] = relevantData[i].replaceAll(AllgemeineKonstanten.FACET_NORMAL, "").replaceAll(AllgemeineKonstanten.VERTEX, "").stripLeading().split(" ");
-            vertices[i] = new Vertex(Float.parseFloat(coord[0]), Float.parseFloat(coord[1]), Float.parseFloat(coord[2]));
+//            vertices[i] = new Vertex(Float.parseFloat(coord[0]), Float.parseFloat(coord[1]), Float.parseFloat(coord[2]));
+            vertices[i] = new Vertex(Double.parseDouble(coord[0]), Double.parseDouble(coord[1]), Double.parseDouble(coord[2]));
         }
 
-//        for (int i = 0; i < 1; ++i)
+//        for (int i = 0; i < 120; ++i)
             triangles.add(new Triangle(vertices[0], vertices[1], vertices[2], vertices[3]));
 //        System.out.println("Anzahl der Dreiecke: " + getTriangleCount());
     }

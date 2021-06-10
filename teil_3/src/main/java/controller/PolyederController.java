@@ -15,32 +15,32 @@ public class PolyederController {
         System.out.println("Dauer des einlesens : " + (System.currentTimeMillis()-time));
 
         time = System.currentTimeMillis();
-        System.out.println(this.polyeder.getSurfaceSerial());
-        System.out.println(System.currentTimeMillis()-time);
-        time = System.currentTimeMillis();
-        System.out.println(this.polyeder.getSurfaceSerial());
-        System.out.println(System.currentTimeMillis()-time);
-        time = System.currentTimeMillis();
-        System.out.println(this.polyeder.getSurfaceSerial());
-        System.out.println(System.currentTimeMillis()-time);
-        time = System.currentTimeMillis();
-        System.out.println(this.polyeder.getSurfaceSerial());
-        System.out.println(System.currentTimeMillis()-time);
+        System.out.println(this.polyeder.getSurfaceThreads());
+        System.out.println("Time Serial " + (System.currentTimeMillis()-time));
+//        time = System.currentTimeMillis();
+//        System.out.println(this.polyeder.getSurfaceThreads());
+//        System.out.println("Time Serial " + (System.currentTimeMillis()-time));
+//        time = System.currentTimeMillis();
+//        System.out.println(this.polyeder.getSurfaceThreads());
+//        System.out.println("Time Serial " + (System.currentTimeMillis()-time));
+//        time = System.currentTimeMillis();
+//        System.out.println(this.polyeder.getSurfaceThreads());
+//        System.out.println("Time Serial " + (System.currentTimeMillis()-time));
 
         System.out.println("-----------------------------------------");
-        time = System.currentTimeMillis();
-        System.out.println(this.polyeder.getSurfaceThreads());
-        System.out.println(System.currentTimeMillis()-time);
-        time = System.currentTimeMillis();
-        System.out.println(this.polyeder.getSurfaceThreads());
-        System.out.println(System.currentTimeMillis()-time);
-        time = System.currentTimeMillis();
-        System.out.println(this.polyeder.getSurfaceThreads());
-        System.out.println(System.currentTimeMillis()-time);
-        time = System.currentTimeMillis();
-        System.out.println(this.polyeder.getSurfaceThreads());
-        System.out.println(System.currentTimeMillis()-time);
 
+        time = System.currentTimeMillis();
+        System.out.println(this.polyeder.getSurfaceSerial());
+        System.out.println("Time Serial " + (System.currentTimeMillis()-time));
+//        time = System.currentTimeMillis();
+//        System.out.println(this.polyeder.getSurfaceSerial());
+//        System.out.println("Time Serial " + (System.currentTimeMillis()-time));
+//        time = System.currentTimeMillis();
+//        System.out.println(this.polyeder.getSurfaceSerial());
+//        System.out.println("Time Serial " + (System.currentTimeMillis()-time));
+//        time = System.currentTimeMillis();
+//        System.out.println(this.polyeder.getSurfaceSerial());
+//        System.out.println("Time Serial " + (System.currentTimeMillis()-time));
     }
 
     private PolyederController() {

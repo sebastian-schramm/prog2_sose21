@@ -114,7 +114,7 @@ public class Parser {
 
             String line;
             String[] relevantData = new String[4];
-            
+
             int counter = 0;
             while ((line = bufferedReader.readLine()) != null) {
                 if (line.contains(AllgemeineKonstanten.FACET_NORMAL) || line.contains(AllgemeineKonstanten.VERTEX)) {

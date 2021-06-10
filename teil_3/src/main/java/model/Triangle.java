@@ -3,7 +3,7 @@ package model;
 public class Triangle implements Comparable<Triangle> {
     private final Vertex normal;
     private final Vertex[] vertices;
-    private float area;
+    private double area;
 
     public Triangle(Vertex normal, Vertex v1, Vertex v2, Vertex v3) {
         this.normal = normal;
@@ -28,7 +28,7 @@ public class Triangle implements Comparable<Triangle> {
 
     public float getArea() {
 
-        return this.area;
+        return (float) this.area;
     }
 
     public Vertex getNormal() {
@@ -38,7 +38,6 @@ public class Triangle implements Comparable<Triangle> {
     public Vertex getVertex(int position) {
         return vertices[position];
     }
-
 
     @Override
     public int compareTo(Triangle triangle) {
