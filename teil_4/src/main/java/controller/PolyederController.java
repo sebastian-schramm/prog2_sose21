@@ -9,12 +9,12 @@ public class PolyederController {
 
     public void init(String dateiName) {
         long time = System.currentTimeMillis();
-        TriangleController.getInstance().init();
         this.polyeder = new Polyeder(Parser.ladeStlAusDatei(dateiName));
         System.out.println("Dauer des einlesens : " + (System.currentTimeMillis()-time));
 
         time = System.currentTimeMillis();
-        System.out.println(this.polyeder.getSurfaceThreads());
+        System.out.println("Umfang : " + this.polyeder.getSurfaceThreads());
+        System.out.println("Fläche : " + this.polyeder.getVolume());
         System.out.println("Time Parallel " + (System.currentTimeMillis()-time));
 
         System.out.println("-----------------------------------------");

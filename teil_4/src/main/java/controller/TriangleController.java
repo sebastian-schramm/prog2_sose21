@@ -11,8 +11,8 @@ public class TriangleController {
     private ArrayList<Triangle> triangles = null;
     private Vertex[] vertices;
 
-    public void init() {
-        triangles = new ArrayList<>();
+    public void initTriangle(int triangleNumber) {
+        triangles = new ArrayList<>(triangleNumber);
         vertices = new Vertex[AllgemeineKonstanten.TRIANGLE_VERTICES];
     }
 

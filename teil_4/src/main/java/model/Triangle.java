@@ -4,6 +4,7 @@ public class Triangle implements Comparable<Triangle> {
     private final Vertex normal;
     private final Vertex[] vertices;
     private double area;
+    private double volume;
 
     public Triangle(Vertex normal, Vertex v1, Vertex v2, Vertex v3) {
         this.normal = normal;
@@ -26,9 +27,22 @@ public class Triangle implements Comparable<Triangle> {
         float s = p / 2;
         this.area = (float) Math.sqrt(s * (s - a) * (s - b) * (s - c));
     }
+    public void calcVolume() {
+        var v321 = vertices[2].getX()*vertices[1].getY()*vertices[0].getZ();
+        var v231 = vertices[1].getX()*vertices[2].getY()*vertices[0].getZ();
+        var v312 = vertices[2].getX()*vertices[0].getY()*vertices[1].getZ();
+        var v132 = vertices[0].getX()*vertices[2].getY()*vertices[1].getZ();
+        var v213 = vertices[1].getX()*vertices[0].getY()*vertices[2].getZ();
+        var v123 = vertices[0].getX()*vertices[1].getY()*vertices[2].getZ();
+        this.volume = (1.0f/6.0f)*(-v321 + v231 + v312 - v132 - v213 + v123);
+    }
 
     public float getArea() {
         return (float) this.area;
+    }
+
+    public float getVolume() {
+        return (float) this.volume;
     }
 
     public Vertex getNormal() {
@@ -43,6 +57,4 @@ public class Triangle implements Comparable<Triangle> {
     public int compareTo(Triangle triangle) {
         return (this.getArea() < (triangle.getArea()) ? -1 : (this.getArea() == triangle.getArea() ? 0:1));
     }
-
-
 }

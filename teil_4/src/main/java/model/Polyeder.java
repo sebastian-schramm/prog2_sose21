@@ -8,7 +8,9 @@ import java.util.concurrent.*;
 
 public class Polyeder extends Thread {
     private ArrayList<Triangle> triangleList;
+
     private double surface = 0.0;
+    private double volume = 0.0;
 
     public Polyeder(ArrayList<Triangle> triangleList) {
         this.triangleList = triangleList;
@@ -17,8 +19,14 @@ public class Polyeder extends Thread {
     private void calcSurface () {
         this.surface = 0;
         for (Triangle triangle : triangleList) {
-            double tmp = triangle.getArea();
-            this.surface += tmp;
+            this.surface += triangle.getArea();
+        }
+    }
+
+    private void calcVolume() {
+        this.volume = 0;
+        for (Triangle triangle : triangleList) {
+            this.volume = triangle.getVolume();
         }
     }
 
@@ -60,6 +68,7 @@ public class Polyeder extends Thread {
                 //TODO: lese den scheiß -> https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/CountDownLatch.html
                 for (int j = start; j < end; j++) {
                     triangleList.get(j).calcArea();
+                    triangleList.get(j).calcVolume();
                 }
                 countDownLatch.countDown();
                 return null;
@@ -74,8 +83,15 @@ public class Polyeder extends Thread {
 
         sortTriangles();
         calcSurface();
+        calcVolume();
         return this.surface;
     }
 
+    public double getSurface() {
+        return surface;
+    }
 
+    public double getVolume() {
+        return volume;
+    }
 }

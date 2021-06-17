@@ -22,7 +22,7 @@ public class Parser {
     private static String[] coords;
     private static int[] index;
     private static int counter;
-    private static long triangleNumber;
+    private static int triangleNumber;
 
     /**
      * Liest eine Datei aus und überprüft ob es sich dabei um ein ASCII oder Binary Format handelt
@@ -56,11 +56,12 @@ public class Parser {
                     System.out.println("Startet nicht mit facet");
 
                 long lineCount = getLineCount(filePath);
-                triangleNumber = ((lineCount - 2 ) / 7);
+                triangleNumber = (int) ((lineCount - 2 ) / 7);
 
                 if ((triangleNumber * 7 + 2) != lineCount)
                     throw new Exception(StringKonstanten_DE.FILE_LINE_COUNT_NOT_VALID);
 
+                TriangleController.getInstance().initTriangle(triangleNumber);
                 readASCIIFile(filePath);
             } else {
                 System.out.println("Kein Solid am anfang gefunden, könnte Binary sein!");
@@ -69,6 +70,7 @@ public class Parser {
                 if (!(fileSize == (triangleNumber * 50 + 84)))
                     throw new Exception(StringKonstanten_DE.FILE_LINE_COUNT_NOT_VALID);
 
+                TriangleController.getInstance().initTriangle(triangleNumber);
                 readBinaryFile(filePath);
             }
 
