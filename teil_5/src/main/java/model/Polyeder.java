@@ -1,5 +1,6 @@
 package model;
 
+import javafx.scene.shape.TriangleMesh;
 import model.interfaces.AllgemeineKonstanten;
 
 import java.util.ArrayList;
@@ -50,7 +51,10 @@ public class Polyeder extends Thread {
         return this.surface;
 
     }
-    public double getSurfaceThreads() {
+
+    private double getSurfaceThreads() {
+//        triangleList.parallelStream().forEach(Triangle::calcArea);
+
         CountDownLatch countDownLatch = new CountDownLatch(AllgemeineKonstanten.THREAD_AMOUNT);
         ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(AllgemeineKonstanten.THREAD_AMOUNT);
 
@@ -68,7 +72,6 @@ public class Polyeder extends Thread {
                 //TODO: lese den scheiß -> https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/CountDownLatch.html
                 for (int j = start; j < end; j++) {
                     triangleList.get(j).calcArea();
-                    triangleList.get(j).calcVolume();
                 }
                 countDownLatch.countDown();
                 return null;
@@ -82,16 +85,72 @@ public class Polyeder extends Thread {
         }
 
         sortTriangles();
-        calcSurface();
-        calcVolume();
         return this.surface;
     }
 
-    public double getSurface() {
-        return surface;
+    public double getSurface(boolean threading) {
+        if (this.surface == 0) {
+            if (threading)
+                getSurfaceThreads();
+            else
+                getSurfaceSerial();
+            calcSurface();
+        }
+        return this.surface;
     }
 
     public double getVolume() {
-        return volume;
+        if (this.volume == 0)
+            calcVolume();
+        return this.volume;
+    }
+
+    public float[] getPoints(TriangleMesh mesh) {
+        float[] points = new float[triangleList.size() * 3 * 3];
+
+        for (int i = 0; i < triangleList.size(); ++i) {
+            for (int n = 0; n < 3; ++n) {
+                points[i * 9 + n * 3] = triangleList.get(i).getVertex(n).getX()/6;
+                points[i * 9 + n * 3 + 1] = triangleList.get(i).getVertex(n).getY()/6;
+                points[i * 9 + n * 3 + 2] = triangleList.get(i).getVertex(n).getZ()/6;
+            }
+        }
+
+        return points;
+    }
+
+    public TriangleMesh getMesh(){
+        TriangleMesh mesh = new TriangleMesh();
+
+        int faceCnt = 0;
+        for(int x = 0; x < triangleList.size(); x++){
+            for(int y = 0; y < 3; y++) {
+                mesh.getTexCoords().addAll(((triangleList.get(x).getNormal().getX() + 1) / -2));
+                mesh.getTexCoords().addAll(((triangleList.get(x).getNormal().getY() + 1) / -2));
+                mesh.getTexCoords().addAll(((triangleList.get(x).getNormal().getZ() + 1) / -2));
+            }
+
+            for(int y = 0; y < 3; y++) {
+                mesh.getPoints().addAll((triangleList.get(x).getVertex(y).getX()));
+                mesh.getPoints().addAll((triangleList.get(x).getVertex(y).getY()));
+                mesh.getPoints().addAll((triangleList.get(x).getVertex(y).getZ()));
+            }
+
+            mesh.getFaces().addAll(faceCnt, faceCnt, faceCnt + 1, faceCnt + 1, faceCnt + 2, faceCnt + 2);
+            faceCnt += 3;
+        }
+        return mesh;
+    }
+
+    public int[] getFaces() {
+        int[] faces = new int[triangleList.size() * 3];
+
+        for (int i = 0; i < triangleList.size(); ++i) {
+            faces[i * 3] = (int) triangleList.get(i).getNormal().getX();
+            faces[i * 3 + 1] = (int) triangleList.get(i).getNormal().getY();
+            faces[i * 3 + 2] = (int) triangleList.get(i).getNormal().getZ();
+        }
+
+        return faces;
     }
 }

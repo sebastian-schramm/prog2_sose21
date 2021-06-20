@@ -73,6 +73,7 @@ public class Parser {
                 TriangleController.getInstance().initTriangle(triangleNumber);
                 readBinaryFile(filePath);
             }
+            System.out.println(triangleNumber + " Dreiecke gefunden");
 
             Ausgabe.loadingFileComplete();
 
@@ -85,6 +86,7 @@ public class Parser {
             e.printStackTrace();
         }
 
+        TriangleController.getInstance().initTriangle(triangleNumber);
         return TriangleController.getInstance().getTriangleList();
     }
 
@@ -148,10 +150,9 @@ public class Parser {
             BufferedReader bufferedReader = new BufferedReader((reader))) {
             Ausgabe.foundASCIIFile();
             
-            CountDownLatch countDownLatch = new CountDownLatch(AllgemeineKonstanten.THREAD_AMOUNT);
-            ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(AllgemeineKonstanten.THREAD_AMOUNT);
+//            CountDownLatch countDownLatch = new CountDownLatch(AllgemeineKonstanten.THREAD_AMOUNT);
+//            ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(AllgemeineKonstanten.THREAD_AMOUNT);
 
-            String line;
             Vertex[] vertices;
 
             bufferedReader.readLine();
@@ -165,17 +166,19 @@ public class Parser {
                 bufferedReader.readLine();
                 bufferedReader.readLine();
 
-                TriangleController.getInstance().constructTriangle(vertices);
-                if (i %250000 == 0)
-                        executor.submit(() -> {
-                            System.gc();
-                            countDownLatch.countDown();
-                            return null;
-                        });
+                for (int n = 0; n < 10; ++n)
+                    TriangleController.getInstance().constructTriangle(vertices);
+
+//                if (i %250000 == 0)
+//                        executor.submit(() -> {
+//                            System.gc();
+//                            countDownLatch.countDown();
+//                            return null;
+//                        });
             }
-            System.gc();
-            System.gc();
-            executor.shutdown();
+//            System.gc();
+//            System.gc();
+//            executor.shutdown();
         }
     }
 

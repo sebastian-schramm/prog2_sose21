@@ -13,8 +13,9 @@ public class PolyederController {
         System.out.println("Dauer des einlesens : " + (System.currentTimeMillis()-time));
 
         time = System.currentTimeMillis();
-        System.out.println("Umfang : " + this.polyeder.getSurfaceThreads());
-        System.out.println("Fläche : " + this.polyeder.getVolume());
+//        System.out.println("Fläche : " + this.polyeder.getSurface(false));
+        System.out.println("Fläche : " + this.polyeder.getSurface(true));
+        System.out.println("Volumen : " + this.polyeder.getVolume());
         System.out.println("Time Parallel " + (System.currentTimeMillis()-time));
 
         System.out.println("-----------------------------------------");
