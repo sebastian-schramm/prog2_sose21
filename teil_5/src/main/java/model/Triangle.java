@@ -14,35 +14,45 @@ public class Triangle implements Comparable<Triangle> {
         vertices[2] = v3;
     }
 
-    private float getSide(Vertex v1, Vertex v2) {
-        return (float) Math.sqrt(Math.pow(v1.getX() - v2.getX(), 2) + Math.pow(v1.getY() - v2.getY(), 2) + Math.pow(v1.getZ() - v2.getZ(), 2));
-    }
-
     //TODO Eventuell nach einer besseren berechnung suchen!
     public void calcArea() {
-        float a = getSide(vertices[1], vertices[2]);
-        float b = getSide(vertices[0], vertices[2]);
-        float c = getSide(vertices[0], vertices[1]);
-        float p = a + b + c;
-        float s = p / 2;
-        this.area = (float) Math.sqrt(s * (s - a) * (s - b) * (s - c));
+        double a = calcSide(vertices[1], vertices[2]);
+        double b = calcSide(vertices[0], vertices[2]);
+        double c = calcSide(vertices[0], vertices[1]);
+        double s = (a + b + c) / 2;
+        this.area = Math.sqrt(s * (s - a) * (s - b) * (s - c));
     }
-    public void calcVolume() {
-        var v321 = vertices[2].getX()*vertices[1].getY()*vertices[0].getZ();
-        var v231 = vertices[1].getX()*vertices[2].getY()*vertices[0].getZ();
-        var v312 = vertices[2].getX()*vertices[0].getY()*vertices[1].getZ();
-        var v132 = vertices[0].getX()*vertices[2].getY()*vertices[1].getZ();
-        var v213 = vertices[1].getX()*vertices[0].getY()*vertices[2].getZ();
-        var v123 = vertices[0].getX()*vertices[1].getY()*vertices[2].getZ();
+
+    private double calcSide(Vertex v1, Vertex v2) {
+        return Math.sqrt(Math.pow(v1.getX() - v2.getX(), 2) + Math.pow(v1.getY() - v2.getY(), 2) + Math.pow(v1.getZ() - v2.getZ(), 2));
+    }
+
+    private void calcVolume() {
+        calcVolume(vertices[0], vertices[1], vertices[2]);
+    }
+
+    private void calcVolume(Vertex v1, Vertex v2, Vertex v3) {
+        double v321 = v3.getX()*v2.getY()*v1.getZ();
+        double v231 = v2.getX()*v3.getY()*v1.getZ();
+        double v312 = v3.getX()*v1.getY()*v2.getZ();
+        double v132 = v1.getX()*v3.getY()*v2.getZ();
+        double v213 = v2.getX()*v1.getY()*v3.getZ();
+        double v123 = v1.getX()*v2.getY()*v3.getZ();
         this.volume = (1.0f/6.0f)*(-v321 + v231 + v312 - v132 - v213 + v123);
     }
 
-    public float getArea() {
-        return (float) this.area;
+    public double getArea() {
+        if (this.area == 0)
+            calcArea();
+
+        return this.area;
     }
 
-    public float getVolume() {
-        return (float) this.volume;
+    public double getVolume() {
+        if (this.volume == 0)
+            calcVolume();
+
+        return this.volume;
     }
 
     public Vertex getNormal() {

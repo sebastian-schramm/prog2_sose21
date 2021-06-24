@@ -26,22 +26,20 @@ public class Parser {
 
     /**
      * Liest eine Datei aus und überprüft ob es sich dabei um ein ASCII oder Binary Format handelt
-     * @param dateiName
+     * @param file
      * @return
      */
-    public static ArrayList<Triangle> ladeStlAusDatei(String dateiName) {
-        String filePath = AllgemeineKonstanten.DEFAULT_RESOURCES_LOCATION + "" + dateiName + ".stl";
-
-        try (FileInputStream inputStream = new FileInputStream(filePath)){
-            Ausgabe.loadingFile(dateiName);
+    public static ArrayList<Triangle> ladeStlAusDatei(File file) {
+        try (FileInputStream inputStream = new FileInputStream(file)){
+            Ausgabe.loadingFile("");
             DataInputStream input = new DataInputStream(inputStream);
 
             boolean isASCII = false;
             triangleNumber = 0;
-            long fileSize = new File(filePath).length();
+            long fileSize = file.length();
             byte[] firstBlock = new byte[80];
 
-            System.out.println("Dateigröße in Bytes : " + fileSize);
+            System.out.println("Filesize in Bytes : " + fileSize);
 
             //Liest die ersten 6 Bytes aus der Datei aus
             input.read(firstBlock);
@@ -50,28 +48,28 @@ public class Parser {
 
             if (block.contains(AllgemeineKonstanten.ASCII_STL_START_LINE)) {
                 input.readLine();
-                System.out.println("Solid am anfang gefunden, könnte ASCII sein!");
+                System.out.println("Solid am anfang gefunden, koennte ASCII sein!");
                 line = input.readLine();
                 if (line.toLowerCase().startsWith(AllgemeineKonstanten.ASCII_TRIANGLE_PATTERN[0]))
                     System.out.println("Startet nicht mit facet");
 
-                long lineCount = getLineCount(filePath);
+                long lineCount = getLineCount(file);
                 triangleNumber = (int) ((lineCount - 2 ) / 7);
 
                 if ((triangleNumber * 7 + 2) != lineCount)
                     throw new Exception(StringKonstanten_DE.FILE_LINE_COUNT_NOT_VALID);
 
                 TriangleController.getInstance().initTriangle(triangleNumber);
-                readASCIIFile(filePath);
+                readASCIIFile(file);
             } else {
-                System.out.println("Kein Solid am anfang gefunden, könnte Binary sein!");
+                System.out.println("Kein Solid am anfang gefunden, koennte Binary sein!");
                 triangleNumber = Integer.reverseBytes(input.readInt());
 
                 if (!(fileSize == (triangleNumber * 50 + 84)))
                     throw new Exception(StringKonstanten_DE.FILE_LINE_COUNT_NOT_VALID);
 
                 TriangleController.getInstance().initTriangle(triangleNumber);
-                readBinaryFile(filePath);
+                readBinaryFile(file);
             }
             System.out.println(triangleNumber + " Dreiecke gefunden");
 
@@ -96,7 +94,7 @@ public class Parser {
      * @return lineCounter
      * @throws Exception
      */
-    private static long getLineCount(String filePath) throws Exception {
+    private static long getLineCount(File filePath) throws Exception {
         long lineCounter = 0;
         try (FileReader reader = new FileReader(filePath + "");
              BufferedReader bufferedReader = new BufferedReader((reader))) {
@@ -107,7 +105,7 @@ public class Parser {
             }
             if (lineCounter == 0)
                 throw new Exception(StringKonstanten_DE.FILE_EMPTY);
-            if (!last.startsWith(AllgemeineKonstanten.ASCII_STL_END_LINE))
+            if (!last.toLowerCase().startsWith(AllgemeineKonstanten.ASCII_STL_END_LINE))
                 throw new Exception(StringKonstanten_DE.FILE_LAST_LINE_NOT_VALID);
         }
         return lineCounter;
@@ -119,7 +117,7 @@ public class Parser {
         return decode.toString().toLowerCase();
     }
 
-    private static void readBinaryFile(String filePath) throws IOException {
+    private static void readBinaryFile(File filePath) throws IOException {
         try (FileInputStream inputStream = new FileInputStream(filePath);
              BufferedInputStream input = new BufferedInputStream(inputStream)) {
             byte[] header = new byte[80];
@@ -145,13 +143,13 @@ public class Parser {
         }
     }
 
-    private static void readASCIIFile(String filePath) throws IOException {
+    private static void readASCIIFile(File filePath) throws IOException {
         try (FileReader reader = new FileReader(filePath);
             BufferedReader bufferedReader = new BufferedReader((reader))) {
             Ausgabe.foundASCIIFile();
             
-//            CountDownLatch countDownLatch = new CountDownLatch(AllgemeineKonstanten.THREAD_AMOUNT);
-//            ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(AllgemeineKonstanten.THREAD_AMOUNT);
+            CountDownLatch countDownLatch = new CountDownLatch(AllgemeineKonstanten.THREAD_AMOUNT);
+            ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(AllgemeineKonstanten.THREAD_AMOUNT);
 
             Vertex[] vertices;
 
@@ -166,19 +164,19 @@ public class Parser {
                 bufferedReader.readLine();
                 bufferedReader.readLine();
 
-                for (int n = 0; n < 10; ++n)
+//                for (int n = 0; n < 10; ++n)
                     TriangleController.getInstance().constructTriangle(vertices);
 
-//                if (i %250000 == 0)
-//                        executor.submit(() -> {
-//                            System.gc();
-//                            countDownLatch.countDown();
-//                            return null;
-//                        });
+                if (i %250000 == 0)
+                        executor.submit(() -> {
+                            System.gc();
+                            countDownLatch.countDown();
+                            return null;
+                        });
             }
-//            System.gc();
-//            System.gc();
-//            executor.shutdown();
+            System.gc();
+            System.gc();
+            executor.shutdown();
         }
     }
 

@@ -10,36 +10,17 @@ import java.util.concurrent.*;
 public class Polyeder extends Thread {
     private ArrayList<Triangle> triangleList;
 
-    private double surface = 0.0;
+    private double area = 0.0;
     private double volume = 0.0;
+
+    public Polyeder() {
+        this.triangleList = new ArrayList<>(0);
+        this.area = 0.0;
+        this.volume = 0.0;
+    }
 
     public Polyeder(ArrayList<Triangle> triangleList) {
         this.triangleList = triangleList;
-    }
-
-    private void calcSurface () {
-        this.surface = 0;
-        for (Triangle triangle : triangleList) {
-            this.surface += triangle.getArea();
-        }
-    }
-
-    private void calcVolume() {
-        this.volume = 0;
-        for (Triangle triangle : triangleList) {
-            this.volume = triangle.getVolume();
-        }
-    }
-
-    private void sortTriangles () {
-        Collections.sort(triangleList);
-    }
-
-    private void printAreas() {
-        for (Triangle triangle : triangleList) {
-            System.out.println(triangle.getArea());
-        }
-        System.out.println("--------------------------");
     }
 
     public double getSurfaceSerial () {
@@ -47,14 +28,11 @@ public class Polyeder extends Thread {
             triangle.calcArea();
         }
         sortTriangles();
-        calcSurface();
-        return this.surface;
+        return this.area;
 
     }
 
     private double getSurfaceThreads() {
-//        triangleList.parallelStream().forEach(Triangle::calcArea);
-
         CountDownLatch countDownLatch = new CountDownLatch(AllgemeineKonstanten.THREAD_AMOUNT);
         ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(AllgemeineKonstanten.THREAD_AMOUNT);
 
@@ -85,18 +63,32 @@ public class Polyeder extends Thread {
         }
 
         sortTriangles();
-        return this.surface;
+        return this.area;
+    }
+
+    private void calcSurface () {
+        this.area = 0;
+        for (int i = 0; i < triangleList.size(); ++i) {
+            this.area += triangleList.get(i).getArea();
+        }
     }
 
     public double getSurface(boolean threading) {
-        if (this.surface == 0) {
+        if (this.area == 0) {
             if (threading)
                 getSurfaceThreads();
             else
                 getSurfaceSerial();
             calcSurface();
         }
-        return this.surface;
+        return this.area;
+    }
+
+    private void calcVolume() {
+        this.volume = 0;
+        for (Triangle triangle : triangleList) {
+            this.volume += triangle.getVolume();
+        }
     }
 
     public double getVolume() {
@@ -105,18 +97,8 @@ public class Polyeder extends Thread {
         return this.volume;
     }
 
-    public float[] getPoints(TriangleMesh mesh) {
-        float[] points = new float[triangleList.size() * 3 * 3];
-
-        for (int i = 0; i < triangleList.size(); ++i) {
-            for (int n = 0; n < 3; ++n) {
-                points[i * 9 + n * 3] = triangleList.get(i).getVertex(n).getX()/6;
-                points[i * 9 + n * 3 + 1] = triangleList.get(i).getVertex(n).getY()/6;
-                points[i * 9 + n * 3 + 2] = triangleList.get(i).getVertex(n).getZ()/6;
-            }
-        }
-
-        return points;
+    private void sortTriangles () {
+        Collections.sort(triangleList);
     }
 
     public TriangleMesh getMesh(){
@@ -138,19 +120,10 @@ public class Polyeder extends Thread {
 
             mesh.getFaces().addAll(faceCnt, faceCnt, faceCnt + 1, faceCnt + 1, faceCnt + 2, faceCnt + 2);
             faceCnt += 3;
+//            if (x %250000 == 0) {
+//                System.gc();
+//            }
         }
         return mesh;
-    }
-
-    public int[] getFaces() {
-        int[] faces = new int[triangleList.size() * 3];
-
-        for (int i = 0; i < triangleList.size(); ++i) {
-            faces[i * 3] = (int) triangleList.get(i).getNormal().getX();
-            faces[i * 3 + 1] = (int) triangleList.get(i).getNormal().getY();
-            faces[i * 3 + 2] = (int) triangleList.get(i).getNormal().getZ();
-        }
-
-        return faces;
     }
 }
