@@ -23,8 +23,10 @@ import javafx.stage.Stage;
 public class ModelCreator {
     private static BorderPane borderPane = new BorderPane();
     private static MeshView meshView;
-    private static PerspectiveCamera camera;
     private static Enum viewPoint = viewPoints.yPos;
+    private static SubScene subScene;
+    private static boolean isFill = false;
+    private static Group root;
 
     private static Translate pivot = new Translate();
     private static Rotate yRotate = new Rotate(0, Rotate.Y_AXIS);
@@ -37,7 +39,7 @@ public class ModelCreator {
 
     }
 
-    public static void createContent(Stage stage, Main main) {
+    public static void createContent(Stage stage) {
         borderPane.setBackground(new Background(new BackgroundFill(Color.GRAY, new CornerRadii(0), Insets.EMPTY)));
 
 //        TriangleMesh triangleMesh = PolyederController.getInstance().getMesh();
@@ -64,8 +66,6 @@ public class ModelCreator {
 //        subScene.setCamera(camera);
 
 //        TriangleMesh triangleMesh = PolyederController.getInstance().getMesh();
-
-        Translate pivot = new Translate();
         meshView = new MeshView(PolyederController.getInstance().getMesh());
         meshView.setMaterial(new PhongMaterial(Color.RED));
         meshView.setDrawMode(DrawMode.LINE);
@@ -73,35 +73,13 @@ public class ModelCreator {
         meshView.setCullFace(CullFace.NONE);
 
         // Create and position camera
-        PerspectiveCamera camera = new PerspectiveCamera(true);
-        camera.getTransforms().addAll (
-                pivot,
-                yRotate,
-                xRotate,
-                zRotate,
-                new Rotate(-20, Rotate.X_AXIS),
-                new Translate(0, 0, -50)
-        );
-        camera.setFarClip(100000);
+        PerspectiveCamera camera = setUpCamera();
 
         // Build the Scene Graph
-        Group root = new Group();
-        root.getChildren().add(camera);
-        root.getChildren().add(meshView);
-
-//         set the pivot for the camera position animation base upon mouse clicks on objects
-        root.getChildren().stream()
-                .filter(node -> !(node instanceof Camera))
-                .forEach(node ->
-                        node.setOnMouseClicked(event -> {
-                            pivot.setX(node.getTranslateX());
-                            pivot.setY(node.getTranslateY());
-                            pivot.setZ(node.getTranslateZ());
-                        })
-                );
+        root = setUpRoot(camera, meshView, stage);
 
         // Use a SubScene
-        SubScene subScene = new SubScene(root, 1280, 720, true, SceneAntialiasing.BALANCED);
+        subScene = new SubScene(root, 1280, 720, true, SceneAntialiasing.BALANCED);
         subScene.setFill(Color.ALICEBLUE);
         subScene.setCamera(camera);
 
@@ -112,7 +90,7 @@ public class ModelCreator {
         return borderPane;
     }
 
-    public static void handleMouseEvents(Scene scene) {
+    public static void handleMouseEvents(Scene scene, Stage stage) {
         scene.setOnMousePressed((MouseEvent me) -> {
             mousePosX = me.getSceneX();
             mousePosY = me.getSceneY();
@@ -129,31 +107,30 @@ public class ModelCreator {
             mousePosY = me.getSceneY();
         });
 
-        scene.setOnScroll((ScrollEvent event) -> {
-            if (event.getDeltaY() < 0)
-                zRotate.setPivotZ(zRotate.getPivotZ() + 1);
-//                cameraTransalteZ += event.getDeltaY();
-            else if (event.getDeltaY() > 0)
-//                cameraTransalteZ += event.getDeltaY();
-                zRotate.setPivotZ(zRotate.getPivotZ() - 1);
 
-//            camera.setTranslateZ(cameraTransalteZ);
-        });
+
+
+        /*scene.setOnScroll((ScrollEvent.SCROLL, event -> {
+            root.translateZProperty().set(root.getTranslateZ() + event.getDeltaY());
+            System.out.println(root.getTranslateZ() + event.getDeltaY());
+        });*/
     }
 
-    public static void update() {
-        meshView = new MeshView(PolyederController.getInstance().getMesh());
-//        meshView.getTransforms().addAll(rotateZ, rotateY, rotateX);
-
-        meshView.setMaterial(new PhongMaterial(Color.RED));
-//        meshView.setDrawMode(DrawMode.LINE);
+    public static void showFill()
+    {
         meshView.setDrawMode(DrawMode.FILL);
-        meshView.setCullFace(CullFace.NONE);
+        isFill = true;
+    }
 
-        camera = new PerspectiveCamera(true);
-        camera.setNearClip(0.1);
-        camera.setFarClip(100000);
-//        camera.setTranslateZ(cameraTransalteZ);
+    public static boolean isFill()
+    {
+        return isFill;
+    }
+
+    public static void showLine()
+    {
+        meshView.setDrawMode(DrawMode.LINE);
+        isFill = false;
     }
 
     public static void setViewPoint(viewPoints pos) {
@@ -186,4 +163,49 @@ public class ModelCreator {
         zPos,
         zNeg;
     }
+
+    private static PerspectiveCamera setUpCamera ()
+    {
+        PerspectiveCamera camera = new PerspectiveCamera(true);
+        camera.getTransforms().addAll (
+                pivot,
+                yRotate,
+                xRotate,
+                zRotate,
+                new Rotate(-20, Rotate.X_AXIS),
+                new Translate(0, 0, -50)
+        );
+        camera.setFarClip(100000);
+        return camera;
+    }
+
+    private static Group setUpRoot (PerspectiveCamera camera, MeshView meshview, Stage stage)
+    {
+        Group root = new Group();
+        root.getChildren().add(camera);
+        root.getChildren().add(meshview);
+
+        root.getChildren().stream()
+                .filter(node -> !(node instanceof Camera))
+                .forEach(node ->
+                        node.setOnMouseClicked(event -> {
+                            pivot.setX(node.getTranslateX());
+                            pivot.setY(node.getTranslateY());
+                            pivot.setZ(node.getTranslateZ());
+                        })
+                );
+
+        stage.addEventHandler(ScrollEvent.SCROLL, scrollEvent -> {
+            //TODO Nicht fertig
+
+            double deltaY = (scrollEvent.getDeltaY())/2;
+            camera.setTranslateX(camera.getTranslateX()+deltaY/2);
+            camera.setTranslateZ(camera.getTranslateZ() + deltaY);
+            System.out.println(camera.getTranslateZ() + deltaY);
+        });
+
+        return root;
+    }
+
+
 }

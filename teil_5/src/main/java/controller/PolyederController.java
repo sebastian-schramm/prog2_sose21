@@ -1,6 +1,6 @@
 package controller;
 
-import com.interactivemesh.jfx.importer.stl.StlMeshImporter;
+
 import javafx.scene.shape.TriangleMesh;
 import model.Polyeder;
 import utilities.Parser;
@@ -9,7 +9,7 @@ import java.io.File;
 
 public class PolyederController {
 
-    private StlMeshImporter stlImporter = new StlMeshImporter();
+
     private Polyeder polyeder = null;
 
     public void init(String dateiName) {
@@ -57,4 +57,5 @@ public class PolyederController {
         return polyeder.getMesh();
 //        return stlImporter.getImport();
     }
+
 }

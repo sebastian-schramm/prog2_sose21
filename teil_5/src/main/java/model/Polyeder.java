@@ -126,4 +126,9 @@ public class Polyeder extends Thread {
         }
         return mesh;
     }
+
+    public ArrayList<Triangle> getTriangleList()
+    {
+        return triangleList;
+    }
 }

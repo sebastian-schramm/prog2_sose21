@@ -166,7 +166,7 @@ public class Parser {
                 bufferedReader.readLine();
 
                 TriangleController.getInstance().constructTriangle(vertices);
-                if (i %250000 == 0)
+                if (i % 250000 == 0)
                         executor.submit(() -> {
                             System.gc();
                             countDownLatch.countDown();

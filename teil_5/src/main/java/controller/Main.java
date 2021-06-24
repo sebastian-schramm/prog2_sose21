@@ -1,6 +1,5 @@
 package controller;
 
-import com.interactivemesh.jfx.importer.stl.StlMeshImporter;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -12,7 +11,7 @@ import view.TopViewCreator;
 
 public class Main extends Application {
 //public class Main {
-    StlMeshImporter stlImporter = new StlMeshImporter();
+
 
     private static BorderPane borderPane = new BorderPane();
 
@@ -25,7 +24,7 @@ public class Main extends Application {
         stage.setTitle(GUIKonstanten.MY_TITLE);
         borderPane.setTop(TopViewCreator.createTopView(stage, this));
         borderPane.setCenter(ModelCreator.getModelCreatorPane());
-        ModelCreator.createContent(stage, this);
+        ModelCreator.createContent(stage);
     }
 
     @Override
@@ -34,7 +33,7 @@ public class Main extends Application {
         stage.setResizable(false);
         Scene scene = new Scene(borderPane, GUIKonstanten.WINDOW_SIZE_X, GUIKonstanten.WINDOW_SIZE_Y);
         stage.setScene(scene);
-        ModelCreator.handleMouseEvents(scene);
+        ModelCreator.handleMouseEvents(scene, stage);
         stage.show();
 
 //        initGUI(stage);
@@ -56,7 +55,7 @@ public class Main extends Application {
 
     public void loadFile(Stage stage) {
         PolyederController.getInstance().loadFile(FileOpenDialog.openFileChooser(stage));
-        ModelCreator.createContent(stage, this);
+        ModelCreator.createContent(stage);
 //        ModelCreator.update();
     }
 }
