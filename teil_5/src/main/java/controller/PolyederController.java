@@ -9,7 +9,7 @@ import java.io.File;
 
 public class PolyederController {
 
-
+//    private StlMeshImporter stlImporter = new StlMeshImporter();
     private Polyeder polyeder = null;
 
     public void init(String dateiName) {
@@ -50,6 +50,7 @@ public class PolyederController {
         polyeder = new Polyeder(Parser.ladeStlAusDatei(file));
         System.out.println("Area : " + this.polyeder.getSurface(false));
         System.out.println("Volume : " + this.polyeder.getVolume());
+        ModelController.getInstance().getModel().updatePane();
 //        stlImporter.read(file);
     }
 

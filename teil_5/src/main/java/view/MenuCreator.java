@@ -1,6 +1,7 @@
 package view;
 
 import controller.Main;
+import controller.ModelController;
 import javafx.event.Event;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Menu;
@@ -31,10 +32,11 @@ public final class MenuCreator {
 
         Menu menuControls = new Menu(GUIKonstanten.MENU_CONTROL);
         CheckMenuItem menuItemShowFaces = new CheckMenuItem(GUIKonstanten.MENU_CONTROL_FACES);
+        CheckMenuItem menuItemShowAxis = new CheckMenuItem(GUIKonstanten.MENU_CONTROL_AXIS);
 
         menuFile.getItems().add(menuFileOpen);
         menuViewPoint.getItems().addAll(menuXPos, menuXNeg, menuYPos, menuYNeg, menuZPos, menuZNeg);
-        menuControls.getItems().addAll(menuItemShowFaces);
+        menuControls.getItems().addAll(menuItemShowFaces, menuItemShowAxis);
 
         menuBar.getMenus().addAll(menuFile, menuViewPoint, menuControls);
 
@@ -66,14 +68,16 @@ public final class MenuCreator {
             ModelCreator.setViewPoint(ModelCreator.viewPoints.zNeg);
         });
 
-        menuItemShowFaces.setSelected(ModelCreator.isFill());
+        menuItemShowFaces.setSelected(ModelController.getInstance().getModel().isFill());
 
         menuItemShowFaces.setOnAction(e -> {
-            if (ModelCreator.isFill())
-            {
-                ModelCreator.showLine();
-            }
-            else ModelCreator.showFill();
+            ModelController.getInstance().getModel().setDrawModeFill(!ModelController.getInstance().getModel().isFill());
+        });
+
+        menuItemShowAxis.setSelected(ModelController.getInstance().getModel().isAxisVisible());
+
+        menuItemShowAxis.setOnAction(e -> {
+            ModelController.getInstance().getModel().setAxisVisible(!ModelController.getInstance().getModel().isAxisVisible());
         });
 
         return menuBar;
