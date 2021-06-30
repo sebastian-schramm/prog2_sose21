@@ -35,8 +35,15 @@ public class PolyederController {
     public void loadFile(File file) {
         if (file != null) {
             polyeder = new Polyeder(Parser.ladeStlAusDatei(file));
-            System.out.println("Area : " + this.polyeder.getSurface(false));
+            System.out.println("Area : " + this.polyeder.getSurface(true));
             System.out.println("Volume : " + this.polyeder.getVolume());
+            System.out.println("Gesundheit vorher " + polyeder.aktuelleGesundheitProperty());
+            polyeder.setAktuelleGesundheit((int) this.polyeder.getVolume());
+            System.out.println("Gesundheit danach " + polyeder.aktuelleGesundheitProperty());
+//            polyeder.setCurrentSurfaceProperty(polyeder.getSurface(true));
+//            polyeder.setCurrentVolumeProperty(polyeder.getVolume());
+//            polyeder.getSurfaceProperty();
+//            polyeder.getVolumeProperty();
             ModelController.getInstance().getModel().updatePane();
 //        stlImporter.read(file);
         }

@@ -56,7 +56,7 @@ public class ModelCreator {
         world.getChildren().addAll(objectGroup);
         root.getChildren().add(world);
 
-        SubScene subScene = new SubScene(root, 1280, 720, true, SceneAntialiasing.BALANCED);
+        SubScene subScene = new SubScene(root, 1280, 667, true, SceneAntialiasing.BALANCED);
         handleMouseEvents(subScene, world);
         subScene.setFill(Color.GREY);
         subScene.setCamera(camera);

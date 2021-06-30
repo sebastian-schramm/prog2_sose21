@@ -6,6 +6,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import model.interfaces.GUIKonstanten;
 import utilities.FileOpenDialog;
+import view.BottomViewCreator;
 import view.TopViewCreator;
 
 public class Main extends Application {
@@ -22,6 +23,7 @@ public class Main extends Application {
         stage.setTitle(GUIKonstanten.MY_TITLE);
         borderPane.setTop(TopViewCreator.createTopView(stage, this));
         borderPane.setCenter(ModelController.getInstance().getModel().getModelCreatorPane());
+        borderPane.setBottom(BottomViewCreator.createBottomView(stage, this));
     }
 
     @Override

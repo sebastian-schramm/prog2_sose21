@@ -1,5 +1,10 @@
 package model;
 
+import javafx.beans.binding.StringBinding;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.scene.shape.TriangleMesh;
 import model.interfaces.AllgemeineKonstanten;
 
@@ -10,8 +15,20 @@ import java.util.concurrent.*;
 public class Polyeder extends Thread {
     private ArrayList<Triangle> triangleList;
 
-    private double area = 0.0;
-    private double volume = 0.0;
+    private Double area = 0.0;
+    private Double volume = 0.0;
+//    private StringProperty currentArea= new SimpleStringProperty(area.toString());
+//    private StringProperty currentVolume = new SimpleStringProperty(volume.toString());
+    private IntegerProperty aktuelleGesundheit = new SimpleIntegerProperty(10);
+
+    public void setAktuelleGesundheit(int aktuelleGesundheit)
+    {
+        this.aktuelleGesundheit.set(aktuelleGesundheit);
+    }
+
+    public IntegerProperty aktuelleGesundheitProperty() {
+        return this.aktuelleGesundheit;
+    }
 
     public Polyeder() {
         this.triangleList = new ArrayList<>(0);
@@ -67,7 +84,7 @@ public class Polyeder extends Thread {
     }
 
     private void calcSurface () {
-        this.area = 0;
+        this.area = 0.0;
         for (int i = 0; i < triangleList.size(); ++i) {
             this.area += triangleList.get(i).getArea();
         }
@@ -84,8 +101,17 @@ public class Polyeder extends Thread {
         return this.area;
     }
 
+//    public void setCurrentSurfaceProperty(Double currentArea) {
+//        this.currentArea.set(currentArea.toString());
+//    }
+//
+//    public StringProperty getSurfaceProperty() {
+//        System.out.println("Current Surface : " + this.currentArea.getValue());
+//        return this.currentArea;
+//    }
+
     private void calcVolume() {
-        this.volume = 0;
+        this.volume = 0.0;
         if (triangleList.size() > 1)
         for (Triangle triangle : triangleList) {
             this.volume += triangle.getVolume();
@@ -97,6 +123,15 @@ public class Polyeder extends Thread {
             calcVolume();
         return this.volume;
     }
+
+//    public void setCurrentVolumeProperty(Double currentVolume) {
+//        this.currentVolume.set(currentVolume.toString());
+//    }
+//
+//    public StringProperty getVolumeProperty() {
+//        System.out.println("Current Volume : " + this.currentVolume.getValue());
+//        return this.currentVolume;
+//    }
 
     private void sortTriangles () {
         Collections.sort(triangleList);
