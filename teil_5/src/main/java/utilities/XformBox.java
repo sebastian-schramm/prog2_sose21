@@ -4,8 +4,11 @@ import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Translate;
 
 public class XformBox extends Group {
+
+    public Translate t  = new Translate();
 
     public XformBox() {
         super();

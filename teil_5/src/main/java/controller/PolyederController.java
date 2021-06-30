@@ -12,20 +12,6 @@ public class PolyederController {
 //    private StlMeshImporter stlImporter = new StlMeshImporter();
     private Polyeder polyeder = null;
 
-    public void init(String dateiName) {
-        long time = System.currentTimeMillis();
-//        this.polyeder = new Polyeder(Parser.ladeStlAusDatei(dateiName));
-        System.out.println("Dauer des einlesens : " + (System.currentTimeMillis()-time));
-
-        time = System.currentTimeMillis();
-        System.out.println("Area : " + this.polyeder.getSurface(false));
-//        System.out.println("Fläche : " + this.polyeder.getSurface(true));
-        System.out.println("Volume : " + this.polyeder.getVolume());
-        System.out.println("Time Parallel " + (System.currentTimeMillis()-time));
-
-        System.out.println("-----------------------------------------");
-    }
-
     public void init() {
         polyeder = new Polyeder();
     }
@@ -47,11 +33,13 @@ public class PolyederController {
     }
 
     public void loadFile(File file) {
-        polyeder = new Polyeder(Parser.ladeStlAusDatei(file));
-        System.out.println("Area : " + this.polyeder.getSurface(false));
-        System.out.println("Volume : " + this.polyeder.getVolume());
-        ModelController.getInstance().getModel().updatePane();
+        if (file != null) {
+            polyeder = new Polyeder(Parser.ladeStlAusDatei(file));
+            System.out.println("Area : " + this.polyeder.getSurface(false));
+            System.out.println("Volume : " + this.polyeder.getVolume());
+            ModelController.getInstance().getModel().updatePane();
 //        stlImporter.read(file);
+        }
     }
 
     public TriangleMesh getMesh() {

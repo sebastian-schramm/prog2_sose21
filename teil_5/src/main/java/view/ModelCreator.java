@@ -29,6 +29,8 @@ public class ModelCreator {
     private static final double CAMERA_NEAR_CLIP = 0.1;
     private static final double CAMERA_FAR_CLIP = 10000.0;
     private static final double AXIS_LENGTH = 2500000.0;
+    private static final double CONTROL_MULTIPLIER = 0.1;
+    private static final double SHIFT_MULTIPLIER = 10.0;
     private static final double MOUSE_SPEED = 0.1;
     private static final double ROTATION_SPEED = 2.0;
 
@@ -67,6 +69,8 @@ public class ModelCreator {
     }
 
     public void updatePane() {
+        System.gc();
+        System.gc();
         buildModel();
     }
 
@@ -127,6 +131,13 @@ public class ModelCreator {
         scene.setOnMouseDragged( me -> {
             double modifier = 1.0;
 
+            if (me.isControlDown()) {
+                modifier = CONTROL_MULTIPLIER;
+            }
+            if (me.isShiftDown()) {
+                modifier = SHIFT_MULTIPLIER;
+            }
+
             mouseOldX = mousePosX;
             mouseOldY = mousePosY;
             mousePosX = me.getSceneX();
@@ -134,10 +145,17 @@ public class ModelCreator {
             mouseDeltaX = (mousePosX - mouseOldX);
             mouseDeltaY = (mousePosY - mouseOldY);
 
-            axisGroup.addRotation(-mouseDeltaX * MOUSE_SPEED * ROTATION_SPEED, Rotate.Y_AXIS);
-            axisGroup.addRotation(mouseDeltaY * MOUSE_SPEED * ROTATION_SPEED, Rotate.X_AXIS);
-            objectGroup.addRotation(-mouseDeltaX * MOUSE_SPEED * ROTATION_SPEED, Rotate.Y_AXIS);
-            objectGroup.addRotation(mouseDeltaY * MOUSE_SPEED * ROTATION_SPEED, Rotate.X_AXIS);
+            if (me.isPrimaryButtonDown()) {
+                world.addRotation(-mouseDeltaX * MOUSE_SPEED * ROTATION_SPEED, Rotate.Y_AXIS);
+                world.addRotation(mouseDeltaY * MOUSE_SPEED * ROTATION_SPEED, Rotate.X_AXIS);
+//                objectGroup.addRotation(-mouseDeltaX * MOUSE_SPEED * ROTATION_SPEED, Rotate.Y_AXIS);
+//                objectGroup.addRotation(mouseDeltaY * MOUSE_SPEED * ROTATION_SPEED, Rotate.X_AXIS);
+            } else if (me.isSecondaryButtonDown()) {
+                objectGroup.setTranslateX(objectGroup.getTranslateX() + mouseDeltaX * MOUSE_SPEED * ROTATION_SPEED);
+                objectGroup.setTranslateZ(objectGroup.getTranslateZ() - mouseDeltaY * MOUSE_SPEED * ROTATION_SPEED);
+//                camera.setTranslateX(camera.getTranslateX() - mouseDeltaX * MOUSE_SPEED * ROTATION_SPEED);
+//                camera.setTranslateY(camera.getTranslateY() - mouseDeltaY * MOUSE_SPEED * ROTATION_SPEED);
+            }
         });
 
         scene.setOnScroll(me -> {

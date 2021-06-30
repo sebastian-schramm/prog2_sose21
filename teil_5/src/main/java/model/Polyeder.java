@@ -86,6 +86,7 @@ public class Polyeder extends Thread {
 
     private void calcVolume() {
         this.volume = 0;
+        if (triangleList.size() > 1)
         for (Triangle triangle : triangleList) {
             this.volume += triangle.getVolume();
         }
