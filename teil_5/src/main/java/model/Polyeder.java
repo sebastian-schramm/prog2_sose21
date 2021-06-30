@@ -17,8 +17,7 @@ public class Polyeder extends Thread {
 
     private Double area = 0.0;
     private Double volume = 0.0;
-//    private StringProperty currentArea= new SimpleStringProperty(area.toString());
-//    private StringProperty currentVolume = new SimpleStringProperty(volume.toString());
+
 
     public Polyeder() {
         this.triangleList = new ArrayList<>(0);
@@ -129,8 +128,8 @@ public class Polyeder extends Thread {
         return mesh;
     }
 
-    public ArrayList<Triangle> getTriangleList()
+    public int getTriangleListSize()
     {
-        return triangleList;
+        return triangleList.size();
     }
 }

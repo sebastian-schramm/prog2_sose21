@@ -14,14 +14,14 @@ public class ModelController {
     }
 
     public static ModelController getInstance() {
-        return PolyederControllerHolder.INSTANCE;
+        return ModelControllerHolder.INSTANCE;
     }
 
     public ModelCreator getModel() {
         return model;
     }
 
-    private static class PolyederControllerHolder {
+    private static class ModelControllerHolder {
         private static final ModelController INSTANCE = new ModelController();
     }
 
