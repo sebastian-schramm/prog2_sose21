@@ -19,16 +19,6 @@ public class Polyeder extends Thread {
     private Double volume = 0.0;
 //    private StringProperty currentArea= new SimpleStringProperty(area.toString());
 //    private StringProperty currentVolume = new SimpleStringProperty(volume.toString());
-    private IntegerProperty aktuelleGesundheit = new SimpleIntegerProperty(10);
-
-    public void setAktuelleGesundheit(int aktuelleGesundheit)
-    {
-        this.aktuelleGesundheit.set(aktuelleGesundheit);
-    }
-
-    public IntegerProperty aktuelleGesundheitProperty() {
-        return this.aktuelleGesundheit;
-    }
 
     public Polyeder() {
         this.triangleList = new ArrayList<>(0);
@@ -36,20 +26,26 @@ public class Polyeder extends Thread {
         this.volume = 0.0;
     }
 
-    public Polyeder(ArrayList<Triangle> triangleList) {
+    public Polyeder(ArrayList<Triangle> triangleList, boolean threading) {
         this.triangleList = triangleList;
+
+        if (threading)
+            getSurfaceThreads();
+        else
+            getSurfaceSerial();
+
+        sortTriangles();
+        calcSurface();
+        calcVolume();
     }
 
-    public double getSurfaceSerial () {
+    public void getSurfaceSerial () {
         for (Triangle triangle : triangleList) {
             triangle.calcArea();
         }
-        sortTriangles();
-        return this.area;
-
     }
 
-    private double getSurfaceThreads() {
+    private void getSurfaceThreads() {
         CountDownLatch countDownLatch = new CountDownLatch(AllgemeineKonstanten.THREAD_AMOUNT);
         ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(AllgemeineKonstanten.THREAD_AMOUNT);
 
@@ -78,37 +74,18 @@ public class Polyeder extends Thread {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        sortTriangles();
-        return this.area;
     }
 
-    private void calcSurface () {
+    private void calcSurface() {
         this.area = 0.0;
         for (int i = 0; i < triangleList.size(); ++i) {
             this.area += triangleList.get(i).getArea();
         }
     }
 
-    public double getSurface(boolean threading) {
-        if (this.area == 0) {
-            if (threading)
-                getSurfaceThreads();
-            else
-                getSurfaceSerial();
-            calcSurface();
-        }
+    public double getSurface() {
         return this.area;
     }
-
-//    public void setCurrentSurfaceProperty(Double currentArea) {
-//        this.currentArea.set(currentArea.toString());
-//    }
-//
-//    public StringProperty getSurfaceProperty() {
-//        System.out.println("Current Surface : " + this.currentArea.getValue());
-//        return this.currentArea;
-//    }
 
     private void calcVolume() {
         this.volume = 0.0;
@@ -119,19 +96,8 @@ public class Polyeder extends Thread {
     }
 
     public double getVolume() {
-        if (this.volume == 0)
-            calcVolume();
         return this.volume;
     }
-
-//    public void setCurrentVolumeProperty(Double currentVolume) {
-//        this.currentVolume.set(currentVolume.toString());
-//    }
-//
-//    public StringProperty getVolumeProperty() {
-//        System.out.println("Current Volume : " + this.currentVolume.getValue());
-//        return this.currentVolume;
-//    }
 
     private void sortTriangles () {
         Collections.sort(triangleList);
