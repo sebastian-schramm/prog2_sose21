@@ -59,7 +59,6 @@ public class Polyeder extends Thread {
             int end = range[i + 1];
             int finalI = i;
             executor.submit(() -> {
-                //TODO: lese den scheiß -> https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/CountDownLatch.html
                 for (int j = start; j < end; j++) {
                     triangleList.get(j).calcArea();
                 }

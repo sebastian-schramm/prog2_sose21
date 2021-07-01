@@ -1,18 +1,27 @@
 package utilities;
 
 import controller.NetworkController;
+import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import model.ConnectionStatusEnum;
 
 import java.net.ServerSocket;
+import java.net.Socket;
 
 public class Server extends Thread {
 
+    private ServerSocket derServer;
+    private Socket einClient;
+    private StringProperty port = new SimpleStringProperty("0000");
+
     public Server() {
-        NetworkController.getInstance().getNetwork().ConnectionStatus().setValue(ConnectionStatusMessage(connectionStatusEnum.Offline));
+        NetworkController.getInstance().getNetwork().ConnectionStatus(ConnectionStatusEnum.OFFLINE);
     }
 
     @Override
     public void run() {
-        NetworkController.getInstance().getNetwork().ConnectionStatus().setValue(ConnectionStatusMessage(connectionStatusEnum.Connecting));
+        NetworkController.getInstance().getNetwork().ConnectionStatus(ConnectionStatusEnum.CONNECTING);
         try {
             derServer = new ServerSocket(Integer.parseInt(port.getValue()));
         } catch (Exception e) {
@@ -35,22 +44,6 @@ public class Server extends Thread {
 //                e.printStackTrace();
 //            }
 //        }
-        NetworkController.getInstance().getNetwork().ConnectionStatus().setValue(ConnectionStatusMessage(connectionStatusEnum.Connected));
-    }
-
-    private static String ConnectionStatusMessage(connectionStatusEnum stautus) {
-        switch (stautus) {
-
-        }
-        return "";
-    }
-
-    public static enum connectionStatusEnum {
-        Offline,
-        Connecting,
-        Connected,
-        Disconnecting,
-        Disconnected,
-        WrongPort;
+        NetworkController.getInstance().getNetwork().ConnectionStatus(ConnectionStatusEnum.CONNECTED);
     }
 }

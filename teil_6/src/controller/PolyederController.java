@@ -7,7 +7,9 @@ import javafx.beans.property.SimpleDoubleProperty;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.shape.TriangleMesh;
+import javafx.stage.Stage;
 import model.Polyeder;
+import model.interfaces.GUIKonstanten;
 import utilities.Parser;
 
 import java.io.File;
@@ -58,14 +60,16 @@ public class PolyederController {
 
 
 
-    public void loadFile(File file) {
+    public void loadFile(File file, Stage stage) {
         if (file != null) {
             polyeder = new Polyeder(Parser.ladeStlAusDatei(file),true);
-            System.out.println("Area : " + this.polyeder.getSurface());
-            System.out.println("Volume : " + this.polyeder.getVolume());
+            System.out.println(GUIKonstanten.LABEL_SURFACE + this.polyeder.getSurface());
+            System.out.println(GUIKonstanten.LABEL_VOLUME + this.polyeder.getVolume());
             setVolumeProperty(this.polyeder.getVolume());
             setSurfaceProperty(this.polyeder.getSurface());
             setTriangleAmountProperty(this.polyeder.getTriangleListSize());
+            System.out.println(file.getName());
+            stage.setTitle(GUIKonstanten.MY_TITLE + file.getName());
             ModelController.getInstance().getModel().updatePane();
 //        stlImporter.read(file);
         }

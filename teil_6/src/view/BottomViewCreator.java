@@ -19,10 +19,10 @@ public final class BottomViewCreator {
         HBox hBox = new HBox();
         hBox.setMaxHeight(GUIKonstanten.BOTTOMBAR_HEIGHT);
 
-        Label volumeLabel = LabelCreator.createLabel(PolyederController.getInstance().volumeProperty().asString(), 12, "Volume: ");
-        Label areaLabel = LabelCreator.createLabel(PolyederController.getInstance().surfaceProperty().asString(), 12, "Surface: ");
-        Label triangleAmountLabel = LabelCreator.createLabel(PolyederController.getInstance().triangleAmountProperty().asString(), 12, "Triangles: ");
-        Label connectionStatus = LabelCreator.createLabel(NetworkController.getInstance().getNetwork().ConnectionStatus(), 12, "Status: ");
+        Label volumeLabel = LabelCreator.createLabel(PolyederController.getInstance().volumeProperty().asString(), 12, GUIKonstanten.LABEL_VOLUME);
+        Label areaLabel = LabelCreator.createLabel(PolyederController.getInstance().surfaceProperty().asString(), 12, GUIKonstanten.LABEL_SURFACE);
+        Label triangleAmountLabel = LabelCreator.createLabel(PolyederController.getInstance().triangleAmountProperty().asString(), 12, GUIKonstanten.LABEL_TRIANGLE);
+        Label connectionStatus = LabelCreator.createLabel(NetworkController.getInstance().getNetwork().ConnectionStatus(), 12, GUIKonstanten.LABEL_STATUS);
 
         hBox.getChildren().addAll(volumeLabel, areaLabel, triangleAmountLabel, connectionStatus);
 

@@ -1,17 +1,16 @@
 package utilities;
 
-import controller.MyClient;
-import controller.NetworkController;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import model.ConnectionStatusEnum;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.*;
 
-public class Network extends Thread {
+public class Network {
 
     private final StringProperty serverIpAddress = new SimpleStringProperty();
     private final StringProperty lokaleIpAddress = new SimpleStringProperty();
@@ -22,9 +21,10 @@ public class Network extends Thread {
 
     private static Socket einClient;
     private static ServerSocket derServer = null;
-    private Server server = new Server();
+    private Server server;
 
     public Network() {
+        ConnectionStatus(ConnectionStatusEnum.OFFLINE);
         this.serverIpAddress.setValue("");
         this.port.setValue("40404");
         try {
@@ -40,19 +40,24 @@ public class Network extends Thread {
         }
     }
 
+    public void startServer() {
+        server = new Server();
+//        server.start();
+    }
+
     public void connect() {
         server.start();
     }
 
     public void disconnect() {
-        this.connectionStatus.setValue(connectionStatusEnum.Disconnecting + "");
+        ConnectionStatus(ConnectionStatusEnum.DISCONNECTING);
         try {
             server.stop();
             derServer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.connectionStatus.setValue(connectionStatusEnum.Disconnected + "");
+        ConnectionStatus(ConnectionStatusEnum.DISCONNECTED);
     }
 
     public StringProperty getLokaleIpAddress() {
@@ -74,4 +79,34 @@ public class Network extends Thread {
     public StringProperty ConnectionStatus() {
         return this.connectionStatus;
     }
+
+    public StringProperty ConnectionStatus(ConnectionStatusEnum status) {
+        String text = "";
+        switch (status) {
+            case OFFLINE:
+                text = "Nicht gestartet";
+                break;
+            case CONNECTING:
+                text = "Verbindung wird hergestellt";
+                break;
+            case CONNECTED:
+                text = "Ist Verbunden";
+                break;
+            case DISCONNECTING:
+                text = "Verbindung wird getrennt";
+                break;
+            case DISCONNECTED:
+                text = "Verbindung ist getrennt";
+                break;
+            case WRONGPORT:
+                text = "Flascher Port";
+                break;
+            default:
+                this.connectionStatus.setValue("Bambus");
+        }
+        this.connectionStatus.setValue(text);
+        return this.connectionStatus;
+    }
+
+
 }

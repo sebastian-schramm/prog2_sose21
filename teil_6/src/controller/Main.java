@@ -22,6 +22,7 @@ public class Main extends Application {
         NetworkController.getInstance().init();
     }
 
+
     private void initGUI(Stage stage) {
         stage.setTitle(GUIKonstanten.MY_TITLE);
         stage.setWidth(GUIKonstanten.WINDOW_SIZE_X);
@@ -59,6 +60,6 @@ public class Main extends Application {
     }
 
     public void loadFile(Stage stage) {
-        PolyederController.getInstance().loadFile(FileOpenDialog.openFileChooser(stage));
+        PolyederController.getInstance().loadFile(FileOpenDialog.openFileChooser(stage), stage);
     }
 }

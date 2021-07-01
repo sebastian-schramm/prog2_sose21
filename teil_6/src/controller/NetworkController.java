@@ -8,10 +8,11 @@ import utilities.Network;
 
 public class NetworkController {
 
-    private Network network = null;;
+    private Network network = null;
 
     public void init() {
         network = new Network();
+        network.startServer();
     }
 
     private NetworkController() {
