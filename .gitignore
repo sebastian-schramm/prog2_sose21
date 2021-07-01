@@ -40,3 +40,6 @@ hs_err_pid*
 KugelASCII.stl
 KugelBinary.stl
 untitled_BIG.stl
+*/nbproject/private/
+*/build/
+*/dist/
