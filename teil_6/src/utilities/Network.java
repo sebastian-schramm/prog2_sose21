@@ -1,5 +1,7 @@
 package utilities;
 
+import controller.MyClient;
+import controller.NetworkController;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -9,7 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.*;
 
-public class Network {
+public class Network extends Thread {
 
     private final StringProperty serverIpAddress = new SimpleStringProperty();
     private final StringProperty lokaleIpAddress = new SimpleStringProperty();
@@ -20,6 +22,7 @@ public class Network {
 
     private static Socket einClient;
     private static ServerSocket derServer = null;
+    private Server server = new Server();
 
     public Network() {
         this.serverIpAddress.setValue("");
@@ -35,30 +38,20 @@ public class Network {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.connectionStatus.setValue(connectionStatusEnum.Offline + "");
     }
 
     public void connect() {
-        this.connectionStatus.setValue(connectionStatusEnum.Connecting + "");
-//        try {
-//            derServer = new ServerSocket(Integer.parseInt(port.getValue()));
-//        } catch (Exception e) {
-//            System.out.println(connectionStatusEnum.Connecting + "");
-////            System.exit(0);
-//        }
-////        MyClient clientThread = new MyClient();
-////        clientThread.start();
-//        try {
-//            einClient = derServer.accept();
-//        } catch (Exception e) {
-//            System.out.println("Fehler accept!"); System.exit(0);
-//        }
-        this.connectionStatus.setValue(connectionStatusEnum.Connected + "");
+        server.start();
     }
 
     public void disconnect() {
         this.connectionStatus.setValue(connectionStatusEnum.Disconnecting + "");
-
+        try {
+            server.stop();
+            derServer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         this.connectionStatus.setValue(connectionStatusEnum.Disconnected + "");
     }
 
@@ -78,16 +71,7 @@ public class Network {
         return this.serverIpAddress;
     }
 
-    public StringProperty getConnectionStatus() {
+    public StringProperty ConnectionStatus() {
         return this.connectionStatus;
-    }
-
-    public enum connectionStatusEnum {
-        Offline,
-        Connecting,
-        Connected,
-        Disconnecting,
-        Disconnected,
-        WrongPort;
     }
 }

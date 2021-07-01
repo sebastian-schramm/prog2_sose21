@@ -22,7 +22,7 @@ public final class BottomViewCreator {
         Label volumeLabel = LabelCreator.createLabel(PolyederController.getInstance().volumeProperty().asString(), 12, "Volume: ");
         Label areaLabel = LabelCreator.createLabel(PolyederController.getInstance().surfaceProperty().asString(), 12, "Surface: ");
         Label triangleAmountLabel = LabelCreator.createLabel(PolyederController.getInstance().triangleAmountProperty().asString(), 12, "Triangles: ");
-        Label connectionStatus = LabelCreator.createLabel(NetworkController.getInstance().getNetwork().getConnectionStatus(), 12, "Status: ");
+        Label connectionStatus = LabelCreator.createLabel(NetworkController.getInstance().getNetwork().ConnectionStatus(), 12, "Status: ");
 
         hBox.getChildren().addAll(volumeLabel, areaLabel, triangleAmountLabel, connectionStatus);
 
