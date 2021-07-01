@@ -10,10 +10,12 @@ import javafx.scene.shape.CullFace;
 import javafx.scene.shape.DrawMode;
 import javafx.scene.shape.MeshView;
 import javafx.scene.transform.Rotate;
+import model.interfaces.GUIKonstanten;
 import utilities.XformBox;
 
 public class ModelCreator {
     private static BorderPane borderPane;
+    public static SubScene subScene;
 
     private final Group root = new Group();
     private MeshView object = new MeshView();
@@ -56,7 +58,7 @@ public class ModelCreator {
         world.getChildren().addAll(objectGroup);
         root.getChildren().add(world);
 
-        SubScene subScene = new SubScene(root, 1280, 667, true, SceneAntialiasing.BALANCED);
+        subScene = new SubScene(root, GUIKonstanten.WINDOW_SIZE_X, (GUIKonstanten.WINDOW_SIZE_Y-GUIKonstanten.MENUBAR_HEIGHT-GUIKonstanten.BOTTOMBAR_HEIGHT*2), true, SceneAntialiasing.BALANCED);
         handleMouseEvents(subScene, world);
         subScene.setFill(Color.GREY);
         subScene.setCamera(camera);

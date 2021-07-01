@@ -14,5 +14,7 @@ public interface GUIKonstanten
     int FONT_SIZE = 32;
     int WINDOW_SIZE_X = 1280;
     int WINDOW_SIZE_Y = 720;
+    int MENUBAR_HEIGHT = 25;
+    int BOTTOMBAR_HEIGHT = 28;
 
 }
