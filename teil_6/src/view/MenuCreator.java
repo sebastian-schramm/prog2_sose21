@@ -2,13 +2,16 @@ package view;
 
 import controller.Main;
 import controller.ModelController;
+import controller.NetworkController;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.Property;
 import javafx.event.Event;
-import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.interfaces.GUIKonstanten;
+import utilities.LabelCreator;
+
+import javax.naming.Binding;
 
 public final class MenuCreator {
 
@@ -34,11 +37,35 @@ public final class MenuCreator {
         CheckMenuItem menuItemShowFaces = new CheckMenuItem(GUIKonstanten.MENU_CONTROL_FACES);
         CheckMenuItem menuItemShowAxis = new CheckMenuItem(GUIKonstanten.MENU_CONTROL_AXIS);
 
+        //Network control bla
+        Menu menuNetwork = new Menu("Network");
+        CheckMenuItem menuItemConnectToServer = new CheckMenuItem(GUIKonstanten.MENU_NETWORK_CONNECT);
+        CustomMenuItem menuItemServerIP = new CustomMenuItem();
+        TextField menuTextFieldServerIP = new TextField();
+        menuTextFieldServerIP.setPrefWidth(150);
+        menuTextFieldServerIP.textProperty().bindBidirectional(NetworkController.getInstance().getNetwork().getPort());
+        menuItemServerIP.setContent(menuTextFieldServerIP);
+        menuItemServerIP.setHideOnClick(false);
+
+        CustomMenuItem menuItemPort = new CustomMenuItem();
+        TextField menuTextFieldPort = new TextField();
+        menuTextFieldPort.setPrefWidth(150);
+        menuTextFieldPort.textProperty().bindBidirectional(NetworkController.getInstance().getNetwork().getServerIpAddress());
+        menuItemPort.setContent(menuTextFieldPort);
+        menuItemPort.setHideOnClick(false);
+
+        MenuItem menuItemShowLocalIpAddress = new MenuItem();
+            menuItemShowLocalIpAddress.textProperty().bind(NetworkController.getInstance().getNetwork().getLokaleIpAddress());
+        MenuItem menuItemShowPublicIpAddress = new MenuItem();
+            menuItemShowPublicIpAddress.textProperty().bind(NetworkController.getInstance().getNetwork().getPublicIpAddress());
+
+
         menuFile.getItems().add(menuFileOpen);
         menuViewPoint.getItems().addAll(menuXPos, menuXNeg, menuYPos, menuYNeg, menuZPos, menuZNeg);
         menuControls.getItems().addAll(menuItemShowFaces, menuItemShowAxis);
+        menuNetwork.getItems().addAll(menuItemConnectToServer, menuItemServerIP, menuItemPort, menuItemShowPublicIpAddress, menuItemShowLocalIpAddress);
 
-        menuBar.getMenus().addAll(menuFile, menuViewPoint, menuControls);
+        menuBar.getMenus().addAll(menuFile, menuViewPoint, menuControls, menuNetwork);
 
         menuFileOpen.setOnAction(e -> {
             meinMain.loadFile(stage);
@@ -79,6 +106,23 @@ public final class MenuCreator {
         menuItemShowAxis.setOnAction(e -> {
             ModelController.getInstance().getModel().setAxisVisible(!ModelController.getInstance().getModel().isAxisVisible());
         });
+
+        menuItemConnectToServer.setOnAction(e -> {
+            if (menuItemConnectToServer.isSelected()) {
+                menuTextFieldServerIP.setDisable(true);
+                menuTextFieldPort.setDisable(true);
+                NetworkController.getInstance().getNetwork().connect();
+            } else {
+                menuTextFieldServerIP.setDisable(false);
+                menuTextFieldPort.setDisable(false);
+                NetworkController.getInstance().getNetwork().disconnect();
+            }
+        });
+
+//        menuTextFieldPort.textProperty().addListener((observable, oldValue, newValue) -> {
+//            System.out.println("textfield changed from " + oldValue + " to " + newValue);
+//            System.out.println(NetworkController.getInstance().getNetwork().getPort());
+//        });
 
         return menuBar;
     }

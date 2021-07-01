@@ -19,6 +19,7 @@ public class Main extends Application {
 //        PolyederController.getInstance().init("KugelBinary");
         PolyederController.getInstance().init();
         ModelController.getInstance().init();
+        NetworkController.getInstance().init();
     }
 
     private void initGUI(Stage stage) {

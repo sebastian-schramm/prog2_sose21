@@ -10,6 +10,7 @@ public interface GUIKonstanten
     String MENU_CONTROL = "Controls";
     String MENU_CONTROL_FACES = "Show faces";
     String MENU_CONTROL_AXIS = "Show Axis";
+    String MENU_NETWORK_CONNECT = "Connect";
 
     int FONT_SIZE = 32;
     int WINDOW_SIZE_X = 1280;

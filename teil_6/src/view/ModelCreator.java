@@ -106,7 +106,7 @@ public class ModelCreator {
     private void buildModel() {
         object = new MeshView(PolyederController.getInstance().getMesh());
         object.setMaterial(new PhongMaterial(Color.RED));
-        setDrawModeFill(true);
+        setDrawModeFill(isFill);
         object.setCullFace(CullFace.NONE);
 
         objectGroup.getChildren().clear();
