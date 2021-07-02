@@ -1,6 +1,7 @@
 package view;
 
 import controller.PolyederController;
+import controller.ServerController;
 import javafx.scene.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
@@ -126,6 +127,7 @@ public class ModelCreator {
             mousePosY = me.getSceneY();
             mouseOldX = me.getSceneX();
             mouseOldY = me.getSceneY();
+            ServerController.getInstance().getServer().sendMessage("MousePressed;" + mousePosX + ";" + mousePosY + ";" + mouseOldX + ";" + mouseOldY + ";");
         });
 
         scene.setOnMouseDragged( me -> {
@@ -146,15 +148,18 @@ public class ModelCreator {
             mouseDeltaY = (mousePosY - mouseOldY);
 
             if (me.isPrimaryButtonDown()) {
-                world.addRotation(-mouseDeltaX * MOUSE_SPEED * ROTATION_SPEED, Rotate.Y_AXIS);
-                world.addRotation(mouseDeltaY * MOUSE_SPEED * ROTATION_SPEED, Rotate.X_AXIS);
+                rotateWorld(mouseDeltaX, mouseDeltaY);
+//                world.addRotation(-mouseDeltaX * MOUSE_SPEED * ROTATION_SPEED, Rotate.Y_AXIS);
+//                world.addRotation(mouseDeltaY * MOUSE_SPEED * ROTATION_SPEED, Rotate.X_AXIS);
 //                objectGroup.addRotation(-mouseDeltaX * MOUSE_SPEED * ROTATION_SPEED, Rotate.Y_AXIS);
 //                objectGroup.addRotation(mouseDeltaY * MOUSE_SPEED * ROTATION_SPEED, Rotate.X_AXIS);
+                ServerController.getInstance().getServer().sendMessage("PrimaryButtonDown;" + mouseDeltaX + ";" + mouseDeltaY);
             } else if (me.isSecondaryButtonDown()) {
                 objectGroup.setTranslateX(objectGroup.getTranslateX() + mouseDeltaX * MOUSE_SPEED * ROTATION_SPEED);
                 objectGroup.setTranslateZ(objectGroup.getTranslateZ() - mouseDeltaY * MOUSE_SPEED * ROTATION_SPEED);
 //                camera.setTranslateX(camera.getTranslateX() - mouseDeltaX * MOUSE_SPEED * ROTATION_SPEED);
 //                camera.setTranslateY(camera.getTranslateY() - mouseDeltaY * MOUSE_SPEED * ROTATION_SPEED);
+                ServerController.getInstance().getServer().sendMessage("SecondaryButtonDown;" + mouseDeltaX + ";" + mouseDeltaY);
             }
         });
 
@@ -165,6 +170,11 @@ public class ModelCreator {
             if (newZ <= 0)
                 camera.setTranslateZ(newZ);
         });
+    }
+
+    public void rotateWorld(Double mouseDeltaX, Double mouseDeltaY) {
+        world.addRotation(-mouseDeltaX * MOUSE_SPEED * ROTATION_SPEED, Rotate.Y_AXIS);
+        world.addRotation(mouseDeltaY * MOUSE_SPEED * ROTATION_SPEED, Rotate.X_AXIS);
     }
 
     public static void setViewPoint(viewPoints pos) {

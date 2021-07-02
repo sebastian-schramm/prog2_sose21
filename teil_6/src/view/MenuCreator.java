@@ -2,16 +2,10 @@ package view;
 
 import controller.Main;
 import controller.ModelController;
-import controller.NetworkController;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.Property;
-import javafx.event.Event;
+import controller.ServerController;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.interfaces.GUIKonstanten;
-import utilities.LabelCreator;
-
-import javax.naming.Binding;
 
 public final class MenuCreator {
 
@@ -43,21 +37,21 @@ public final class MenuCreator {
         CustomMenuItem menuItemServerIP = new CustomMenuItem();
         TextField menuTextFieldServerIP = new TextField();
         menuTextFieldServerIP.setPrefWidth(150);
-        menuTextFieldServerIP.textProperty().bindBidirectional(NetworkController.getInstance().getNetwork().getPort());
+        menuTextFieldServerIP.textProperty().bindBidirectional(ServerController.getInstance().getServer().getPort());
         menuItemServerIP.setContent(menuTextFieldServerIP);
         menuItemServerIP.setHideOnClick(false);
 
         CustomMenuItem menuItemPort = new CustomMenuItem();
         TextField menuTextFieldPort = new TextField();
         menuTextFieldPort.setPrefWidth(150);
-        menuTextFieldPort.textProperty().bindBidirectional(NetworkController.getInstance().getNetwork().getServerIpAddress());
+        menuTextFieldPort.textProperty().bindBidirectional(ServerController.getInstance().getServer().getServerIpAddress());
         menuItemPort.setContent(menuTextFieldPort);
         menuItemPort.setHideOnClick(false);
 
         MenuItem menuItemShowLocalIpAddress = new MenuItem();
-            menuItemShowLocalIpAddress.textProperty().bind(NetworkController.getInstance().getNetwork().getLokaleIpAddress());
+            menuItemShowLocalIpAddress.textProperty().bind(ServerController.getInstance().getServer().getLokaleIpAddress());
         MenuItem menuItemShowPublicIpAddress = new MenuItem();
-            menuItemShowPublicIpAddress.textProperty().bind(NetworkController.getInstance().getNetwork().getPublicIpAddress());
+            menuItemShowPublicIpAddress.textProperty().bind(ServerController.getInstance().getServer().getPublicIpAddress());
 
 
         menuFile.getItems().add(menuFileOpen);
@@ -111,11 +105,11 @@ public final class MenuCreator {
             if (menuItemConnectToServer.isSelected()) {
                 menuTextFieldServerIP.setDisable(true);
                 menuTextFieldPort.setDisable(true);
-                NetworkController.getInstance().getNetwork().connect();
+                ServerController.getInstance().getServer().connect();
             } else {
                 menuTextFieldServerIP.setDisable(false);
                 menuTextFieldPort.setDisable(false);
-                NetworkController.getInstance().getNetwork().disconnect();
+                ServerController.getInstance().getServer().disconnect();
             }
         });
 

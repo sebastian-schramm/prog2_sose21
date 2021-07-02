@@ -7,5 +7,8 @@ public enum ConnectionStatusEnum
     CONNECTED,
     DISCONNECTING,
     DISCONNECTED,
-    WRONGPORT;
+    WRONG_PORT,
+    SERVER_START,
+    SERVER_STARTED,
+    SERVER_CLOSING
 }

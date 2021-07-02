@@ -33,5 +33,4 @@ public class ModelController {
     private static class ModelControllerHolder {
         private static final ModelController INSTANCE = new ModelController();
     }
-
 }

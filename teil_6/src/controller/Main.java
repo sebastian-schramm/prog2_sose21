@@ -19,7 +19,7 @@ public class Main extends Application {
 //        PolyederController.getInstance().init("KugelBinary");
         PolyederController.getInstance().init();
         ModelController.getInstance().init();
-        NetworkController.getInstance().init();
+        ServerController.getInstance().init();
     }
 
 
@@ -35,6 +35,7 @@ public class Main extends Application {
         stage.widthProperty().addListener((obs, oldVal, newVal) -> {
             // Do whatever you want
             ModelController.getInstance().setSubSceneWidth(newVal.doubleValue());
+            ServerController.getInstance().getServer().sendMessage(newVal + "");
         });
 
         stage.heightProperty().addListener((obs, oldVal, newVal) -> {
@@ -52,6 +53,11 @@ public class Main extends Application {
 
         stage.setMinWidth(stage.getWidth());
         stage.setMinHeight(stage.getHeight());
+
+        stage.setOnCloseRequest(e -> {
+            System.out.println("Programm wird beendet");
+            ServerController.getInstance().getServer().close();
+        });
     }
 
     public static void main(String[] args) {

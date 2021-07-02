@@ -1,8 +1,8 @@
 package view;
 
 import controller.Main;
-import controller.NetworkController;
 import controller.PolyederController;
+import controller.ServerController;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
@@ -22,7 +22,7 @@ public final class BottomViewCreator {
         Label volumeLabel = LabelCreator.createLabel(PolyederController.getInstance().volumeProperty().asString(), 12, GUIKonstanten.LABEL_VOLUME);
         Label areaLabel = LabelCreator.createLabel(PolyederController.getInstance().surfaceProperty().asString(), 12, GUIKonstanten.LABEL_SURFACE);
         Label triangleAmountLabel = LabelCreator.createLabel(PolyederController.getInstance().triangleAmountProperty().asString(), 12, GUIKonstanten.LABEL_TRIANGLE);
-        Label connectionStatus = LabelCreator.createLabel(NetworkController.getInstance().getNetwork().ConnectionStatus(), 12, GUIKonstanten.LABEL_STATUS);
+        Label connectionStatus = LabelCreator.createLabel(ServerController.getInstance().getServer().ConnectionStatus(), 12, GUIKonstanten.LABEL_STATUS);
 
         hBox.getChildren().addAll(volumeLabel, areaLabel, triangleAmountLabel, connectionStatus);
 
