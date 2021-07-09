@@ -27,6 +27,7 @@ public class Triangle implements Comparable<Triangle> {
         return Math.sqrt(Math.pow(v1.getX() - v2.getX(), 2) + Math.pow(v1.getY() - v2.getY(), 2) + Math.pow(v1.getZ() - v2.getZ(), 2));
     }
 
+    //TODO Eventuell nach einer besseren berechnung suchen!
     private void calcVolume() {
         calcVolume(vertices[0], vertices[1], vertices[2]);
     }
@@ -38,7 +39,7 @@ public class Triangle implements Comparable<Triangle> {
         double v132 = v1.getX()*v3.getY()*v2.getZ();
         double v213 = v2.getX()*v1.getY()*v3.getZ();
         double v123 = v1.getX()*v2.getY()*v3.getZ();
-        this.volume = (1.0f/6.0f)*(-v321 + v231 + v312 - v132 - v213 + v123);
+        this.volume = (1.0/6.0)*(-v321 + v231 + v312 - v132 - v213 + v123);
     }
 
     public double getArea() {
@@ -65,6 +66,8 @@ public class Triangle implements Comparable<Triangle> {
 
     @Override
     public int compareTo(Triangle triangle) {
-        return (this.getArea() < (triangle.getArea()) ? -1 : (this.getArea() == triangle.getArea() ? 0:1));
+        return (Double.compare(this.getArea(), triangle.getArea()));
+        //TODO Prüfen ob beides das selbe ergibt!
+//        return (this.getArea() < (triangle.getArea()) ? -1 : (this.getArea() == triangle.getArea() ? 0:1));
     }
 }

@@ -2,12 +2,13 @@ package model.interfaces;
 
 public interface AllgemeineKonstanten {
 
-    public static final String DEFAULT_RESOURCES_LOCATION = "src/main/java/resources/";
-    public static final int THREAD_AMOUNT = 12;
-    public static final int TRIANGLE_VERTICES = 4;
-    public static final String ASCII_STL_START_LINE = "solid";
-    public static final String ASCII_STL_END_LINE = "endsolid";
-    public static final String[] ASCII_TRIANGLE_PATTERN = {
+    String DEFAULT_RESOURCES_LOCATION = "src/resources/";
+    String DEFAULT_APPLICATION_ICON = "file:src/resources/icons/test.jpg";
+    int THREAD_AMOUNT = 12;
+    int TRIANGLE_VERTICES = 4;
+    String ASCII_STL_START_LINE = "solid";
+    String ASCII_STL_END_LINE = "endsolid";
+    String[] ASCII_TRIANGLE_PATTERN = {
             "facet normal",
             "outer loop",
             "vertex",

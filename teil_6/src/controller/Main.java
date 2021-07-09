@@ -2,70 +2,38 @@ package controller;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import model.interfaces.GUIKonstanten;
-import utilities.FileOpenDialog;
-import view.BottomViewCreator;
-import view.TopViewCreator;
+import view.Ausgabe;
+import view.FileOpenDialog;
+import view.GUICreator;
 
 public class Main extends Application {
 
-    private static BorderPane borderPane = new BorderPane();
-    private static StackPane root = new StackPane();
-
-    private static void myInit() {
-//        PolyederController.getInstance().init("KugelBinary");
-        PolyederController.getInstance().init();
-        ModelController.getInstance().init();
-        ServerController.getInstance().init();
-    }
-
-
-    private void initGUI(Stage stage) {
-        stage.setTitle(GUIKonstanten.MY_TITLE);
-        stage.setWidth(GUIKonstanten.WINDOW_SIZE_X);
-        stage.setHeight(GUIKonstanten.WINDOW_SIZE_Y);
-        root.getChildren().add(borderPane);
-        borderPane.setTop(TopViewCreator.createTopView(stage, this));
-        borderPane.setBottom(BottomViewCreator.createBottomView(stage, this));
-        borderPane.setCenter(ModelController.getInstance().getModel().getModelCreatorPane());
-
-        stage.widthProperty().addListener((obs, oldVal, newVal) -> {
-            // Do whatever you want
-            ModelController.getInstance().setSubSceneWidth(newVal.doubleValue());
-            ServerController.getInstance().getServer().sendMessage(newVal + "");
-        });
-
-        stage.heightProperty().addListener((obs, oldVal, newVal) -> {
-            // Do whatever you want
-            ModelController.getInstance().setSubSceneHeight(newVal.doubleValue());
-        });
-    }
-
-    @Override
-    public void start(Stage stage) throws Exception {
-        initGUI(stage);
-        Scene scene = new Scene(root, stage.getWidth(), stage.getHeight());
-        stage.setScene(scene);
-        stage.show();
-
-        stage.setMinWidth(stage.getWidth());
-        stage.setMinHeight(stage.getHeight());
-
-        stage.setOnCloseRequest(e -> {
-            System.out.println("Programm wird beendet");
-            ServerController.getInstance().getServer().close();
-        });
-    }
-
     public static void main(String[] args) {
-        myInit();
         launch(args);
     }
 
+    @Override
+    public void start(Stage stage) {
+//        Drag3DObject drag3DObject = new Drag3DObject();
+//        drag3DObject.start(stage);
+
+        Scene scene = new Scene(GUICreator.createMainFrame(stage, this), stage.getWidth(), stage.getHeight());
+        stage.setScene(scene);
+        stage.show();
+
+        stage.setOnCloseRequest(e -> {
+            Ausgabe.print("Programm wird beendet");
+            ServerController.getInstance().close();
+        });
+    }
+
+    private static void myInit() {
+
+    }
+
     public void loadFile(Stage stage) {
-        PolyederController.getInstance().loadFile(FileOpenDialog.openFileChooser(stage), stage);
+        PolyederController.getInstance().getPolyeder().loadFile(FileOpenDialog.openFileChooser(stage), stage);
     }
 }

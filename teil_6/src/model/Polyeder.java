@@ -1,41 +1,79 @@
 package model;
 
-import javafx.beans.binding.StringBinding;
+import controller.ModelController;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.scene.shape.TriangleMesh;
+import javafx.stage.Stage;
 import model.interfaces.AllgemeineKonstanten;
+import model.interfaces.GUIKonstanten;
+import utilities.Parser;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.concurrent.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class Polyeder extends Thread {
+
+    private final DoubleProperty surfaceProperty = new SimpleDoubleProperty();
+    private final DoubleProperty volumeProperty = new SimpleDoubleProperty();
+    private final IntegerProperty triangleAmountProperty = new SimpleIntegerProperty();
+
     private ArrayList<Triangle> triangleList;
 
-    private Double area = 0.0;
-    private Double volume = 0.0;
-
+    private Double area;
+    private Double volume;
 
     public Polyeder() {
         this.triangleList = new ArrayList<>(0);
+        this.surfaceProperty.set(0.0);
+        this.volumeProperty.set(0.0);
+        this.triangleAmountProperty.set(0);
         this.area = 0.0;
         this.volume = 0.0;
     }
 
-    public Polyeder(ArrayList<Triangle> triangleList, boolean threading) {
-        this.triangleList = triangleList;
+    public void loadFile(File file, Stage stage) {
+        boolean threading = true;
+        if (file != null) {
+//            Thread loadingThread = new Thread() {
+//                @Override
+//                public void run() {
+//                    System.out.println("Thread start!");
+                    Parser.ladeStlAusDatei(file);
 
-        if (threading)
-            getSurfaceThreads();
-        else
-            getSurfaceSerial();
 
-        sortTriangles();
-        calcSurface();
-        calcVolume();
+                    if (threading)
+                        getSurfaceThreads();
+                    else
+                        getSurfaceSerial();
+
+                    sortTriangles();
+                    calcSurface();
+                    calcVolume();
+
+
+//                    Platform.runLater(() -> {
+                        stage.setTitle(GUIKonstanten.MY_TITLE + file.getName());
+                        ModelController.getInstance().buildModel();
+//                    });
+//                }
+//            };
+//            loadingThread.start();
+        }
+    }
+
+    public void initTriangleList(int triangleNumber) {
+        triangleList = new ArrayList<>(triangleNumber);
+    }
+
+    public void constructTriangle(Vertex[] vertices) {
+        triangleList.add(new Triangle(vertices[0], vertices[1], vertices[2], vertices[3]));
     }
 
     public void getSurfaceSerial () {
@@ -57,7 +95,7 @@ public class Polyeder extends Thread {
         for (int i = 0; i < AllgemeineKonstanten.THREAD_AMOUNT; ++i) {
             int start = range[i];
             int end = range[i + 1];
-            int finalI = i;
+
             executor.submit(() -> {
                 for (int j = start; j < end; j++) {
                     triangleList.get(j).calcArea();
@@ -76,13 +114,19 @@ public class Polyeder extends Thread {
 
     private void calcSurface() {
         this.area = 0.0;
-        for (int i = 0; i < triangleList.size(); ++i) {
-            this.area += triangleList.get(i).getArea();
+        for (Triangle triangle : triangleList) {
+            this.area += triangle.getArea();
         }
+
+        this.surfaceProperty.set(Math.round(area * 1000.0) / 1000.0);
     }
 
     public double getSurface() {
-        return this.area;
+        return this.surfaceProperty.doubleValue();
+    }
+
+    public DoubleProperty getSurfaceProperty() {
+        return this.surfaceProperty;
     }
 
     private void calcVolume() {
@@ -91,10 +135,28 @@ public class Polyeder extends Thread {
         for (Triangle triangle : triangleList) {
             this.volume += triangle.getVolume();
         }
+
+        this.volumeProperty.set(Math.round(volume * 1000.0) / 1000.0);
     }
 
     public double getVolume() {
-        return this.volume;
+        return this.volumeProperty.doubleValue();
+    }
+
+    public DoubleProperty getVolumeProperty() {
+        return this.volumeProperty;
+    }
+
+    public void setTriangleAmount(int triangleAmount) {
+        this.triangleAmountProperty.setValue(triangleAmount);
+    }
+
+    public int getTriangleAmount() {
+        return this.triangleAmountProperty.intValue();
+    }
+
+    public IntegerProperty getTriangleAmountProperty() {
+        return this.triangleAmountProperty;
     }
 
     private void sortTriangles () {
@@ -107,28 +169,27 @@ public class Polyeder extends Thread {
         int faceCnt = 0;
         for(int x = 0; x < triangleList.size(); x++){
             for(int y = 0; y < 3; y++) {
-                mesh.getTexCoords().addAll(((triangleList.get(x).getNormal().getX() + 1) / -2));
-                mesh.getTexCoords().addAll(((triangleList.get(x).getNormal().getY() + 1) / -2));
-                mesh.getTexCoords().addAll(((triangleList.get(x).getNormal().getZ() + 1) / -2));
+                mesh.getTexCoords().addAll((float) ((triangleList.get(x).getNormal().getX() + 1) / -2));
+                mesh.getTexCoords().addAll((float) ((triangleList.get(x).getNormal().getY() + 1) / -2));
+                mesh.getTexCoords().addAll((float) ((triangleList.get(x).getNormal().getZ() + 1) / -2));
             }
 
             for(int y = 0; y < 3; y++) {
-                mesh.getPoints().addAll((triangleList.get(x).getVertex(y).getX()));
-                mesh.getPoints().addAll((triangleList.get(x).getVertex(y).getY()));
-                mesh.getPoints().addAll((triangleList.get(x).getVertex(y).getZ()));
+                mesh.getPoints().addAll((float) triangleList.get(x).getVertex(y).getX());
+                mesh.getPoints().addAll((float) triangleList.get(x).getVertex(y).getY());
+                mesh.getPoints().addAll((float) triangleList.get(x).getVertex(y).getZ());
             }
 
             mesh.getFaces().addAll(faceCnt, faceCnt, faceCnt + 1, faceCnt + 1, faceCnt + 2, faceCnt + 2);
             faceCnt += 3;
-//            if (x %250000 == 0) {
-//                System.gc();
-//            }
+            if (x %250000 == 0) {
+                System.gc();
+            }
         }
         return mesh;
     }
 
-    public int getTriangleListSize()
-    {
-        return triangleList.size();
+    public ArrayList<Triangle> getTriangleList() {
+        return this.triangleList;
     }
 }

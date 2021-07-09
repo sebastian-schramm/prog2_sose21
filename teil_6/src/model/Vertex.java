@@ -1,25 +1,16 @@
 package model;
 
-public class Vertex {
-    private float x;
-    private float y;
-    private float z;
+public record Vertex(double x, double y, double z) {
 
-    public Vertex(float x, float y, float z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
-
-    public float getX() {
+    public double getX() {
         return x;
     }
 
-    public float getY() {
+    public double getY() {
         return y;
     }
 
-    public float getZ() {
+    public double getZ() {
         return z;
     }
 }

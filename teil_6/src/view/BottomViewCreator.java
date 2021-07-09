@@ -3,29 +3,35 @@ package view;
 import controller.Main;
 import controller.PolyederController;
 import controller.ServerController;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import model.interfaces.BottomBarInterface;
 import model.interfaces.GUIKonstanten;
 import utilities.LabelCreator;
 
-public final class BottomViewCreator {
+public class BottomViewCreator {
 
-    private BottomViewCreator() {
-
-    }
-
-    public static HBox createBottomView (Stage stage, Main meinMain) {
+    public static HBox createBottomView(Stage stage, Main main) {
         HBox hBox = new HBox();
-        hBox.setMaxHeight(GUIKonstanten.BOTTOMBAR_HEIGHT);
+        hBox.setAlignment(Pos.CENTER);
+        hBox.setPrefHeight(BottomBarInterface.HBOX_HEIGHT);
+        hBox.setSpacing(BottomBarInterface.HBOX_SPACING);
+        hBox.setStyle(GUIKonstanten.BOTTOMBAR_COLOR);
 
-        Label volumeLabel = LabelCreator.createLabel(PolyederController.getInstance().volumeProperty().asString(), 12, GUIKonstanten.LABEL_VOLUME);
-        Label areaLabel = LabelCreator.createLabel(PolyederController.getInstance().surfaceProperty().asString(), 12, GUIKonstanten.LABEL_SURFACE);
-        Label triangleAmountLabel = LabelCreator.createLabel(PolyederController.getInstance().triangleAmountProperty().asString(), 12, GUIKonstanten.LABEL_TRIANGLE);
-        Label connectionStatus = LabelCreator.createLabel(ServerController.getInstance().getServer().ConnectionStatus(), 12, GUIKonstanten.LABEL_STATUS);
+        Label areaLabel = LabelCreator.createLabel(PolyederController.getInstance().getPolyeder().getSurfaceProperty().asString(), BottomBarInterface.FONT_SIZE, BottomBarInterface.LABEL_SURFACE);
+        Label volumeLabel = LabelCreator.createLabel(PolyederController.getInstance().getPolyeder().getVolumeProperty().asString(), BottomBarInterface.FONT_SIZE, BottomBarInterface.LABEL_VOLUME);
+        Label triangleAmountLabel = LabelCreator.createLabel(PolyederController.getInstance().getPolyeder().getTriangleAmountProperty().asString(), BottomBarInterface.FONT_SIZE, BottomBarInterface.LABEL_TRIANGLE);
+        Label connectionStatus = LabelCreator.createLabel(ServerController.getInstance().getConnectionStatusProperty(), BottomBarInterface.FONT_SIZE, BottomBarInterface.LABEL_STATUS);
 
-        hBox.getChildren().addAll(volumeLabel, areaLabel, triangleAmountLabel, connectionStatus);
 
+        hBox.getChildren().addAll(
+                areaLabel,
+                volumeLabel,
+                triangleAmountLabel,
+                connectionStatus
+        );
         return hBox;
     }
 }

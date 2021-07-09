@@ -1,25 +1,16 @@
 package model.interfaces;
 
-public interface GUIKonstanten
-{
+public interface GUIKonstanten {
+
     String MY_TITLE = "STL_Viewer: ";
-    String FILE_CHOOSER_TITLE = "W?hlen...";
+    String FILE_CHOOSER_TITLE = "Wählen...";
 
-    String MENU_FILE = "File";
-    String MENU_FILE_OPEN = "Load file";
-    String MENU_CONTROL = "Controls";
-    String MENU_CONTROL_FACES = "Show faces";
-    String MENU_CONTROL_AXIS = "Show Axis";
-    String MENU_NETWORK_CONNECT = "Connect";
+    int FONT_SIZE = 12;
+    int WINDOW_SIZE_X = 640;
+    int WINDOW_SIZE_Y = 480;
 
-    String LABEL_VOLUME = "Volume: ";
-    String LABEL_SURFACE = "Surface: ";
-    String LABEL_TRIANGLE = "Triangle: ";
-    String LABEL_STATUS = "Status: ";
+    String ANCHORPANE_COLOR = "-fx-background-color: #52FE01FF;";
+    String SUBSCENE_COLOR = "-fx-background-color: LIGHTGREY;";
+    String BOTTOMBAR_COLOR = "-fx-background-color: GREY;";
 
-    int FONT_SIZE = 32;
-    int WINDOW_SIZE_X = 1280;
-    int WINDOW_SIZE_Y = 720;
-    int MENUBAR_HEIGHT = 30;
-    int BOTTOMBAR_HEIGHT = 30;
 }

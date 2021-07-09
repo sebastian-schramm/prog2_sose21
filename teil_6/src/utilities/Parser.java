@@ -1,25 +1,22 @@
 package utilities;
 
-import controller.TriangleController;
-import model.Triangle;
+import controller.PolyederController;
 import model.Vertex;
 import model.interfaces.AllgemeineKonstanten;
 import resources.StringKonstanten_DE;
-import view.Ausgabe;
 
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
 public class Parser {
 
-    private static String[] coords;
     private static int[] index;
     private static int counter;
     private static int triangleNumber;
@@ -27,14 +24,11 @@ public class Parser {
     /**
      * Liest eine Datei aus und überprüft ob es sich dabei um ein ASCII oder Binary Format handelt
      * @param file
-     * @return
      */
-    public static ArrayList<Triangle> ladeStlAusDatei(File file) {
+    public static void ladeStlAusDatei(File file) {
         try (FileInputStream inputStream = new FileInputStream(file)){
-            Ausgabe.loadingFile("");
             DataInputStream input = new DataInputStream(inputStream);
 
-            boolean isASCII = false;
             triangleNumber = 0;
             long fileSize = file.length();
             byte[] firstBlock = new byte[80];
@@ -48,44 +42,46 @@ public class Parser {
 
             if (block.contains(AllgemeineKonstanten.ASCII_STL_START_LINE)) {
                 input.readLine();
-                System.out.println("Solid am anfang gefunden, koennte ASCII sein!");
+                System.out.println("Solid am anfang gefunden, könnte ASCII sein!");
                 line = input.readLine();
                 if (line.toLowerCase().startsWith(AllgemeineKonstanten.ASCII_TRIANGLE_PATTERN[0]))
                     System.out.println("Startet nicht mit facet");
 
                 long lineCount = getLineCount(file);
                 triangleNumber = (int) ((lineCount - 2 ) / 7);
+                PolyederController.getInstance().getPolyeder().setTriangleAmount(triangleNumber);
 
-                if ((triangleNumber * 7 + 2) != lineCount)
+                if ((triangleNumber * 7L + 2) != lineCount)
                     throw new Exception(StringKonstanten_DE.FILE_LINE_COUNT_NOT_VALID);
 
-                TriangleController.getInstance().initTriangle(triangleNumber);
+                PolyederController.getInstance().getPolyeder().initTriangleList(triangleNumber);
                 readASCIIFile(file);
             } else {
-                System.out.println("Kein Solid am anfang gefunden, koennte Binary sein!");
+                System.out.println("Kein Solid am anfang gefunden, könnte Binary sein!");
                 triangleNumber = Integer.reverseBytes(input.readInt());
+                PolyederController.getInstance().getPolyeder().setTriangleAmount(triangleNumber);
 
-                if (!(fileSize == (triangleNumber * 50 + 84)))
+                if (!(fileSize == (triangleNumber * 50L + 84)))
                     throw new Exception(StringKonstanten_DE.FILE_LINE_COUNT_NOT_VALID);
 
-                TriangleController.getInstance().initTriangle(triangleNumber);
+                PolyederController.getInstance().getPolyeder().initTriangleList(triangleNumber);
                 readBinaryFile(file);
             }
             System.out.println(triangleNumber + " Dreiecke gefunden");
 
-            Ausgabe.loadingFileComplete();
+            //TODO Alert hier einbinden
+//            Ausgabe.loadingFileComplete();
 
-            return TriangleController.getInstance().getTriangleList();
+            return;
         } catch (FileNotFoundException e) {
-            Ausgabe.loadingFileFailed();
+//            Ausgabe.loadingFileFailed();
         } catch (IOException e) {
-            Ausgabe.loadingFileFailed();
+//            Ausgabe.loadingFileFailed();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        TriangleController.getInstance().initTriangle(triangleNumber);
-        return TriangleController.getInstance().getTriangleList();
+        PolyederController.getInstance().getPolyeder().initTriangleList(triangleNumber);
     }
 
     /**
@@ -112,7 +108,7 @@ public class Parser {
     }
 
     private static String readBlock(byte[] firstBlock) {
-        Charset charset = Charset.forName("UTF-8");
+        Charset charset = StandardCharsets.UTF_8;
         CharBuffer decode = charset.decode(ByteBuffer.wrap(firstBlock, 0, firstBlock.length));
         return decode.toString().toLowerCase();
     }
@@ -136,7 +132,8 @@ public class Parser {
                     input.read(normal);
                     vertices[i] = getVertex(normal);
                 }
-                TriangleController.getInstance().constructTriangle(vertices);
+                PolyederController.getInstance().getPolyeder().constructTriangle(vertices);
+//                TriangleController.getInstance().constructTriangle(vertices);
 
                 input.read(attribute);
             }
@@ -146,7 +143,7 @@ public class Parser {
     private static void readASCIIFile(File filePath) throws IOException {
         try (FileReader reader = new FileReader(filePath);
             BufferedReader bufferedReader = new BufferedReader((reader))) {
-            Ausgabe.foundASCIIFile();
+//            Ausgabe.foundASCIIFile();
             
             CountDownLatch countDownLatch = new CountDownLatch(AllgemeineKonstanten.THREAD_AMOUNT);
             ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(AllgemeineKonstanten.THREAD_AMOUNT);
@@ -165,11 +162,12 @@ public class Parser {
                 bufferedReader.readLine();
 
 //                for (int n = 0; n < 10; ++n)
-                    TriangleController.getInstance().constructTriangle(vertices);
+                    PolyederController.getInstance().getPolyeder().constructTriangle(vertices);
+//                    TriangleController.getInstance().constructTriangle(vertices);
 
                 if (i %250000 == 0)
                         executor.submit(() -> {
-                            System.gc();
+//                            System.gc();
                             countDownLatch.countDown();
                             return null;
                         });
@@ -182,14 +180,10 @@ public class Parser {
 
     private static Vertex stringToVertexNormal(String line) {
         return getVertex(line.stripLeading().substring(AllgemeineKonstanten.ASCII_TRIANGLE_PATTERN[0].length() + 1).stripLeading());
-//        coords = line.stripLeading().substring(AllgemeineKonstanten.ASCII_TRIANGLE_PATTERN[0].length() + 1).stripLeading().split(" ");
-//        return new Vertex(Float.parseFloat(coords[0]), Float.parseFloat(coords[1]), Float.parseFloat(coords[2]));
     }
 
     private static Vertex stringToVertexFacet(String line) {
         return getVertex(line.stripLeading().substring(AllgemeineKonstanten.ASCII_TRIANGLE_PATTERN[2].length() + 1).stripLeading());
-//        coords = line.substring(AllgemeineKonstanten.ASCII_TRIANGLE_PATTERN[2].length() + 1).stripLeading().split(" ");
-//        return new Vertex(Float.parseFloat(coords[0]), Float.parseFloat(coords[1]), Float.parseFloat(coords[2]));
     }
 
     private static Vertex getVertex(byte[] attribute) {
@@ -205,11 +199,7 @@ public class Parser {
             if(Character.isWhitespace(value.charAt(i)))
                 index[counter++] = i;
 
-        return new Vertex((float) Double.parseDouble(value.substring(0, index[0])), (float) Double.parseDouble(value.substring(index[0] + 1, index[1])), (float) Double.parseDouble(value.substring(index[1] + 1, value.length())));
+        return new Vertex((float) Double.parseDouble(value.substring(0, index[0])), (float) Double.parseDouble(value.substring(index[0] + 1, index[1])), (float) Double.parseDouble(value.substring(index[1] + 1)));
     }
 
-    private static Vertex stringToVertex(String line) {
-        coords = line.replace(AllgemeineKonstanten.ASCII_TRIANGLE_PATTERN[0], "").replace(AllgemeineKonstanten.ASCII_TRIANGLE_PATTERN[2], "").stripLeading().split(" ");
-        return new Vertex(Float.parseFloat(coords[0]), Float.parseFloat(coords[1]), Float.parseFloat(coords[2]));
-    }
 }
