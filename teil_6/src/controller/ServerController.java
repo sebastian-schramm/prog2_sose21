@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
+import utilities.ClientThread;
 
 public class ServerController extends Thread {
 
@@ -25,7 +26,7 @@ public class ServerController extends Thread {
     private final StringProperty connectionStatus = new SimpleStringProperty();
 
     private ServerThread serverThread = null;
-    private Thread clientThread = null;
+    private ClientThread clientThread = null;
 
     private ServerController() {
         this.serverIpAddress.setValue(ServerInterface.SERVER_IP);
@@ -55,7 +56,7 @@ public class ServerController extends Thread {
             serverThread.notify();
         }
 
-//        clientThread = new ClientThread();
+        clientThread = new ClientThread();
 //        clientThread.start();
 //        synchronized (clientThread) {
 //            notify();
@@ -77,8 +78,8 @@ public class ServerController extends Thread {
             setConnectionStatus(ServerInterface.SERVER_START);
             Ausgabe.print(ServerInterface.CHECK_IP_FOUND);
 
-//            serverThread.setWaiting(false);
-//
+           
+            clientThread.start();
 //            synchronized (serverThread) {
 //                serverThread.notify();
 //            }
@@ -109,16 +110,16 @@ public class ServerController extends Thread {
     private void closeAllServerThings() {
         if (serverThread.getServer() != null)
             try {
-                serverThread.getServer().close();
-            } catch (IOException e) {
-                Ausgabe.print(ServerInterface.SERVER_COULD_NOT_CLOSE);
-            }
+            serverThread.getServer().close();
+        } catch (IOException e) {
+            Ausgabe.print(ServerInterface.SERVER_COULD_NOT_CLOSE);
+        }
         if (serverThread.getClient() != null)
             try {
-                    serverThread.getClient().close();
-            } catch (IOException e) {
-                Ausgabe.print(ServerInterface.SERVER_CLIENT_COULD_NOT_CLOSE);
-            }
+            serverThread.getClient().close();
+        } catch (IOException e) {
+            Ausgabe.print(ServerInterface.SERVER_CLIENT_COULD_NOT_CLOSE);
+        }
         if (serverThread.ein != null) {
             try {
                 serverThread.ein.close();
@@ -129,6 +130,10 @@ public class ServerController extends Thread {
         if (serverThread.aus != null) {
             serverThread.aus.close();
         }
+    }
+
+    public void sendMessage(String message) {
+        clientThread.sendeKommando(message);
     }
 
     public StringProperty getLokaleIpAddress() {
@@ -162,6 +167,7 @@ public class ServerController extends Thread {
     }
 
     private static class ServerControllerHolder {
+
         private static final ServerController INSTANCE = new ServerController();
     }
 }

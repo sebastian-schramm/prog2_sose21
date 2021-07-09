@@ -7,7 +7,7 @@ public interface ServerInterface {
     String PUBLIC_IP = "localhost";
     String PORT_NUMBER = "40404";
 
-    String URL_TO_GET_PUBIC_IP = "hzttp://checkip.amazonaws.com";
+    String URL_TO_GET_PUBIC_IP = "http://checkip.amazonaws.com";
 
     String CHECK_IF_IP_IS_SET = "Prüfe ob eine IP für den Server gesetzt wurde...";
     String CHECK_NO_IP_FOUND = "Keine IP angegeben, Starte Server!";

@@ -77,6 +77,12 @@ public class ServerThread extends Thread {
                         ServerController.getInstance().disconnect();
                         Ausgabe.print("Server wird geschlossen, Verbindung getrennt");
                         break;
+                    }else if(zeile.startsWith("setOnMousePressed")){
+                        String[] lines = zeile.split(";");
+                        ModelController.getInstance().mousePressed(Double.parseDouble(lines[1]), Double.parseDouble(lines[2]));
+                    }else if(zeile.startsWith("setOnMouseDragged")){
+                         String[] lines = zeile.split(";");
+                        ModelController.getInstance().rotateWorld(Double.parseDouble(lines[1]), Double.parseDouble(lines[2]));
                     } else {
                         Ausgabe.print(zeile);
                     }
@@ -89,6 +95,7 @@ public class ServerThread extends Thread {
             }
         }
     }
+    
 
     public Socket getClient() {
         return client;

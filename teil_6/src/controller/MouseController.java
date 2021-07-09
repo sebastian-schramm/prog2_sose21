@@ -18,16 +18,17 @@ public class MouseController {
 
     public void handleMouseEvents(StackPane scene) {
 
-        scene.setOnMousePressed( me -> {
+        scene.setOnMousePressed(me -> {
             mousePosX = me.getSceneX();
             mousePosY = me.getSceneY();
             mouseOldX = me.getSceneX();
             mouseOldY = me.getSceneY();
 
             ModelController.getInstance().mousePressed(mousePosX, mousePosY);
+            ServerController.getInstance().sendMessage("setOnMousePressed;" + mousePosX + ";" + mousePosY);
         });
 
-        scene.setOnMouseDragged( me -> {
+        scene.setOnMouseDragged(me -> {
 
             mouseOldX = mousePosX;
             mouseOldY = mousePosY;
@@ -38,6 +39,7 @@ public class MouseController {
 
             if (me.isPrimaryButtonDown()) {
                 ModelController.getInstance().rotateWorld(mouseDeltaX, mouseDeltaY);
+                ServerController.getInstance().sendMessage("setOnMouseDragged;" + mouseDeltaX + ";" + mouseDeltaY);
             } else if (me.isSecondaryButtonDown()) {
                 ModelController.getInstance().moveWorld(mousePosX, mousePosY);
             }
@@ -53,6 +55,7 @@ public class MouseController {
     }
 
     private static class MouseControllerHolder {
+
         private static final MouseController INSTANCE = new MouseController();
     }
 }
