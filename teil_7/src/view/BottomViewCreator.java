@@ -20,10 +20,10 @@ public class BottomViewCreator {
         hBox.setSpacing(BottomBarInterface.HBOX_SPACING);
         hBox.setStyle(GUIKonstanten.BOTTOMBAR_COLOR);
 
-        Label areaLabel = LabelCreator.createLabel(PolyederController.getInstance().getSurfaceProperty().asString(), BottomBarInterface.FONT_SIZE, BottomBarInterface.LABEL_SURFACE);
-        Label volumeLabel = LabelCreator.createLabel(PolyederController.getInstance().getVolumeProperty().asString(), BottomBarInterface.FONT_SIZE, BottomBarInterface.LABEL_VOLUME);
-        Label triangleAmountLabel = LabelCreator.createLabel(PolyederController.getInstance().getTriangleAmountProperty().asString(), BottomBarInterface.FONT_SIZE, BottomBarInterface.LABEL_TRIANGLE);
-        Label connectionStatus = LabelCreator.createLabel(ServerController.getInstance().getConnectionStatusProperty(), BottomBarInterface.FONT_SIZE, BottomBarInterface.LABEL_STATUS);
+        Label areaLabel = LabelCreator.createLabel(PolyederController.getInstance().getSurfaceProperty().asString(), GUIKonstanten.FONT_SIZE, BottomBarInterface.LABEL_SURFACE);
+        Label volumeLabel = LabelCreator.createLabel(PolyederController.getInstance().getVolumeProperty().asString(), GUIKonstanten.FONT_SIZE, BottomBarInterface.LABEL_VOLUME);
+        Label triangleAmountLabel = LabelCreator.createLabel(PolyederController.getInstance().getTriangleAmountProperty().asString(), GUIKonstanten.FONT_SIZE, BottomBarInterface.LABEL_TRIANGLE);
+        Label connectionStatus = LabelCreator.createLabel(ServerController.getInstance().getConnectionStatusProperty(), GUIKonstanten.FONT_SIZE, BottomBarInterface.LABEL_STATUS);
 
 
         hBox.getChildren().addAll(

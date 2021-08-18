@@ -10,6 +10,7 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.interfaces.MenuBarInterface;
+import utilities.ClipboardCreator;
 import utilities.MenuTextFieldCreator;
 
 public final class TopViewCreator {
@@ -27,6 +28,9 @@ public final class TopViewCreator {
         CheckMenuItem menuItemShowFaces = new CheckMenuItem(MenuBarInterface.MENU_CONTROL_FACES);
         CheckMenuItem menuItemShowAxis = new CheckMenuItem(MenuBarInterface.MENU_CONTROL_AXIS);
 
+        Menu menuHelp = new Menu(MenuBarInterface.MENU_HELP);
+        MenuItem menuItemAbout = new MenuItem(MenuBarInterface.MENU_ABOUT);
+
         //Network control bla
         Menu menuNetwork = new Menu(MenuBarInterface.MENU_NETWORK);
         CheckMenuItem menuItemConnectToServer = new CheckMenuItem(MenuBarInterface.MENU_NETWORK_CONNECT);
@@ -38,18 +42,17 @@ public final class TopViewCreator {
         MenuItem menuItemShowPublicIpAddress = new MenuItem();
         menuItemShowPublicIpAddress.textProperty().bind(Bindings.concat(MenuBarInterface.LABEL_SERVER , ServerController.getInstance().getPublicIpAddress()));
 
-        menuFile.getItems().addAll(
-                menuFileOpen
-        );
+        menuFile.getItems().addAll(menuFileOpen);
 
-        menuViewPoint.getItems().addAll(
-
-        );
+        menuViewPoint.getItems().addAll();
 
         menuControls.getItems().addAll(
                 menuItemShowFaces,
                 menuItemShowAxis
         );
+
+        menuHelp.getItems().addAll(menuItemAbout);
+
         menuNetwork.getItems().addAll(
                 menuItemConnectToServer,
                 menuItemServerIP,
@@ -62,7 +65,8 @@ public final class TopViewCreator {
                 menuFile,
                 menuViewPoint,
                 menuControls,
-                menuNetwork
+                menuNetwork,
+                menuHelp
         );
 
         menuFileOpen.setOnAction(e -> main.loadFile(stage));
@@ -77,26 +81,26 @@ public final class TopViewCreator {
             if (menuItemConnectToServer.isSelected()) {
                 menuItemServerIP.getContent().setDisable(true);
                 menuItemPort.getContent().setDisable(true);
-//                ServerController.getInstance().connect();
+                System.out.println(ServerController.getInstance().getServerIpAddress().getValue());
+                System.out.println(ServerController.getInstance().getPort().getValue());
+                ServerController.getInstance().connect();
             } else {
                 menuItemServerIP.getContent().setDisable(false);
                 menuItemPort.getContent().setDisable(false);
-//                ServerController.getInstance().disconnect();
+                ServerController.getInstance().disconnect();
             }
         });
 
         menuItemShowLocalIpAddress.setOnAction(e -> {
-            final Clipboard clipboard = Clipboard.getSystemClipboard();
-            final ClipboardContent content = new ClipboardContent();
-            content.putString(ServerController.getInstance().getLokaleIpAddress().getValue());
-            clipboard.setContent(content);
+            ClipboardCreator.createClipboard(ServerController.getInstance().getLokaleIpAddress().getValue());
         });
 
         menuItemShowPublicIpAddress.setOnAction(e -> {
-            final Clipboard clipboard = Clipboard.getSystemClipboard();
-            final ClipboardContent content = new ClipboardContent();
-            content.putString(ServerController.getInstance().getPublicIpAddress().getValue());
-            clipboard.setContent(content);
+            ClipboardCreator.createClipboard(ServerController.getInstance().getPublicIpAddress().getValue());
+        });
+
+        menuItemAbout.setOnAction(actionEvent -> {
+            AlertMessage.aboutMessage(MenuBarInterface.ABOUT_MESSAGE, MenuBarInterface.ABOUT_HEADER, MenuBarInterface.MENU_ABOUT);
         });
 
         vBox.getChildren().add(menuBar);

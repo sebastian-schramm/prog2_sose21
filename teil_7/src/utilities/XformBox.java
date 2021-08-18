@@ -8,12 +8,6 @@ import javafx.scene.transform.Translate;
 
 public class XformBox extends Group {
 
-    public Translate t  = new Translate();
-    private Rotate rotateX = new Rotate(0, Rotate.X_AXIS);
-    private Rotate rotateY = new Rotate(0, Rotate.Y_AXIS);
-    double angleX = 0.0;
-    double angleY = 0.0;
-
     public XformBox() {
         super();
         getTransforms().add(new Affine());
@@ -40,9 +34,6 @@ public class XformBox extends Group {
         getTransforms().set(0, new Affine(mxx, mxy, mxz, tx, myx, myy, myz, ty, mzx, mzy, mzz, tz));
     }
 
-    /**
-     * Reset transform to identity transform
-     */
     public void reset() {
         getTransforms().set(0, new Affine());
     }

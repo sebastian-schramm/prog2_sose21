@@ -1,10 +1,17 @@
 package controller;
 
+import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.stage.Stage;
 import model.Polyeder;
+import model.interfaces.GUIKonstanten;
+import utilities.Parser;
+import view.AlertMessage;
+
+import java.io.File;
 
 public class PolyederController {
 
@@ -23,6 +30,36 @@ public class PolyederController {
 
     public Polyeder getPolyeder() {
         return polyeder;
+    }
+
+    public void loadFile(File file, Stage stage) {
+        boolean threading = true;
+        if (file != null) {
+            Thread loadingThread = new Thread() {
+                @Override
+                public void run() {
+                    Platform.runLater(() -> {
+                        //TODO Message das eine Datei geladen wird
+                        Parser.ladeStlAusDatei(file);
+
+                        if (threading)
+                            polyeder.surfaceThreads();
+                        else
+                            polyeder.surfaceSerial();
+
+                        polyeder.sortTriangles();
+                        polyeder.calcSurface();
+                        polyeder.calcVolume();
+
+                        stage.setTitle(GUIKonstanten.MY_TITLE + file.getName());
+                        ModelController.getInstance().buildModel();
+                        //TODO Alert hier einbinden
+                        AlertMessage.showMessage(GUIKonstanten.LOADING_FILE_COMPLETE);
+                    });
+                }
+            };
+            loadingThread.start();
+        }
     }
 
     public DoubleProperty getSurfaceProperty() {

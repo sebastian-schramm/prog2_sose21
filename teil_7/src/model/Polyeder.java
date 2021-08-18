@@ -2,15 +2,13 @@ package model;
 
 import controller.ModelController;
 import controller.PolyederController;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.application.Platform;
 import javafx.scene.shape.TriangleMesh;
 import javafx.stage.Stage;
 import model.interfaces.AllgemeineKonstanten;
 import model.interfaces.GUIKonstanten;
 import utilities.Parser;
+import view.AlertMessage;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -19,8 +17,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
-public class Polyeder extends Thread {
-
+public class Polyeder {
+    //TODO nicht von Thread erben
     private ArrayList<Triangle> triangleList;
 
     private Double area;
@@ -35,30 +33,30 @@ public class Polyeder extends Thread {
     public void loadFile(File file, Stage stage) {
         boolean threading = true;
         if (file != null) {
-//            Thread loadingThread = new Thread() {
-//                @Override
-//                public void run() {
-//                    System.out.println("Thread start!");
-                    Parser.ladeStlAusDatei(file);
+            Thread loadingThread = new Thread() {
+                @Override
+                public void run() {
+                    Platform.runLater(() -> {
+                        //TODO Message das eine Datei geladen wird
+                        Parser.ladeStlAusDatei(file);
 
+                        if (threading)
+                            surfaceThreads();
+                        else
+                            surfaceSerial();
 
-                    if (threading)
-                        getSurfaceThreads();
-                    else
-                        getSurfaceSerial();
+                        sortTriangles();
+                        calcSurface();
+                        calcVolume();
 
-                    sortTriangles();
-                    calcSurface();
-                    calcVolume();
-
-
-//                    Platform.runLater(() -> {
                         stage.setTitle(GUIKonstanten.MY_TITLE + file.getName());
                         ModelController.getInstance().buildModel();
-//                    });
-//                }
-//            };
-//            loadingThread.start();
+                        //TODO Alert hier einbinden
+                        AlertMessage.showMessage(GUIKonstanten.LOADING_FILE_COMPLETE);
+                    });
+                }
+            };
+            loadingThread.start();
         }
     }
 
@@ -70,13 +68,13 @@ public class Polyeder extends Thread {
         triangleList.add(new Triangle(vertices[0], vertices[1], vertices[2], vertices[3]));
     }
 
-    public void getSurfaceSerial () {
+    public void surfaceSerial() {
         for (Triangle triangle : triangleList) {
             triangle.calcArea();
         }
     }
 
-    private void getSurfaceThreads() {
+    public void surfaceThreads() {
         CountDownLatch countDownLatch = new CountDownLatch(AllgemeineKonstanten.THREAD_AMOUNT);
         ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(AllgemeineKonstanten.THREAD_AMOUNT);
 
@@ -106,7 +104,7 @@ public class Polyeder extends Thread {
         }
     }
 
-    private void calcSurface() {
+    public void calcSurface() {
         this.area = 0.0;
         for (Triangle triangle : triangleList) {
             this.area += triangle.getArea();
@@ -114,16 +112,16 @@ public class Polyeder extends Thread {
         PolyederController.getInstance().getSurfaceProperty().set(Math.round(area * AllgemeineKonstanten.ROUND_KOMMASTELLE) / AllgemeineKonstanten.ROUND_KOMMASTELLE);
     }
 
-    private void calcVolume() {
+    public void calcVolume() {
         this.volume = 0.0;
         if (triangleList.size() > 1)
         for (Triangle triangle : triangleList) {
             this.volume += triangle.getVolume();
         }
-        PolyederController.getInstance().getVolumeProperty().set(Math.round(area * AllgemeineKonstanten.ROUND_KOMMASTELLE) / AllgemeineKonstanten.ROUND_KOMMASTELLE);
+        PolyederController.getInstance().getVolumeProperty().set(Math.round(volume * AllgemeineKonstanten.ROUND_KOMMASTELLE) / AllgemeineKonstanten.ROUND_KOMMASTELLE);
     }
 
-    private void sortTriangles () {
+    public void sortTriangles () {
         Collections.sort(triangleList);
     }
 

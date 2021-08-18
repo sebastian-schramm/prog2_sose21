@@ -19,6 +19,7 @@ public interface ServerInterface {
     String SERVER_CONNECTION_DETECTED = "Client verbindet";
     String SERVER_CLIENT_CONNECTED = "Client Verbunden";
     String SERVER_CLOSING = "Server wird beendet";
+    String CONNECTED_WITH_SERVER = "Mit Server verbunden";
 
     //Error messages
     String WEBSITE_COULD_NOT_BE_FOUND = "Webseite für die Public IP Adresse konnte nicht aufgerufen werden!";

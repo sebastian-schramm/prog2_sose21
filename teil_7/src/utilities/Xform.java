@@ -8,6 +8,7 @@ import javafx.scene.transform.Translate;
 
 public class Xform extends Group {
 
+    //TODO Richtung Ende des Projekts die Klasse löschen, falls wir sie nicht benötigen.
     public enum RotateOrder {
         XYZ, XZY, YXZ, YZX, ZXY, ZYX
     }

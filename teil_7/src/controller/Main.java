@@ -13,18 +13,18 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         Scene scene = new Scene(GUICreator.createMainFrame(stage, this), stage.getWidth(), stage.getHeight());
         stage.setScene(scene);
         stage.show();
 
         stage.setOnCloseRequest(e -> {
-//            ServerController.getInstance().close();
+            ServerController.getInstance().close();
         });
     }
 
     public void loadFile(Stage stage) {
-        PolyederController.getInstance().getPolyeder().loadFile(FileOpenDialog.openFileChooser(stage), stage);
+        PolyederController.getInstance().loadFile(FileOpenDialog.openFileChooser(stage), stage);
     }
 
 }

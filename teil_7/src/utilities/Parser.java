@@ -3,7 +3,9 @@ package utilities;
 import controller.PolyederController;
 import model.Vertex;
 import model.interfaces.AllgemeineKonstanten;
+import model.interfaces.GUIKonstanten;
 import resources.StringKonstanten_DE;
+import view.AlertMessage;
 
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -22,7 +24,7 @@ public class Parser {
     private static int triangleNumber;
 
     /**
-     * Liest eine Datei aus und überprüft ob es sich dabei um ein ASCII oder Binary Format handelt
+     * Liest eine Datei aus und überprüft, ob es sich dabei um ein ASCII oder Binary Format handelt
      * @param file
      */
     public static void ladeStlAusDatei(File file) {
@@ -33,6 +35,7 @@ public class Parser {
             long fileSize = file.length();
             byte[] firstBlock = new byte[80];
 
+            //TODO
             System.out.println("Filesize in Bytes : " + fileSize);
 
             //Liest die ersten 6 Bytes aus der Datei aus
@@ -69,14 +72,11 @@ public class Parser {
             }
             System.out.println(triangleNumber + " Dreiecke gefunden");
 
-            //TODO Alert hier einbinden
-//            Ausgabe.loadingFileComplete();
-
             return;
         } catch (FileNotFoundException e) {
-//            Ausgabe.loadingFileFailed();
+            AlertMessage.showMessage(GUIKonstanten.LOADING_FILE_FAILED);
         } catch (IOException e) {
-//            Ausgabe.loadingFileFailed();
+            AlertMessage.showMessage(GUIKonstanten.LOADING_FILE_FAILED);
         } catch (Exception e) {
             e.printStackTrace();
         }
