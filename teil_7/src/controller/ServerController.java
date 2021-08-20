@@ -4,6 +4,8 @@ import javafx.application.Platform;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.scene.shape.TriangleMesh;
+import model.Triangle;
 import model.interfaces.ServerInterface;
 import utilities.ServerThread;
 import view.Ausgabe;
@@ -14,9 +16,11 @@ import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+
 import utilities.ClientThread;
 
-public class ServerController extends Thread {
+public class ServerController {
 
     private final StringProperty serverIpAddress = new SimpleStringProperty();
     private final StringProperty lokaleIpAddress = new SimpleStringProperty();
@@ -48,15 +52,14 @@ public class ServerController extends Thread {
             Ausgabe.print(ServerInterface.WEBSITE_IP_NOT_FOUND);
         }
 
-        serverThread = new ServerThread();
-        serverThread.setWaiting(true);
-        serverThread.start();
+//        serverThread = new ServerThread();
+//        serverThread.setWaiting(true);
+//        serverThread.start();
+//        synchronized (serverThread) {
+//            serverThread.notify();
+//        }
 
-        synchronized (serverThread) {
-            serverThread.notify();
-        }
-
-        clientThread = new ClientThread();
+//        clientThread = new ClientThread();
 //        clientThread.start();
 //        synchronized (clientThread) {
 //            notify();
@@ -67,10 +70,28 @@ public class ServerController extends Thread {
         System.out.println("Try to start Client");
         System.out.println(ip);
         System.out.println(port);
-//        this.serverIpAddress.setValue(ip);
-//        this.port.setValue(port);
+        this.serverIpAddress.setValue(ip);
+        this.port.setValue(port);
 
-        clientThread.start();
+        if (clientThread == null) {
+            System.out.println("Start ClientThread");
+            clientThread = new ClientThread();
+            clientThread.start();
+        }
+    }
+
+    public void startServer(String ip, String port) {
+        System.out.println("Try to start Client");
+        System.out.println(ip);
+        System.out.println(port);
+        this.serverIpAddress.setValue(ip);
+        this.port.setValue(port);
+
+        if (serverThread == null) {
+            System.out.println("Start ClientThread");
+            serverThread = new ServerThread();
+            serverThread.start();
+        }
     }
 
     public void connect() {
@@ -78,47 +99,59 @@ public class ServerController extends Thread {
 
         if (this.serverIpAddress.getValue().equals("")) {
             Ausgabe.print(ServerInterface.CHECK_NO_IP_FOUND);
-            serverThread.setWaiting(false);
+            serverThread = new ServerThread();
+            serverThread.start();
+            serverThread.setServerMainLoopRunning(true);
+//            serverThread.setWaiting(false);
 
-            synchronized (serverThread) {
-                serverThread.notify();
-            }
+//            synchronized (serverThread) {
+//                serverThread.notify();
+//            }
 
         } else {
             setConnectionStatus(ServerInterface.SERVER_START);
             Ausgabe.print(ServerInterface.CHECK_IP_FOUND);
-
+            clientThread = new ClientThread();
 
             clientThread.start();
-            //synchronized (serverThread) {
-            //  serverThread.notify();
-            //}
         }
     }
 
     public void disconnect() {
-        setConnectionStatus(ServerInterface.SERVER_CLOSING);
-        serverThread.setWaiting(true);
-        serverThread.closeAll();
+        if (serverThread != null) {
+            setConnectionStatus(ServerInterface.SERVER_CLOSING);
+            serverThread.setServerMainLoopRunning(false);
+//        serverThread.setWaiting(true);
+            serverThread.closeAll();
+            clientThread.closeAll();
 
-        synchronized (serverThread) {
-            serverThread.notify();
+            synchronized (serverThread) {
+                serverThread.notify();
+            }
+            setConnectionStatus(ServerInterface.OFFLINE);
         }
-        setConnectionStatus(ServerInterface.OFFLINE);
     }
 
     public void close() {
-        serverThread.setServerMainLoopRunning(false);
-        serverThread.setWaiting(false);
-        serverThread.closeAll();
+        if (serverThread != null) {
+            serverThread.setServerMainLoopRunning(false);
+            serverThread.setWaiting(false);
+            serverThread.closeAll();
 
-        synchronized (serverThread) {
-            serverThread.notify();
+            synchronized (serverThread) {
+                serverThread.notify();
+            }
         }
     }
 
     public void sendMessage(String message) {
-        clientThread.sendeKommando(message);
+        if (clientThread != null)
+            clientThread.sendeKommando(message);
+    }
+
+    public void sendObject(ArrayList<Triangle> triangleList){
+        if (clientThread != null)
+            clientThread.sendeMesh(triangleList);
     }
 
     public StringProperty getLokaleIpAddress() {

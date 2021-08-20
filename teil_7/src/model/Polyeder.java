@@ -2,6 +2,7 @@ package model;
 
 import controller.ModelController;
 import controller.PolyederController;
+import controller.ServerController;
 import javafx.application.Platform;
 import javafx.scene.shape.TriangleMesh;
 import javafx.stage.Stage;
@@ -11,13 +12,14 @@ import utilities.Parser;
 import view.AlertMessage;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
-public class Polyeder {
+public class Polyeder{
     //TODO nicht von Thread erben
     private ArrayList<Triangle> triangleList;
 
@@ -148,10 +150,13 @@ public class Polyeder {
                 System.gc();
             }
         }
+        ServerController.getInstance().sendObject(triangleList);
         return mesh;
     }
 
     public ArrayList<Triangle> getTriangleList() {
         return this.triangleList;
     }
+
+    public void setTriangleList(ArrayList<Triangle> triangleList){this.triangleList = triangleList;}
 }

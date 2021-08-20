@@ -52,7 +52,7 @@ public class Parser {
 
                 long lineCount = getLineCount(file);
                 triangleNumber = (int) ((lineCount - 2 ) / 7);
-                PolyederController.getInstance().setTriangleAmount(triangleNumber);
+                PolyederController.getInstance().getTriangleAmountProperty().setValue(triangleNumber);
 
                 if ((triangleNumber * 7L + 2) != lineCount)
                     throw new Exception(StringKonstanten_DE.FILE_LINE_COUNT_NOT_VALID);
@@ -62,7 +62,7 @@ public class Parser {
             } else {
                 System.out.println("Kein Solid am anfang gefunden, könnte Binary sein!");
                 triangleNumber = Integer.reverseBytes(input.readInt());
-                PolyederController.getInstance().setTriangleAmount(triangleNumber);
+                PolyederController.getInstance().getTriangleAmountProperty().setValue(triangleNumber);
 
                 if (!(fileSize == (triangleNumber * 50L + 84)))
                     throw new Exception(StringKonstanten_DE.FILE_LINE_COUNT_NOT_VALID);

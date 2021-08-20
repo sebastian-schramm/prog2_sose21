@@ -1,6 +1,8 @@
 package model;
 
-public class Triangle implements Comparable<Triangle> {
+import java.io.Serializable;
+
+public class Triangle implements Comparable<Triangle>, Serializable {
     private final Vertex normal;
     private final Vertex[] vertices;
     private double area;

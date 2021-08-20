@@ -81,8 +81,6 @@ public final class TopViewCreator {
             if (menuItemConnectToServer.isSelected()) {
                 menuItemServerIP.getContent().setDisable(true);
                 menuItemPort.getContent().setDisable(true);
-                System.out.println(ServerController.getInstance().getServerIpAddress().getValue());
-                System.out.println(ServerController.getInstance().getPort().getValue());
                 ServerController.getInstance().connect();
             } else {
                 menuItemServerIP.getContent().setDisable(false);

@@ -1,6 +1,8 @@
 package model;
 
-public class Vertex {
+import java.io.Serializable;
+
+public class Vertex implements Serializable {
 
     private double x;
     private double y ;

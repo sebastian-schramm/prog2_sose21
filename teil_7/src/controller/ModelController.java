@@ -8,10 +8,7 @@ import javafx.scene.*;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.Box;
-import javafx.scene.shape.CullFace;
-import javafx.scene.shape.DrawMode;
-import javafx.scene.shape.MeshView;
+import javafx.scene.shape.*;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
@@ -96,6 +93,16 @@ public class ModelController {
     public void buildModel() {
         object = new MeshView(PolyederController.getInstance().getPolyeder().getMesh());
 
+        dingsbums();
+    }
+
+    public void buildModel(TriangleMesh triangleMesh) {
+        System.out.println("lol2");
+        object = new MeshView(triangleMesh);
+        dingsbums();
+    }
+
+    private void dingsbums() {
         centerModel();
         camera.setTranslateZ(-object.getBoundsInLocal().getHeight()-object.getBoundsInLocal().getDepth()-object.getBoundsInLocal().getWidth());
 

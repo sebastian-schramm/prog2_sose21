@@ -16,7 +16,7 @@ public interface ServerInterface {
     String OFFLINE = "Nicht gestartet";
     String SERVER_START = "Server Startet";
     String SERVER_WAIT_FOR_CONNECTION = "Warte auf Verbindung";
-    String SERVER_CONNECTION_DETECTED = "Client verbindet";
+    String SERVER_CONNECTION_DETECTED = "Verbindung aufgebaut";
     String SERVER_CLIENT_CONNECTED = "Client Verbunden";
     String SERVER_CLOSING = "Server wird beendet";
     String CONNECTED_WITH_SERVER = "Mit Server verbunden";

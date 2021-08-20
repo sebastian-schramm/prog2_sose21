@@ -74,14 +74,6 @@ public class PolyederController {
         return this.triangleAmountProperty;
     }
 
-    public void setTriangleAmount(int triangleAmount) {
-        this.triangleAmountProperty.setValue(triangleAmount);
-    }
-
-    public int getTriangleAmount() {
-        return this.triangleAmountProperty.intValue();
-    }
-
     public static PolyederController getInstance() {
         return PolyederControllerHolder.INSTANCE;
     }

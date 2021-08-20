@@ -1,16 +1,19 @@
 package utilities;
 
 import controller.ModelController;
+import controller.PolyederController;
 import controller.ServerController;
+import javafx.application.Platform;
+import javafx.scene.shape.TriangleMesh;
+import model.Polyeder;
+import model.Triangle;
 import model.interfaces.ServerInterface;
 import view.Ausgabe;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class ServerThread extends Thread {
 
@@ -22,46 +25,54 @@ public class ServerThread extends Thread {
 
     private BufferedReader inputData;
     private PrintWriter outputData;
+    private ObjectInputStream objectInputStream;
 
     @Override
     public void run() {
         long counter = 0;
 
         while (serverMainLoopRunning) {
+            Ausgabe.print("Laufen... " + ++counter);
             synchronized (this) {
-                while (waiting) {
-                    Ausgabe.print("Wait... " + ++counter);
-                    try {
-                        wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
+//                while (waiting) {
+//                    Ausgabe.print("Wait... " + ++counter);
+//                    try {
+//                        wait();
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
                 if (serverMainLoopRunning) {
-                    Ausgabe.print("Arbeite...");
-                    server = null;
+//                    server = null;
                     client = null;
 
                     ServerController.getInstance().setConnectionStatus(ServerInterface.SERVER_START);
-                    try {
-                        server = new ServerSocket(Integer.parseInt(ServerController.getInstance().getPort().getValue()));
-                    } catch (IOException e) {
-                        Ausgabe.print(ServerInterface.SERVER_INIT_ERROR);
-                    }
+                    if (server == null)
+                        try {
+                            Ausgabe.print("Starte server...");
+                            server = new ServerSocket(Integer.parseInt(ServerController.getInstance().getPort().getValue()));
+                        } catch (IOException e) {
+                            Ausgabe.print(ServerInterface.SERVER_INIT_ERROR);
+                        }
                     ServerController.getInstance().setConnectionStatus(ServerInterface.SERVER_WAIT_FOR_CONNECTION);
 
                     try {
+                        System.out.println("Warte auf client...");
                         client = server.accept();
                     } catch (IOException e) {
                         Ausgabe.print(ServerInterface.SERVER_ACCEPT_ERROR);
                     }
+                    System.out.println("Client verbunden...");
 
-                    startListener();
+
+//                    startListener();
+                    startObjectListener();
 
                     Ausgabe.print("... Ende");
                 }
             }
         }
+        System.out.println("ende loop");
     }
 
     private void startListener() {
@@ -87,11 +98,6 @@ public class ServerThread extends Thread {
                     } else if (zeile.startsWith("setOnMouseDragged")){
                         String[] lines = zeile.split(";");
                         ModelController.getInstance().rotateWorld(Double.parseDouble(lines[1]), Double.parseDouble(lines[2]), Double.parseDouble(lines[3]), Double.parseDouble(lines[4]), Double.parseDouble(lines[5]), Double.parseDouble(lines[6]), Double.parseDouble(lines[7]), Double.parseDouble(lines[8]), Double.parseDouble(lines[9]), Double.parseDouble(lines[10]), Double.parseDouble(lines[11]), Double.parseDouble(lines[12]));
-                    } else if (zeile.startsWith("startClient")) {
-                        String[] lines = zeile.split(";");
-                        ServerController.getInstance().startClient(lines[1], lines[2]);
-
-//                        sendeKommando("startClient;" + ServerController.getInstance().getLokaleIpAddress() + ";" + ServerController.getInstance().getPort());
                     } else {
                         Ausgabe.print(zeile);
                     }
@@ -105,6 +111,35 @@ public class ServerThread extends Thread {
         }
     }
 
+    private void startObjectListener(){
+        if (client != null && client.isConnected())
+        {
+            try
+            {
+                objectInputStream = new ObjectInputStream(client.getInputStream());
+                ArrayList<Triangle> receivingTriangleList = new ArrayList<>();
+                try
+                {
+                    while ((receivingTriangleList = (ArrayList<Triangle>) objectInputStream.readObject()) != null) {
+//                        receivingTriangleList = (ArrayList<Triangle>) objectInputStream.readObject();
+                        PolyederController.getInstance().getPolyeder().setTriangleList(receivingTriangleList);
+                        Platform.runLater(() -> {
+                            ModelController.getInstance().buildModel();
+                        });
+                        objectInputStream = new ObjectInputStream(client.getInputStream());
+                    }
+                }
+                catch (ClassNotFoundException e) {
+                    Ausgabe.print("classnotfoundexception");
+                }
+            }
+            catch (IOException e){
+                Ausgabe.print("IOException in ServerThread");
+                e.printStackTrace();
+            }
+//            startObjectListener();
+        }
+    }
 
     public Socket getClient() {
         return client;
