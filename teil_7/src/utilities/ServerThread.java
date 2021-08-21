@@ -10,6 +10,7 @@ import model.Triangle;
 import model.interfaces.ServerInterface;
 import view.Ausgabe;
 
+import java.awt.geom.AffineTransform;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -112,23 +113,47 @@ public class ServerThread extends Thread {
     }
 
     private void startObjectListener(){
-        if (client != null && client.isConnected())
-        {
-            try
-            {
+        if (client != null && client.isConnected()) {
+            try {
                 objectInputStream = new ObjectInputStream(client.getInputStream());
                 ArrayList<Triangle> receivingTriangleList = new ArrayList<>();
-                try
-                {
-                    while ((receivingTriangleList = (ArrayList<Triangle>) objectInputStream.readObject()) != null) {
+                Object object;
+                try {
+                    while ((object = objectInputStream.readObject()) != null) {
+                        if (object.getClass().isInstance(new String())) {
+                            String zeile = (String) object;
+                            System.out.println("Affine found");
+                            System.out.println(zeile);
+                            String[] lines = zeile.split(";");
+                            ModelController.getInstance().rotateWorld(Double.parseDouble(lines[1]), Double.parseDouble(lines[2]), Double.parseDouble(lines[3]), Double.parseDouble(lines[4]), Double.parseDouble(lines[5]), Double.parseDouble(lines[6]), Double.parseDouble(lines[7]), Double.parseDouble(lines[8]), Double.parseDouble(lines[9]), Double.parseDouble(lines[10]), Double.parseDouble(lines[11]), Double.parseDouble(lines[12]));
+                        } else if (object.getClass().isInstance(new ArrayList<Triangle>())) {
+                            System.out.println("Triangle Arraylist");
+                            PolyederController.getInstance().getPolyeder().setTriangleList((ArrayList<Triangle>) object);
+                            Platform.runLater(() -> {
+                                PolyederController.getInstance().getPolyeder().updatePolyederInfo();
+                                ModelController.getInstance().buildModel();
+                            });
+                        } else {
+                            System.out.println("Nichts gefunden");
+                        }
 //                        receivingTriangleList = (ArrayList<Triangle>) objectInputStream.readObject();
-                        PolyederController.getInstance().getPolyeder().setTriangleList(receivingTriangleList);
-                        Platform.runLater(() -> {
-                            ModelController.getInstance().buildModel();
-                        });
+//                        PolyederController.getInstance().getPolyeder().setTriangleList(receivingTriangleList);
+//                        Platform.runLater(() -> {
+//                            ModelController.getInstance().buildModel();
+//                        });
                         objectInputStream = new ObjectInputStream(client.getInputStream());
                     }
                 }
+//                try {
+//                    while ((receivingTriangleList = (ArrayList<Triangle>) objectInputStream.readObject()) != null) {
+////                        receivingTriangleList = (ArrayList<Triangle>) objectInputStream.readObject();
+//                        PolyederController.getInstance().getPolyeder().setTriangleList(receivingTriangleList);
+//                        Platform.runLater(() -> {
+//                            ModelController.getInstance().buildModel();
+//                        });
+//                        objectInputStream = new ObjectInputStream(client.getInputStream());
+//                    }
+//                }
                 catch (ClassNotFoundException e) {
                     Ausgabe.print("classnotfoundexception");
                 }

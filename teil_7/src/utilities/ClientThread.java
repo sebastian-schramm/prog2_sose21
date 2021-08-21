@@ -1,11 +1,12 @@
 package utilities;
 
 import controller.ServerController;
-import javafx.scene.shape.TriangleMesh;
+import javafx.scene.transform.Affine;
+import javafx.scene.transform.Transform;
 import model.Triangle;
-import model.interfaces.ServerInterface;
 import view.Ausgabe;
 
+import java.awt.geom.AffineTransform;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
@@ -27,22 +28,29 @@ public class ClientThread extends Thread {
     }
 
     public void sendeMesh(ArrayList<Triangle> triangleArrayList){
-        try
-        {
+        try {
             OutputStream outputStream = socket.getOutputStream();
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-            if (triangleArrayList != null)
-            {
+            if (triangleArrayList != null) {
                 objectOutputStream.writeObject(triangleArrayList);
             }
-        }
-        catch(IOException e)
-        {
+        } catch(IOException e) {
             Ausgabe.print("Fehler beim Versenden der Trianglemesh");
             e.printStackTrace();
         }
+    }
 
-
+    public void sendeRotation(String affine){
+        try {
+            OutputStream outputStream = socket.getOutputStream();
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+            if (affine != null) {
+                objectOutputStream.writeObject(affine);
+            }
+        } catch(IOException e) {
+            Ausgabe.print("Fehler beim Versenden der Affine");
+            e.printStackTrace();
+        }
     }
 
     @Override

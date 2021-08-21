@@ -4,7 +4,10 @@ import javafx.application.Platform;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.ObservableList;
 import javafx.scene.shape.TriangleMesh;
+import javafx.scene.transform.Affine;
+import javafx.scene.transform.Transform;
 import model.Triangle;
 import model.interfaces.ServerInterface;
 import utilities.ServerThread;
@@ -154,6 +157,11 @@ public class ServerController {
             clientThread.sendeMesh(triangleList);
     }
 
+    public void sendObject(String affine) {
+        if (clientThread != null)
+            clientThread.sendeRotation(affine);
+    }
+
     public StringProperty getLokaleIpAddress() {
         return this.lokaleIpAddress;
     }
@@ -189,7 +197,6 @@ public class ServerController {
     }
 
     private static class ServerControllerHolder {
-
         private static final ServerController INSTANCE = new ServerController();
     }
 }

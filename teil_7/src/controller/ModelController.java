@@ -2,13 +2,13 @@ package controller;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.collections.ObservableList;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.*;
+import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
@@ -16,6 +16,8 @@ import model.interfaces.GUIKonstanten;
 import model.interfaces.ModelInterface;
 import utilities.CreateAnchor;
 import utilities.XformBox;
+
+import java.awt.geom.AffineTransform;
 
 public class ModelController {
 
@@ -146,8 +148,14 @@ public class ModelController {
         WORLD_XFORM.addRotation(mxx, mxy, mxz, tx, myx, myy, myz, ty, mzx, mzy, mzz, tz);
     }
 
-    public ObservableList<Transform> getAffine() {
-        return WORLD_XFORM.getTransforms();
+    public Transform getAffine() {
+//        Transform affineTransform = WORLD_XFORM.getTransforms().get(0);
+        return WORLD_XFORM.getTransforms().get(0);
+    }
+
+    public String getAffineString() {
+        return getAffine().getMxx() + ";" + getAffine().getMxy() + ";" + getAffine().getMxz() + ";" + getAffine().getTx() + ";" + getAffine().getMyx() + ";" + getAffine().getMyy() + ";" + getAffine().getMyz() + ";" + getAffine().getTy() + ";" + getAffine().getMzx() + ";" + getAffine().getMzy() + ";" + getAffine().getMzz() + ";" + getAffine().getTz();
+//        return new Affine(WORLD_XFORM.getTransforms().get(0).getMxx(), WORLD_XFORM.getTransforms().get(0).getMxy(), WORLD_XFORM.getTransforms().get(0).getMxz(), WORLD_XFORM.getTransforms().get(0).getTx(), WORLD_XFORM.getTransforms().get(0).getMyx(), WORLD_XFORM.getTransforms().get(0).getMyy(), WORLD_XFORM.getTransforms().get(0).getMyz(), WORLD_XFORM.getTransforms().get(0).getTy(), WORLD_XFORM.getTransforms().get(0).getMzx(), WORLD_XFORM.getTransforms().get(0).getMzy(), WORLD_XFORM.getTransforms().get(0).getMzz(), WORLD_XFORM.getTransforms().get(0).getTz());
     }
 
     public void moveWorld(Double mousePosX, Double mousePosY) {

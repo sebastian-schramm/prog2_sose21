@@ -40,8 +40,8 @@ public class MouseController {
             if (me.isPrimaryButtonDown()) {
                 ModelController.getInstance().rotateWorld(mouseDeltaX, mouseDeltaY);
                 if (nanoSec + 20 < System.currentTimeMillis()) {
-                    ServerController.getInstance().sendMessage("setOnMouseDragged;" + ModelController.getInstance().getAffine().get(0).getMxx() + ";" + ModelController.getInstance().getAffine().get(0).getMxy() + ";" + ModelController.getInstance().getAffine().get(0).getMxz() + ";" + ModelController.getInstance().getAffine().get(0).getTx() + ";" + ModelController.getInstance().getAffine().get(0).getMyx() + ";" + ModelController.getInstance().getAffine().get(0).getMyy() + ";" + ModelController.getInstance().getAffine().get(0).getMyz() + ";" + ModelController.getInstance().getAffine().get(0).getTy() + ";" + ModelController.getInstance().getAffine().get(0).getMzx() + ";" + ModelController.getInstance().getAffine().get(0).getMzy() + ";" + ModelController.getInstance().getAffine().get(0).getMzz() + ";" + ModelController.getInstance().getAffine().get(0).getTz());
-                    nanoSec = System.currentTimeMillis();
+                    ServerController.getInstance().sendObject("setOnMouseDragged;" + ModelController.getInstance().getAffineString());
+//                  nanoSec = System.currentTimeMillis();
                 }
             } else if (me.isSecondaryButtonDown()) {
 //                ModelController.getInstance().resetRotation();

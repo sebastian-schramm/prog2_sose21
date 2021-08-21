@@ -106,7 +106,21 @@ public class Polyeder{
         }
     }
 
-    public void calcSurface() {
+    public void updatePolyederInfo() {
+        boolean threading = true;
+
+        if (threading)
+            surfaceThreads();
+        else
+            surfaceSerial();
+
+        PolyederController.getInstance().getTriangleAmountProperty().setValue(triangleList.size());
+        sortTriangles();
+        calcSurface();
+        calcVolume();
+    }
+
+    private void calcSurface() {
         this.area = 0.0;
         for (Triangle triangle : triangleList) {
             this.area += triangle.getArea();
@@ -114,7 +128,7 @@ public class Polyeder{
         PolyederController.getInstance().getSurfaceProperty().set(Math.round(area * AllgemeineKonstanten.ROUND_KOMMASTELLE) / AllgemeineKonstanten.ROUND_KOMMASTELLE);
     }
 
-    public void calcVolume() {
+    private void calcVolume() {
         this.volume = 0.0;
         if (triangleList.size() > 1)
         for (Triangle triangle : triangleList) {
@@ -123,7 +137,7 @@ public class Polyeder{
         PolyederController.getInstance().getVolumeProperty().set(Math.round(volume * AllgemeineKonstanten.ROUND_KOMMASTELLE) / AllgemeineKonstanten.ROUND_KOMMASTELLE);
     }
 
-    public void sortTriangles () {
+    private void sortTriangles () {
         Collections.sort(triangleList);
     }
 
@@ -158,5 +172,7 @@ public class Polyeder{
         return this.triangleList;
     }
 
-    public void setTriangleList(ArrayList<Triangle> triangleList){this.triangleList = triangleList;}
+    public void setTriangleList(ArrayList<Triangle> triangleList){
+        this.triangleList = triangleList;
+    }
 }

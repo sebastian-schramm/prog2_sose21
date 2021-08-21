@@ -33,7 +33,6 @@ public class PolyederController {
     }
 
     public void loadFile(File file, Stage stage) {
-        boolean threading = true;
         if (file != null) {
             Thread loadingThread = new Thread() {
                 @Override
@@ -42,14 +41,7 @@ public class PolyederController {
                         //TODO Message das eine Datei geladen wird
                         Parser.ladeStlAusDatei(file);
 
-                        if (threading)
-                            polyeder.surfaceThreads();
-                        else
-                            polyeder.surfaceSerial();
-
-                        polyeder.sortTriangles();
-                        polyeder.calcSurface();
-                        polyeder.calcVolume();
+                        polyeder.updatePolyederInfo();
 
                         stage.setTitle(GUIKonstanten.MY_TITLE + file.getName());
                         ModelController.getInstance().buildModel();
