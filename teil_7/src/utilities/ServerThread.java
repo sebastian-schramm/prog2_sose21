@@ -76,6 +76,7 @@ public class ServerThread extends Thread {
         System.out.println("ende loop");
     }
 
+    //TODO entfernen
     private void startListener() {
         if (client != null && client.isConnected()) {
             Ausgabe.print("Client verbunden.");
@@ -116,16 +117,27 @@ public class ServerThread extends Thread {
         if (client != null && client.isConnected()) {
             try {
                 objectInputStream = new ObjectInputStream(client.getInputStream());
-                ArrayList<Triangle> receivingTriangleList = new ArrayList<>();
                 Object object;
                 try {
                     while ((object = objectInputStream.readObject()) != null) {
                         if (object.getClass().isInstance(new String())) {
                             String zeile = (String) object;
-                            System.out.println("Affine found");
-                            System.out.println(zeile);
-                            String[] lines = zeile.split(";");
-                            ModelController.getInstance().rotateWorld(Double.parseDouble(lines[1]), Double.parseDouble(lines[2]), Double.parseDouble(lines[3]), Double.parseDouble(lines[4]), Double.parseDouble(lines[5]), Double.parseDouble(lines[6]), Double.parseDouble(lines[7]), Double.parseDouble(lines[8]), Double.parseDouble(lines[9]), Double.parseDouble(lines[10]), Double.parseDouble(lines[11]), Double.parseDouble(lines[12]));
+                            if (zeile.startsWith("exit")) {
+                                ServerController.getInstance().disconnect();
+                                Ausgabe.print("Server wird geschlossen, Verbindung getrennt");
+                                break;
+                            } else if (zeile.startsWith("startClient")) {
+                                String[] lines = zeile.split(";");
+                                ServerController.getInstance().startClient(lines[1], lines[2]);
+                            } else if (zeile.startsWith("setOnMousePressed")){
+                                String[] lines = zeile.split(";");
+                                ModelController.getInstance().mousePressed(Double.parseDouble(lines[1]), Double.parseDouble(lines[2]));
+                            } else if (zeile.startsWith("setOnMouseDragged")){
+                                String[] lines = zeile.split(";");
+                                ModelController.getInstance().rotateWorld(Double.parseDouble(lines[1]), Double.parseDouble(lines[2]), Double.parseDouble(lines[3]), Double.parseDouble(lines[4]), Double.parseDouble(lines[5]), Double.parseDouble(lines[6]), Double.parseDouble(lines[7]), Double.parseDouble(lines[8]), Double.parseDouble(lines[9]), Double.parseDouble(lines[10]), Double.parseDouble(lines[11]), Double.parseDouble(lines[12]));
+                            } else {
+                                Ausgabe.print(zeile);
+                            }
                         } else if (object.getClass().isInstance(new ArrayList<Triangle>())) {
                             System.out.println("Triangle Arraylist");
                             PolyederController.getInstance().getPolyeder().setTriangleList((ArrayList<Triangle>) object);
@@ -136,24 +148,9 @@ public class ServerThread extends Thread {
                         } else {
                             System.out.println("Nichts gefunden");
                         }
-//                        receivingTriangleList = (ArrayList<Triangle>) objectInputStream.readObject();
-//                        PolyederController.getInstance().getPolyeder().setTriangleList(receivingTriangleList);
-//                        Platform.runLater(() -> {
-//                            ModelController.getInstance().buildModel();
-//                        });
                         objectInputStream = new ObjectInputStream(client.getInputStream());
                     }
                 }
-//                try {
-//                    while ((receivingTriangleList = (ArrayList<Triangle>) objectInputStream.readObject()) != null) {
-////                        receivingTriangleList = (ArrayList<Triangle>) objectInputStream.readObject();
-//                        PolyederController.getInstance().getPolyeder().setTriangleList(receivingTriangleList);
-//                        Platform.runLater(() -> {
-//                            ModelController.getInstance().buildModel();
-//                        });
-//                        objectInputStream = new ObjectInputStream(client.getInputStream());
-//                    }
-//                }
                 catch (ClassNotFoundException e) {
                     Ausgabe.print("classnotfoundexception");
                 }
@@ -162,7 +159,6 @@ public class ServerThread extends Thread {
                 Ausgabe.print("IOException in ServerThread");
                 e.printStackTrace();
             }
-//            startObjectListener();
         }
     }
 

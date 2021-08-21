@@ -83,11 +83,11 @@ public class ClientThread extends Thread {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-//        sendeKommando("startClient;" + ServerController.getInstance().getLokaleIpAddress().getValue() + ";" + Integer.parseInt(ServerController.getInstance().getPort().getValue()));
+        sendeRotation("startClient;" + ServerController.getInstance().getLokaleIpAddress().getValue() + ";" + Integer.parseInt(ServerController.getInstance().getPort().getValue()));
 
-//        synchronized (ServerController.getInstance().getServerThread()) {
-//            ServerController.getInstance().getServerThread().notify();
-//        }
+        synchronized (ServerController.getInstance().getServerThread()) {
+            ServerController.getInstance().getServerThread().notify();
+        }
 //        }
     }
 

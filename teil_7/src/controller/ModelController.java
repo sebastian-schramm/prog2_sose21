@@ -149,13 +149,11 @@ public class ModelController {
     }
 
     public Transform getAffine() {
-//        Transform affineTransform = WORLD_XFORM.getTransforms().get(0);
         return WORLD_XFORM.getTransforms().get(0);
     }
 
     public String getAffineString() {
         return getAffine().getMxx() + ";" + getAffine().getMxy() + ";" + getAffine().getMxz() + ";" + getAffine().getTx() + ";" + getAffine().getMyx() + ";" + getAffine().getMyy() + ";" + getAffine().getMyz() + ";" + getAffine().getTy() + ";" + getAffine().getMzx() + ";" + getAffine().getMzy() + ";" + getAffine().getMzz() + ";" + getAffine().getTz();
-//        return new Affine(WORLD_XFORM.getTransforms().get(0).getMxx(), WORLD_XFORM.getTransforms().get(0).getMxy(), WORLD_XFORM.getTransforms().get(0).getMxz(), WORLD_XFORM.getTransforms().get(0).getTx(), WORLD_XFORM.getTransforms().get(0).getMyx(), WORLD_XFORM.getTransforms().get(0).getMyy(), WORLD_XFORM.getTransforms().get(0).getMyz(), WORLD_XFORM.getTransforms().get(0).getTy(), WORLD_XFORM.getTransforms().get(0).getMzx(), WORLD_XFORM.getTransforms().get(0).getMzy(), WORLD_XFORM.getTransforms().get(0).getMzz(), WORLD_XFORM.getTransforms().get(0).getTz());
     }
 
     public void moveWorld(Double mousePosX, Double mousePosY) {

@@ -41,7 +41,7 @@ public class MouseController {
                 ModelController.getInstance().rotateWorld(mouseDeltaX, mouseDeltaY);
                 if (nanoSec + 20 < System.currentTimeMillis()) {
                     ServerController.getInstance().sendObject("setOnMouseDragged;" + ModelController.getInstance().getAffineString());
-//                  nanoSec = System.currentTimeMillis();
+                    nanoSec = System.currentTimeMillis();
                 }
             } else if (me.isSecondaryButtonDown()) {
 //                ModelController.getInstance().resetRotation();
