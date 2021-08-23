@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.scene.input.PickResult;
 import javafx.scene.layout.StackPane;
 
 public class MouseController {
@@ -24,9 +25,10 @@ public class MouseController {
             mousePosY = me.getSceneY();
             mouseOldX = me.getSceneX();
             mouseOldY = me.getSceneY();
+            PickResult pr = me.getPickResult();
 
-            ModelController.getInstance().mousePressed(mousePosX, mousePosY);
-//            ServerController.getInstance().sendMessage("setOnMousePressed;" + mousePosX + ";" + mousePosY);
+
+            ModelController.getInstance().mousePressed(mousePosX, mousePosY, pr);
         });
 
         scene.setOnMouseDragged(me -> {
@@ -45,12 +47,18 @@ public class MouseController {
                 }
             } else if (me.isSecondaryButtonDown()) {
 //                ModelController.getInstance().resetRotation();
-//                ModelController.getInstance().moveWorld(mousePosX, mousePosY);
+                ModelController.getInstance().moveWorld(mousePosX, mousePosY, me.getPickResult());
             }
         });
 
         scene.setOnScroll(me -> {
             ModelController.getInstance().zoomCamera(me.getDeltaY());
+        });
+
+        scene.setOnMouseReleased(mouseEvent -> {
+            if (ModelController.getInstance().getIsPicking()){
+                ModelController.getInstance().setPicking(false);
+            }
         });
     }
 

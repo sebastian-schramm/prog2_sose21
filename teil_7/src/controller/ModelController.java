@@ -4,11 +4,12 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
+import javafx.scene.input.PickResult;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.*;
-import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
@@ -17,12 +18,10 @@ import model.interfaces.ModelInterface;
 import utilities.CreateAnchor;
 import utilities.XformBox;
 
-import java.awt.geom.AffineTransform;
-
 public class ModelController {
 
     private static final Group ROOT = new Group();
-    private static final XformBox STL_MODEL_XFORM = new XformBox();
+    private static  XformBox STL_MODEL_XFORM = new XformBox();
     private static final XformBox AXIS_MODEL_XFORM = new XformBox();
     private static final XformBox WORLD_XFORM = new XformBox();
     private static final XformBox CAMERA_XFORM = new XformBox();
@@ -36,6 +35,8 @@ public class ModelController {
     private static PerspectiveCamera camera;
     private static MeshView object;
     private static Point3D vecIni, vecPos;
+    private volatile boolean isPicking=true;
+    private double distance;
 
     private static BooleanProperty isFill = new SimpleBooleanProperty(true);
     private static BooleanProperty isAxisVisible = new SimpleBooleanProperty(true);
@@ -95,16 +96,16 @@ public class ModelController {
     public void buildModel() {
         object = new MeshView(PolyederController.getInstance().getPolyeder().getMesh());
 
-        dingsbums();
+        build();
     }
 
     public void buildModel(TriangleMesh triangleMesh) {
         System.out.println("lol2");
         object = new MeshView(triangleMesh);
-        dingsbums();
+        build();
     }
 
-    private void dingsbums() {
+    private void build() {
         centerModel();
         camera.setTranslateZ(-object.getBoundsInLocal().getHeight()-object.getBoundsInLocal().getDepth()-object.getBoundsInLocal().getWidth());
 
@@ -135,8 +136,15 @@ public class ModelController {
         object.setTranslateZ(-object.getBoundsInLocal().getCenterZ() + object.getBoundsInLocal().getCenterZ());
     }
 
-    public void mousePressed(Double mousePosX, Double mousePosY) {
-        vecIni = unProjectDirection(mousePosX, mousePosY, subScene.getWidth(), subScene.getHeight());
+    public void mousePressed(Double mousePosX, Double mousePosY, PickResult pr) {
+        System.out.println(pr.getIntersectedNode());
+        /*if(pr.getIntersectedNode() != null && pr.getIntersectedNode() instanceof BorderPane){
+            System.out.println("in Mousepressed");
+            distance=pr.getIntersectedDistance();
+            STL_MODEL_XFORM = (XformBox) pr.getIntersectedNode();
+            isPicking=true;*/
+            vecIni = unProjectDirection(mousePosX, mousePosY, subScene.getWidth(), subScene.getHeight());
+//        }
     }
 
     public void rotateWorld(Double mouseDeltaX, Double mouseDeltaY) {
@@ -156,11 +164,18 @@ public class ModelController {
         return getAffine().getMxx() + ";" + getAffine().getMxy() + ";" + getAffine().getMxz() + ";" + getAffine().getTx() + ";" + getAffine().getMyx() + ";" + getAffine().getMyy() + ";" + getAffine().getMyz() + ";" + getAffine().getTy() + ";" + getAffine().getMzx() + ";" + getAffine().getMzy() + ";" + getAffine().getMzz() + ";" + getAffine().getTz();
     }
 
-    public void moveWorld(Double mousePosX, Double mousePosY) {
-        vecPos = unProjectDirection(mousePosX, mousePosY, subScene.getWidth(), subScene.getHeight());
-        Point3D p = vecPos.subtract(vecIni).multiply(-camera.getTranslateZ());
-        STL_MODEL_XFORM.getTransforms().add(new Translate(p.getX(),p.getY(),p.getZ()));
-        vecIni=vecPos;
+    public void moveWorld(Double mousePosX, Double mousePosY, PickResult pr) {
+        System.out.println(isPicking);
+
+            System.out.println("in Moveworld");
+            vecPos = unProjectDirection(mousePosX, mousePosY, subScene.getWidth(), subScene.getHeight());
+            Point3D p = vecPos.subtract(vecIni).multiply(-camera.getTranslateZ());
+            STL_MODEL_XFORM.getTransforms().add(new Translate(p.getX(),p.getY(),p.getZ()));
+            vecIni=vecPos;
+            distance=pr.getIntersectedDistance();
+
+
+
 
 //        STL_MODEL_XFORM.setTranslateX(STL_MODEL_XFORM.getTranslateX() + mouseDeltaX);
 //        STL_MODEL_XFORM.setTranslateZ(STL_MODEL_XFORM.getTranslateZ() - mouseDeltaY);
@@ -226,6 +241,14 @@ public class ModelController {
 
     public StackPane getModelStackPane() {
         return stackPane;
+    }
+
+    public boolean getIsPicking(){
+        return isPicking;
+    }
+
+    public void setPicking(boolean isPicking){
+        this.isPicking = isPicking;
     }
 
     public static ModelController getInstance() {

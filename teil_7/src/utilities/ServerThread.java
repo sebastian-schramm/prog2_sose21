@@ -96,7 +96,7 @@ public class ServerThread extends Thread {
                         ServerController.getInstance().startClient(lines[1], lines[2]);
                     } else if (zeile.startsWith("setOnMousePressed")){
                         String[] lines = zeile.split(";");
-                        ModelController.getInstance().mousePressed(Double.parseDouble(lines[1]), Double.parseDouble(lines[2]));
+//                        ModelController.getInstance().mousePressed(Double.parseDouble(lines[1]), Double.parseDouble(lines[2]));
                     } else if (zeile.startsWith("setOnMouseDragged")){
                         String[] lines = zeile.split(";");
                         ModelController.getInstance().rotateWorld(Double.parseDouble(lines[1]), Double.parseDouble(lines[2]), Double.parseDouble(lines[3]), Double.parseDouble(lines[4]), Double.parseDouble(lines[5]), Double.parseDouble(lines[6]), Double.parseDouble(lines[7]), Double.parseDouble(lines[8]), Double.parseDouble(lines[9]), Double.parseDouble(lines[10]), Double.parseDouble(lines[11]), Double.parseDouble(lines[12]));
@@ -118,6 +118,8 @@ public class ServerThread extends Thread {
             try {
                 objectInputStream = new ObjectInputStream(client.getInputStream());
                 Object object;
+                ArrayList<Triangle> tmp = new ArrayList<>();
+                ArrayList<Triangle> triangles = new ArrayList<>();
                 try {
                     while ((object = objectInputStream.readObject()) != null) {
                         if (object.getClass().isInstance(new String())) {
@@ -131,24 +133,25 @@ public class ServerThread extends Thread {
                                 ServerController.getInstance().startClient(lines[1], lines[2]);
                             } else if (zeile.startsWith("setOnMousePressed")){
                                 String[] lines = zeile.split(";");
-                                ModelController.getInstance().mousePressed(Double.parseDouble(lines[1]), Double.parseDouble(lines[2]));
+//                                ModelController.getInstance().mousePressed(Double.parseDouble(lines[1]), Double.parseDouble(lines[2]));
                             } else if (zeile.startsWith("setOnMouseDragged")){
+                                System.out.println("setOnMouseDragged");
                                 String[] lines = zeile.split(";");
                                 ModelController.getInstance().rotateWorld(Double.parseDouble(lines[1]), Double.parseDouble(lines[2]), Double.parseDouble(lines[3]), Double.parseDouble(lines[4]), Double.parseDouble(lines[5]), Double.parseDouble(lines[6]), Double.parseDouble(lines[7]), Double.parseDouble(lines[8]), Double.parseDouble(lines[9]), Double.parseDouble(lines[10]), Double.parseDouble(lines[11]), Double.parseDouble(lines[12]));
                             } else {
                                 Ausgabe.print(zeile);
                             }
                         } else if (object.getClass().isInstance(new ArrayList<Triangle>())) {
-                            System.out.println("Triangle Arraylist");
-                            PolyederController.getInstance().getPolyeder().setTriangleList((ArrayList<Triangle>) object);
-                            Platform.runLater(() -> {
-                                PolyederController.getInstance().getPolyeder().updatePolyederInfo();
-                                ModelController.getInstance().buildModel();
-                            });
-                        } else {
-                            System.out.println("Nichts gefunden");
-                        }
+                                System.out.println(((ArrayList<Triangle>) object).get(1).getArea());
+                                PolyederController.getInstance().getPolyeder().setTriangleList((ArrayList<Triangle>) object);
+                                tmp = (ArrayList<Triangle>) object;
+                                Platform.runLater(() -> {
+                                    PolyederController.getInstance().getPolyeder().updatePolyederInfo();
+                                    ModelController.getInstance().buildModel();
+                                });
+                            }
                         objectInputStream = new ObjectInputStream(client.getInputStream());
+//                        objectInputStream.reset();
                     }
                 }
                 catch (ClassNotFoundException e) {
