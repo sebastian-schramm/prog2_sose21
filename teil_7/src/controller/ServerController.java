@@ -147,17 +147,12 @@ public class ServerController {
         }
     }
 
-    public void sendMessage(String message) {
-        if (clientThread != null)
-            clientThread.sendeKommando(message);
-    }
-
-    public void sendObject(ArrayList<Triangle> triangleList){
+    public void sendTriangleList(ArrayList<Triangle> triangleList){
         if (clientThread != null)
             clientThread.sendeMesh(triangleList);
     }
 
-    public void sendObject(String affine) {
+    public void sendString(String affine) {
         if (clientThread != null)
             clientThread.sendeRotation(affine);
     }

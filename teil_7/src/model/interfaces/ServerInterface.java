@@ -31,4 +31,8 @@ public interface ServerInterface {
     String SERVER_CLIENT_COULD_NOT_CLOSE = "Server client konnte nicht beendet werden!";
     String SERVER_COULD_NOT_CLOSE = "Server konnte nicht beendet werden!";
 
+    String MESSAGE_EXIT = "exit";
+    String MESSAGE_START_CLIENT = "startClient";
+    String MESSAGE_SETONMOUSEDRAGGED = "setOnMouseDragged";
+    String MESSAGE_UPDATEGUIELEMENTS = "updateGUIElements";
 }

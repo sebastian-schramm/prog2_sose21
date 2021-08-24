@@ -48,7 +48,8 @@ public class PolyederController {
                         polyeder.updatePolyederInfo();
                         updateGuiProperties(file.getName());
 
-                        ServerController.getInstance().sendObject(polyeder.getTriangleList());
+                        ServerController.getInstance().sendTriangleList(polyeder.getTriangleList());
+                        ServerController.getInstance().sendString("updateGUIElements;" + file.getName());
 
                         ModelController.getInstance().buildModel();
                         AlertMessage.showMessage(GUIKonstanten.LOADING_FILE_COMPLETE);

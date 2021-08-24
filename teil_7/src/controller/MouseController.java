@@ -42,7 +42,7 @@ public class MouseController {
             if (me.isPrimaryButtonDown()) {
                 ModelController.getInstance().rotateWorld(mouseDeltaX, mouseDeltaY);
                 if (nanoSec + 20 < System.currentTimeMillis()) {
-                    ServerController.getInstance().sendObject("setOnMouseDragged;" + ModelController.getInstance().getAffineString());
+                    ServerController.getInstance().sendString("setOnMouseDragged;" + ModelController.getInstance().getAffineString());
                     nanoSec = System.currentTimeMillis();
                 }
             } else if (me.isSecondaryButtonDown()) {

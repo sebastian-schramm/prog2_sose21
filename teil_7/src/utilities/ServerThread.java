@@ -76,43 +76,6 @@ public class ServerThread extends Thread {
         System.out.println("ende loop");
     }
 
-    //TODO entfernen
-    private void startListener() {
-        if (client != null && client.isConnected()) {
-            Ausgabe.print("Client verbunden.");
-            ServerController.getInstance().setConnectionStatus(ServerInterface.SERVER_CLIENT_CONNECTED);
-            try {
-                inputData = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                String zeile;
-                System.out.println("Start listening");
-                while (client.isConnected() && (zeile = inputData.readLine()) != null) {
-                    System.out.println("Received message " + zeile);
-                    if (zeile.startsWith("exit")) {
-                        ServerController.getInstance().disconnect();
-                        Ausgabe.print("Server wird geschlossen, Verbindung getrennt");
-                        break;
-                    } else if (zeile.startsWith("startClient")) {
-                        String[] lines = zeile.split(";");
-                        ServerController.getInstance().startClient(lines[1], lines[2]);
-                    } else if (zeile.startsWith("setOnMousePressed")){
-                        String[] lines = zeile.split(";");
-//                        ModelController.getInstance().mousePressed(Double.parseDouble(lines[1]), Double.parseDouble(lines[2]));
-                    } else if (zeile.startsWith("setOnMouseDragged")){
-                        String[] lines = zeile.split(";");
-                        ModelController.getInstance().rotateWorld(Double.parseDouble(lines[1]), Double.parseDouble(lines[2]), Double.parseDouble(lines[3]), Double.parseDouble(lines[4]), Double.parseDouble(lines[5]), Double.parseDouble(lines[6]), Double.parseDouble(lines[7]), Double.parseDouble(lines[8]), Double.parseDouble(lines[9]), Double.parseDouble(lines[10]), Double.parseDouble(lines[11]), Double.parseDouble(lines[12]));
-                    } else {
-                        Ausgabe.print(zeile);
-                    }
-                }
-                System.out.println("End listening");
-                ServerController.getInstance().setConnectionStatus(ServerInterface.SERVER_CLOSING);
-            } catch (IOException e) {
-                Ausgabe.print("Das ist der Fehler hier");
-                System.out.println(e);
-            }
-        }
-    }
-
     private void startObjectListener(){
         if (client != null && client.isConnected()) {
             try {
@@ -122,26 +85,33 @@ public class ServerThread extends Thread {
                     while ((object = objectInputStream.readObject()) != null) {
                         if (object.getClass().isInstance(new String())) {
                             String zeile = (String) object;
-                            if (zeile.startsWith("exit")) {
-                                ServerController.getInstance().disconnect();
-                                Ausgabe.print("Server wird geschlossen, Verbindung getrennt");
-                                break;
-                            } else if (zeile.startsWith("startClient")) {
-                                String[] lines = zeile.split(";");
-                                ServerController.getInstance().startClient(lines[1], lines[2]);
-                            } else if (zeile.startsWith("setOnMouseDragged")){
-                                System.out.println("setOnMouseDragged");
-                                String[] lines = zeile.split(";");
-                                ModelController.getInstance().rotateWorld(Double.parseDouble(lines[1]), Double.parseDouble(lines[2]), Double.parseDouble(lines[3]), Double.parseDouble(lines[4]), Double.parseDouble(lines[5]), Double.parseDouble(lines[6]), Double.parseDouble(lines[7]), Double.parseDouble(lines[8]), Double.parseDouble(lines[9]), Double.parseDouble(lines[10]), Double.parseDouble(lines[11]), Double.parseDouble(lines[12]));
-                            } else {
-                                Ausgabe.print(zeile);
+                            String[] lines = zeile.split(";");
+
+                            switch (lines[0]) {
+                                case ServerInterface.MESSAGE_EXIT:
+                                    ServerController.getInstance().disconnect();
+                                    Ausgabe.print("Server wird geschlossen, Verbindung getrennt");
+                                    break;
+                                case ServerInterface.MESSAGE_START_CLIENT:
+                                    ServerController.getInstance().startClient(lines[1], lines[2]);
+                                    break;
+                                case ServerInterface.MESSAGE_SETONMOUSEDRAGGED:
+                                    ModelController.getInstance().rotateWorld(Double.parseDouble(lines[1]), Double.parseDouble(lines[2]), Double.parseDouble(lines[3]), Double.parseDouble(lines[4]), Double.parseDouble(lines[5]), Double.parseDouble(lines[6]), Double.parseDouble(lines[7]), Double.parseDouble(lines[8]), Double.parseDouble(lines[9]), Double.parseDouble(lines[10]), Double.parseDouble(lines[11]), Double.parseDouble(lines[12]));
+                                    break;
+                                case ServerInterface.MESSAGE_UPDATEGUIELEMENTS:
+                                    Platform.runLater(() -> {
+                                        PolyederController.getInstance().updateGuiProperties(lines[1]);
+                                    });
+                                    break;
+                                default:
+                                    Ausgabe.print(zeile);
                             }
                         } else if (object.getClass().isInstance(new ArrayList<Triangle>())) {
                                 PolyederController.getInstance().getPolyeder().setTriangleList((ArrayList<Triangle>) object);
 
                                 Platform.runLater(() -> {
                                     PolyederController.getInstance().getPolyeder().updatePolyederInfo();
-                                    PolyederController.getInstance().updateGuiProperties("Hallo");
+//                                    PolyederController.getInstance().updateGuiProperties("Hallo");
                                     ModelController.getInstance().buildModel();
                                 });
                             }
