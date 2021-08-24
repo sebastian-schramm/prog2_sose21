@@ -11,6 +11,7 @@ import model.interfaces.GUIKonstanten;
 import utilities.Parser;
 import view.AlertMessage;
 
+import javax.sound.midi.Soundbank;
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -30,36 +31,6 @@ public class Polyeder{
         this.triangleList = new ArrayList<>(0);
         this.area = 0.0;
         this.volume = 0.0;
-    }
-
-    public void loadFile(File file, Stage stage) {
-        boolean threading = true;
-        if (file != null) {
-            Thread loadingThread = new Thread() {
-                @Override
-                public void run() {
-                    Platform.runLater(() -> {
-                        //TODO Message das eine Datei geladen wird
-                        Parser.ladeStlAusDatei(file);
-
-                        if (threading)
-                            surfaceThreads();
-                        else
-                            surfaceSerial();
-
-                        sortTriangles();
-                        calcSurface();
-                        calcVolume();
-
-                        stage.setTitle(GUIKonstanten.MY_TITLE + file.getName());
-                        ModelController.getInstance().buildModel();
-                        //TODO Alert hier einbinden
-                        AlertMessage.showMessage(GUIKonstanten.LOADING_FILE_COMPLETE);
-                    });
-                }
-            };
-            loadingThread.start();
-        }
     }
 
     public void initTriangleList(int triangleNumber) {
@@ -114,7 +85,7 @@ public class Polyeder{
         else
             surfaceSerial();
 
-        PolyederController.getInstance().getTriangleAmountProperty().setValue(triangleList.size());
+//        PolyederController.getInstance().getTriangleAmountProperty().setValue(triangleList.size());
         sortTriangles();
         calcSurface();
         calcVolume();
@@ -125,7 +96,7 @@ public class Polyeder{
         for (Triangle triangle : triangleList) {
             this.area += triangle.getArea();
         }
-        PolyederController.getInstance().getSurfaceProperty().set(Math.round(area * AllgemeineKonstanten.ROUND_KOMMASTELLE) / AllgemeineKonstanten.ROUND_KOMMASTELLE);
+//        PolyederController.getInstance().getSurfaceProperty().set(Math.round(area * AllgemeineKonstanten.ROUND_KOMMASTELLE) / AllgemeineKonstanten.ROUND_KOMMASTELLE);
     }
 
     private void calcVolume() {
@@ -134,7 +105,7 @@ public class Polyeder{
         for (Triangle triangle : triangleList) {
             this.volume += triangle.getVolume();
         }
-        PolyederController.getInstance().getVolumeProperty().set(Math.round(volume * AllgemeineKonstanten.ROUND_KOMMASTELLE) / AllgemeineKonstanten.ROUND_KOMMASTELLE);
+//        PolyederController.getInstance().getVolumeProperty().set(Math.round(volume * AllgemeineKonstanten.ROUND_KOMMASTELLE) / AllgemeineKonstanten.ROUND_KOMMASTELLE);
     }
 
     private void sortTriangles () {
@@ -142,6 +113,7 @@ public class Polyeder{
     }
 
     public TriangleMesh getMesh(){
+        System.out.println("getMesh wird aufgerufen!");
         TriangleMesh mesh = new TriangleMesh();
 
         int faceCnt = 0;
@@ -164,7 +136,6 @@ public class Polyeder{
                 System.gc();
             }
         }
-        ServerController.getInstance().sendObject(triangleList);
         return mesh;
     }
 
@@ -174,5 +145,13 @@ public class Polyeder{
 
     public void setTriangleList(ArrayList<Triangle> triangleList){
         this.triangleList = triangleList;
+    }
+
+    public Double getVolume() {
+        return volume;
+    }
+
+    public Double getArea() {
+        return area;
     }
 }

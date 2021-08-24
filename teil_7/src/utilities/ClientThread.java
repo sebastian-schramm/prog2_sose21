@@ -28,6 +28,7 @@ public class ClientThread extends Thread {
     }
 
     public void sendeMesh(ArrayList<Triangle> triangleArrayList){
+        System.out.println("Mesh wird gesendet");
         try {
             OutputStream outputStream = socket.getOutputStream();
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);

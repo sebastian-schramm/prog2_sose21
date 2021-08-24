@@ -118,8 +118,6 @@ public class ServerThread extends Thread {
             try {
                 objectInputStream = new ObjectInputStream(client.getInputStream());
                 Object object;
-                ArrayList<Triangle> tmp = new ArrayList<>();
-                ArrayList<Triangle> triangles = new ArrayList<>();
                 try {
                     while ((object = objectInputStream.readObject()) != null) {
                         if (object.getClass().isInstance(new String())) {
@@ -131,9 +129,6 @@ public class ServerThread extends Thread {
                             } else if (zeile.startsWith("startClient")) {
                                 String[] lines = zeile.split(";");
                                 ServerController.getInstance().startClient(lines[1], lines[2]);
-                            } else if (zeile.startsWith("setOnMousePressed")){
-                                String[] lines = zeile.split(";");
-//                                ModelController.getInstance().mousePressed(Double.parseDouble(lines[1]), Double.parseDouble(lines[2]));
                             } else if (zeile.startsWith("setOnMouseDragged")){
                                 System.out.println("setOnMouseDragged");
                                 String[] lines = zeile.split(";");
@@ -142,16 +137,15 @@ public class ServerThread extends Thread {
                                 Ausgabe.print(zeile);
                             }
                         } else if (object.getClass().isInstance(new ArrayList<Triangle>())) {
-                                System.out.println(((ArrayList<Triangle>) object).get(1).getArea());
                                 PolyederController.getInstance().getPolyeder().setTriangleList((ArrayList<Triangle>) object);
-                                tmp = (ArrayList<Triangle>) object;
+
                                 Platform.runLater(() -> {
                                     PolyederController.getInstance().getPolyeder().updatePolyederInfo();
+                                    PolyederController.getInstance().updateGuiProperties("Hallo");
                                     ModelController.getInstance().buildModel();
                                 });
                             }
                         objectInputStream = new ObjectInputStream(client.getInputStream());
-//                        objectInputStream.reset();
                     }
                 }
                 catch (ClassNotFoundException e) {

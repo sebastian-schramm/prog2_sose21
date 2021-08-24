@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.stage.Stage;
 import model.Polyeder;
+import model.interfaces.AllgemeineKonstanten;
 import model.interfaces.GUIKonstanten;
 import utilities.Parser;
 import view.AlertMessage;
@@ -19,6 +20,7 @@ public class PolyederController {
     private final DoubleProperty volumeProperty = new SimpleDoubleProperty();
     private final IntegerProperty triangleAmountProperty = new SimpleIntegerProperty();
 
+    private static Stage stage;
     private Polyeder polyeder;
 
     private PolyederController() {
@@ -32,26 +34,36 @@ public class PolyederController {
         return polyeder;
     }
 
-    public void loadFile(File file, Stage stage) {
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    public void loadFile(File file) {
         if (file != null) {
             Thread loadingThread = new Thread() {
                 @Override
                 public void run() {
                     Platform.runLater(() -> {
-                        //TODO Message das eine Datei geladen wird
                         Parser.ladeStlAusDatei(file);
-
                         polyeder.updatePolyederInfo();
+                        updateGuiProperties(file.getName());
 
-                        stage.setTitle(GUIKonstanten.MY_TITLE + file.getName());
+                        ServerController.getInstance().sendObject(polyeder.getTriangleList());
+
                         ModelController.getInstance().buildModel();
-                        //TODO Alert hier einbinden
                         AlertMessage.showMessage(GUIKonstanten.LOADING_FILE_COMPLETE);
                     });
                 }
             };
             loadingThread.start();
         }
+    }
+
+    public void updateGuiProperties(String filename){
+        getTriangleAmountProperty().setValue(polyeder.getTriangleList().size());
+        getVolumeProperty().set(Math.round(polyeder.getVolume() * AllgemeineKonstanten.ROUND_KOMMASTELLE)/AllgemeineKonstanten.ROUND_KOMMASTELLE);
+        getSurfaceProperty().set(Math.round(polyeder.getArea() * AllgemeineKonstanten.ROUND_KOMMASTELLE)/AllgemeineKonstanten.ROUND_KOMMASTELLE);
+        stage.setTitle(GUIKonstanten.MY_TITLE + filename);
     }
 
     public DoubleProperty getSurfaceProperty() {

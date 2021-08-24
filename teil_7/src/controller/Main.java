@@ -14,6 +14,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
+        init(stage);
         Scene scene = new Scene(GUICreator.createMainFrame(stage, this), stage.getWidth(), stage.getHeight());
         stage.setScene(scene);
         stage.show();
@@ -23,8 +24,12 @@ public class Main extends Application {
         });
     }
 
+    public void init(Stage stage) {
+        PolyederController.getInstance().setStage(stage);
+    }
+
     public void loadFile(Stage stage) {
-        PolyederController.getInstance().loadFile(FileOpenDialog.openFileChooser(stage), stage);
+        PolyederController.getInstance().loadFile(FileOpenDialog.openFileChooser(stage));
     }
 
 }

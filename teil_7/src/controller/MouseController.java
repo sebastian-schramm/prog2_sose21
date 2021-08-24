@@ -28,7 +28,7 @@ public class MouseController {
             PickResult pr = me.getPickResult();
 
 
-            ModelController.getInstance().mousePressed(mousePosX, mousePosY, pr);
+            ModelController.getInstance().mousePressed(mousePosX, mousePosY);
         });
 
         scene.setOnMouseDragged(me -> {
@@ -47,7 +47,7 @@ public class MouseController {
                 }
             } else if (me.isSecondaryButtonDown()) {
 //                ModelController.getInstance().resetRotation();
-                ModelController.getInstance().moveWorld(mousePosX, mousePosY, me.getPickResult());
+                ModelController.getInstance().moveWorld(mousePosX, mousePosY);
             }
         });
 

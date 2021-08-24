@@ -136,8 +136,7 @@ public class ModelController {
         object.setTranslateZ(-object.getBoundsInLocal().getCenterZ() + object.getBoundsInLocal().getCenterZ());
     }
 
-    public void mousePressed(Double mousePosX, Double mousePosY, PickResult pr) {
-        System.out.println(pr.getIntersectedNode());
+    public void mousePressed(Double mousePosX, Double mousePosY) {
         /*if(pr.getIntersectedNode() != null && pr.getIntersectedNode() instanceof BorderPane){
             System.out.println("in Mousepressed");
             distance=pr.getIntersectedDistance();
@@ -164,15 +163,12 @@ public class ModelController {
         return getAffine().getMxx() + ";" + getAffine().getMxy() + ";" + getAffine().getMxz() + ";" + getAffine().getTx() + ";" + getAffine().getMyx() + ";" + getAffine().getMyy() + ";" + getAffine().getMyz() + ";" + getAffine().getTy() + ";" + getAffine().getMzx() + ";" + getAffine().getMzy() + ";" + getAffine().getMzz() + ";" + getAffine().getTz();
     }
 
-    public void moveWorld(Double mousePosX, Double mousePosY, PickResult pr) {
-        System.out.println(isPicking);
-
-            System.out.println("in Moveworld");
+    public void moveWorld(Double mousePosX, Double mousePosY) {
             vecPos = unProjectDirection(mousePosX, mousePosY, subScene.getWidth(), subScene.getHeight());
             Point3D p = vecPos.subtract(vecIni).multiply(-camera.getTranslateZ());
             STL_MODEL_XFORM.getTransforms().add(new Translate(p.getX(),p.getY(),p.getZ()));
             vecIni=vecPos;
-            distance=pr.getIntersectedDistance();
+
 
 
 
