@@ -1,7 +1,9 @@
 package controller;
 
+import javafx.scene.chart.Axis;
 import javafx.scene.input.PickResult;
 import javafx.scene.layout.StackPane;
+import javafx.scene.transform.Rotate;
 
 public class MouseController {
 
@@ -46,8 +48,12 @@ public class MouseController {
                     nanoSec = System.currentTimeMillis();
                 }
             } else if (me.isSecondaryButtonDown()) {
-//                ModelController.getInstance().resetRotation();
-                ModelController.getInstance().moveWorld(mousePosX, mousePosY);
+                if (mouseDeltaX != 0) {
+                    ModelController.getInstance().translate(Rotate.X_AXIS, mouseDeltaX);
+                }
+                if (mouseDeltaY != 0) {
+                    ModelController.getInstance().translate(Rotate.Y_AXIS, -mouseDeltaY);
+                }
             }
         });
 

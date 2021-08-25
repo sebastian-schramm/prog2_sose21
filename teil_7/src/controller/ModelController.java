@@ -4,8 +4,6 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
-import javafx.scene.input.PickResult;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
@@ -163,20 +161,8 @@ public class ModelController {
         return getAffine().getMxx() + ";" + getAffine().getMxy() + ";" + getAffine().getMxz() + ";" + getAffine().getTx() + ";" + getAffine().getMyx() + ";" + getAffine().getMyy() + ";" + getAffine().getMyz() + ";" + getAffine().getTy() + ";" + getAffine().getMzx() + ";" + getAffine().getMzy() + ";" + getAffine().getMzz() + ";" + getAffine().getTz();
     }
 
-    public void moveWorld(Double mousePosX, Double mousePosY) {
-            vecPos = unProjectDirection(mousePosX, mousePosY, subScene.getWidth(), subScene.getHeight());
-            Point3D p = vecPos.subtract(vecIni).multiply(-camera.getTranslateZ());
-            STL_MODEL_XFORM.getTransforms().add(new Translate(p.getX(),p.getY(),p.getZ()));
-            vecIni=vecPos;
-
-
-
-
-
-//        STL_MODEL_XFORM.setTranslateX(STL_MODEL_XFORM.getTranslateX() + mouseDeltaX);
-//        STL_MODEL_XFORM.setTranslateZ(STL_MODEL_XFORM.getTranslateZ() - mouseDeltaY);
-//        WORLD_XFORM.setTranslateX(mouseDeltaX);
-//        WORLD_XFORM.setTranslateY(mouseDeltaY);
+    public void translate(Point3D axis, double mouseDelta) {
+        STL_MODEL_XFORM.translate(axis.multiply(mouseDelta));
     }
 
     public void resetRotation() {

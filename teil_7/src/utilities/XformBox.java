@@ -8,9 +8,11 @@ import javafx.scene.transform.Translate;
 
 public class XformBox extends Group {
 
+    private Translate t = new Translate();
+
     public XformBox() {
         super();
-        getTransforms().add(new Affine());
+        getTransforms().addAll(new Affine(), t);
     }
 
     /**
@@ -32,6 +34,22 @@ public class XformBox extends Group {
 
     public void addRotation(double mxx, double mxy, double mxz, double tx, double myx, double myy, double myz, double ty, double mzx, double mzy, double mzz, double tz) {
         getTransforms().set(0, new Affine(mxx, mxy, mxz, tx, myx, myy, myz, ty, mzx, mzy, mzz, tz));
+    }
+
+    public void setTranslate(Point3D translation) {
+        translation = sceneToLocal(translation);
+        translation = t.transform(translation);
+        t.setX(translation.getX());
+        t.setY(translation.getY());
+        t.setZ(translation.getZ());
+    }
+
+    public void translate(Point3D translation) {
+        translation = sceneToLocal(translation);
+        translation = t.transform(translation);
+        t.setX(t.getX() + translation.getX());
+        t.setY(t.getY() + translation.getY());
+        t.setZ(t.getZ() + translation.getZ());
     }
 
     public void reset() {
