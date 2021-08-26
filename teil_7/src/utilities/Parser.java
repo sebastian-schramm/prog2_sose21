@@ -35,7 +35,6 @@ public class Parser {
             long fileSize = file.length();
             byte[] firstBlock = new byte[80];
 
-            //TODO
             System.out.println("Filesize in Bytes : " + fileSize);
 
             //Liest die ersten 6 Bytes aus der Datei aus

@@ -5,6 +5,7 @@ import controller.PolyederController;
 import controller.ServerController;
 import javafx.application.Platform;
 import javafx.scene.shape.TriangleMesh;
+import javafx.scene.transform.Rotate;
 import model.Polyeder;
 import model.Triangle;
 import model.interfaces.ServerInterface;
@@ -14,6 +15,7 @@ import java.awt.geom.AffineTransform;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 
 public class ServerThread extends Thread {
@@ -65,8 +67,6 @@ public class ServerThread extends Thread {
                     }
                     System.out.println("Client verbunden...");
 
-
-//                    startListener();
                     startObjectListener();
 
                     Ausgabe.print("... Ende");
@@ -86,7 +86,6 @@ public class ServerThread extends Thread {
                         if (object.getClass().isInstance(new String())) {
                             String zeile = (String) object;
                             String[] lines = zeile.split(";");
-
                             switch (lines[0]) {
                                 case ServerInterface.MESSAGE_EXIT:
                                     ServerController.getInstance().disconnect();
@@ -103,19 +102,29 @@ public class ServerThread extends Thread {
                                         PolyederController.getInstance().updateGuiProperties(lines[1]);
                                     });
                                     break;
+                                case ServerInterface.MESSAGE_TRANSLATE_X_AXIS:
+                                    ModelController.getInstance().translate(Double.parseDouble(lines[1]), Double.parseDouble(lines[2]), Double.parseDouble(lines[3]));
+                                    break;
+                                case ServerInterface.MESSAGE_TRANSLATE_Y_AXIS:
+                                    ModelController.getInstance().translate(Double.parseDouble(lines[1]), Double.parseDouble(lines[2]), Double.parseDouble(lines[3]));
                                 default:
                                     Ausgabe.print(zeile);
                             }
                         } else if (object.getClass().isInstance(new ArrayList<Triangle>())) {
                                 PolyederController.getInstance().getPolyeder().setTriangleList((ArrayList<Triangle>) object);
-
                                 Platform.runLater(() -> {
                                     PolyederController.getInstance().getPolyeder().updatePolyederInfo();
-//                                    PolyederController.getInstance().updateGuiProperties("Hallo");
                                     ModelController.getInstance().buildModel();
                                 });
                             }
-                        objectInputStream = new ObjectInputStream(client.getInputStream());
+                        try {
+                            objectInputStream = new ObjectInputStream(client.getInputStream());
+                        }
+                        catch (SocketException e)
+                        {
+                            Ausgabe.print("Verbindung abgebrochen");
+                            break;
+                        }
                     }
                 }
                 catch (ClassNotFoundException e) {

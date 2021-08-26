@@ -161,8 +161,16 @@ public class ModelController {
         return getAffine().getMxx() + ";" + getAffine().getMxy() + ";" + getAffine().getMxz() + ";" + getAffine().getTx() + ";" + getAffine().getMyx() + ";" + getAffine().getMyy() + ";" + getAffine().getMyz() + ";" + getAffine().getTy() + ";" + getAffine().getMzx() + ";" + getAffine().getMzy() + ";" + getAffine().getMzz() + ";" + getAffine().getTz();
     }
 
+    public String getTranslationString(){
+        return STL_MODEL_XFORM.getT().getX() + ";" + STL_MODEL_XFORM.getT().getY() + ";" + STL_MODEL_XFORM.getT().getZ();
+    }
+
     public void translate(Point3D axis, double mouseDelta) {
-        STL_MODEL_XFORM.translate(axis.multiply(mouseDelta));
+        STL_MODEL_XFORM.translate(axis.multiply(mouseDelta * ModelInterface.MOUSE_SPEED * ModelInterface.ROTATION_SPEED));
+    }
+
+    public void translate(double x, double y, double z){
+        STL_MODEL_XFORM.translate(x, y, z);
     }
 
     public void resetRotation() {

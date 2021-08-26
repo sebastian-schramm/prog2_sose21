@@ -21,7 +21,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
 public class Polyeder{
-    //TODO nicht von Thread erben
+
     private ArrayList<Triangle> triangleList;
 
     private Double area;
@@ -85,7 +85,6 @@ public class Polyeder{
         else
             surfaceSerial();
 
-//        PolyederController.getInstance().getTriangleAmountProperty().setValue(triangleList.size());
         sortTriangles();
         calcSurface();
         calcVolume();
@@ -96,7 +95,6 @@ public class Polyeder{
         for (Triangle triangle : triangleList) {
             this.area += triangle.getArea();
         }
-//        PolyederController.getInstance().getSurfaceProperty().set(Math.round(area * AllgemeineKonstanten.ROUND_KOMMASTELLE) / AllgemeineKonstanten.ROUND_KOMMASTELLE);
     }
 
     private void calcVolume() {
@@ -105,7 +103,6 @@ public class Polyeder{
         for (Triangle triangle : triangleList) {
             this.volume += triangle.getVolume();
         }
-//        PolyederController.getInstance().getVolumeProperty().set(Math.round(volume * AllgemeineKonstanten.ROUND_KOMMASTELLE) / AllgemeineKonstanten.ROUND_KOMMASTELLE);
     }
 
     private void sortTriangles () {

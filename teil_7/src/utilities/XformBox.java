@@ -6,9 +6,14 @@ import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 
+import java.awt.*;
+
 public class XformBox extends Group {
 
     private Translate t = new Translate();
+
+    private Point3D position = new Point3D(0.0, 0.0, 0.0);
+
 
     public XformBox() {
         super();
@@ -42,14 +47,33 @@ public class XformBox extends Group {
         t.setX(translation.getX());
         t.setY(translation.getY());
         t.setZ(translation.getZ());
+
     }
 
-    public void translate(Point3D translation) {
+    public void translate(Point3D translation)
+    {
         translation = sceneToLocal(translation);
         translation = t.transform(translation);
-        t.setX(t.getX() + translation.getX());
-        t.setY(t.getY() + translation.getY());
-        t.setZ(t.getZ() + translation.getZ());
+        this.t.setX(t.getX() + translation.getX());
+        this.t.setY(t.getY() + translation.getY());
+        this.t.setZ(t.getZ() + translation.getZ());
+///        System.out.println(getTransforms().get(0).getTx() + " " + getTransforms().get(0).getTy() + " " + getTransforms().get(0).getTz());
+        System.out.println(t.getX() + " " + t.getY() + " " + t.getZ());
+    }
+
+    public void translate(double x, double y, double z){
+        this.t.setX(x);
+        this.t.setY(y);
+        this.t.setZ(z);
+    }
+
+    public Translate getT() {
+        return t;
+    }
+
+    public void moveX(double value) {
+        position.add(position.getX() + value, 0.0, 0.0);
+        getTransforms().add(new Translate(position.getX(),position.getY(),position.getZ()));
     }
 
     public void reset() {

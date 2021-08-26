@@ -10,6 +10,10 @@ public interface MenuBarInterface {
     String MENU_CONTROL = "Controls";
     String MENU_CONTROL_FACES = "Show faces";
     String MENU_CONTROL_AXIS = "Show Axis";
+    String MENU_CONTROL_SELECT_AXIS = "Select Axis";
+    String MENU_CONTROL_X_SELECT = "Select X-Axis";
+    String MENU_CONTROL_Y_SELECT = "Select Y-Axis";
+    String MENU_CONTROL_Z_SELECT = "Select Z-Axis";
 
     String MENU_NETWORK= "Network";
     String MENU_NETWORK_CONNECT = "Connect";

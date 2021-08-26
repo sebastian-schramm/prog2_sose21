@@ -35,4 +35,6 @@ public interface ServerInterface {
     String MESSAGE_START_CLIENT = "startClient";
     String MESSAGE_SETONMOUSEDRAGGED = "setOnMouseDragged";
     String MESSAGE_UPDATEGUIELEMENTS = "updateGUIElements";
+    String MESSAGE_TRANSLATE_X_AXIS = "translateXAxis";
+    String MESSAGE_TRANSLATE_Y_AXIS = "translateYAxis";
 }

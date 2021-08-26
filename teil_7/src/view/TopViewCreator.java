@@ -27,6 +27,17 @@ public final class TopViewCreator {
         Menu menuControls = new Menu(MenuBarInterface.MENU_CONTROL);
         CheckMenuItem menuItemShowFaces = new CheckMenuItem(MenuBarInterface.MENU_CONTROL_FACES);
         CheckMenuItem menuItemShowAxis = new CheckMenuItem(MenuBarInterface.MENU_CONTROL_AXIS);
+        Menu menuItemSelectAxis = new Menu(MenuBarInterface.MENU_CONTROL_SELECT_AXIS);
+        RadioMenuItem menuItemSelectXAxis = new RadioMenuItem(MenuBarInterface.MENU_CONTROL_X_SELECT);
+        RadioMenuItem menuItemSelectYAxis = new RadioMenuItem(MenuBarInterface.MENU_CONTROL_Y_SELECT);
+        RadioMenuItem menuItemSelectZAxis = new RadioMenuItem(MenuBarInterface.MENU_CONTROL_Z_SELECT);
+
+        ToggleGroup toggleGroup = new ToggleGroup();
+        toggleGroup.getToggles().addAll(
+                menuItemSelectXAxis,
+                menuItemSelectYAxis,
+                menuItemSelectZAxis
+        );
 
         Menu menuHelp = new Menu(MenuBarInterface.MENU_HELP);
         MenuItem menuItemAbout = new MenuItem(MenuBarInterface.MENU_ABOUT);
@@ -48,7 +59,14 @@ public final class TopViewCreator {
 
         menuControls.getItems().addAll(
                 menuItemShowFaces,
-                menuItemShowAxis
+                menuItemShowAxis,
+                menuItemSelectAxis
+        );
+
+        menuItemSelectAxis.getItems().addAll(
+                menuItemSelectXAxis,
+                menuItemSelectYAxis,
+                menuItemSelectZAxis
         );
 
         menuHelp.getItems().addAll(menuItemAbout);
@@ -76,6 +94,13 @@ public final class TopViewCreator {
 
         menuItemShowAxis.setSelected(ModelController.getInstance().isAxisVisible().getValue());
         menuItemShowAxis.setOnAction(e -> ModelController.getInstance().setAxisVisible(!ModelController.getInstance().isAxisVisible().getValue()));
+
+        menuItemSelectXAxis.setOnAction(e -> {
+
+        });
+
+
+
 
         menuItemConnectToServer.setOnAction(e -> {
             if (menuItemConnectToServer.isSelected()) {

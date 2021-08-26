@@ -69,7 +69,5 @@ public class Triangle implements Comparable<Triangle>, Serializable {
     @Override
     public int compareTo(Triangle triangle) {
         return (Double.compare(this.getArea(), triangle.getArea()));
-        //TODO Prüfen ob beides das selbe ergibt!
-//        return (this.getArea() < (triangle.getArea()) ? -1 : (this.getArea() == triangle.getArea() ? 0:1));
     }
 }
