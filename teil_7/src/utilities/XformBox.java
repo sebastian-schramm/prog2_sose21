@@ -6,13 +6,11 @@ import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 
-import java.awt.*;
-
 public class XformBox extends Group {
 
-    private Translate t = new Translate();
+    private final Translate t = new Translate();
 
-    private Point3D position = new Point3D(0.0, 0.0, 0.0);
+    private final Point3D position = new Point3D(0.0, 0.0, 0.0);
 
 
     public XformBox() {
@@ -50,8 +48,7 @@ public class XformBox extends Group {
 
     }
 
-    public void translate(Point3D translation)
-    {
+    public void translate(Point3D translation) {
         translation = sceneToLocal(translation);
         translation = t.transform(translation);
         this.t.setX(t.getX() + translation.getX());
@@ -61,7 +58,7 @@ public class XformBox extends Group {
         System.out.println(t.getX() + " " + t.getY() + " " + t.getZ());
     }
 
-    public void translate(double x, double y, double z){
+    public void translate(double x, double y, double z) {
         this.t.setX(x);
         this.t.setY(y);
         this.t.setZ(z);
@@ -73,7 +70,7 @@ public class XformBox extends Group {
 
     public void moveX(double value) {
         position.add(position.getX() + value, 0.0, 0.0);
-        getTransforms().add(new Translate(position.getX(),position.getY(),position.getZ()));
+        getTransforms().add(new Translate(position.getX(), position.getY(), position.getZ()));
     }
 
     public void reset() {

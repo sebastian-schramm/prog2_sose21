@@ -1,7 +1,6 @@
 package view;
 
 import controller.Main;
-//import controller.ModelController;
 import controller.ModelController;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;

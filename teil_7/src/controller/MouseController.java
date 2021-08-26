@@ -1,10 +1,8 @@
 package controller;
 
-import javafx.scene.chart.Axis;
-import javafx.scene.input.PickResult;
 import javafx.scene.layout.StackPane;
 import javafx.scene.transform.Rotate;
-import utilities.ClientThread;
+import model.interfaces.ServerInterface;
 
 public class MouseController {
 
@@ -12,15 +10,13 @@ public class MouseController {
     private double mouseOldX, mouseOldY;
     private double mouseDeltaX, mouseDeltaY;
     private long nanoSec = System.currentTimeMillis();
-    private long nano1Sec = System.currentTimeMillis();
-    private long nano2Sec = System.currentTimeMillis();
-
-    public void init() {
-
-    }
 
     private MouseController() {
 
+    }
+
+    public static MouseController getInstance() {
+        return MouseControllerHolder.INSTANCE;
     }
 
     public void handleMouseEvents(StackPane scene) {
@@ -30,10 +26,6 @@ public class MouseController {
             mousePosY = me.getSceneY();
             mouseOldX = me.getSceneX();
             mouseOldY = me.getSceneY();
-            PickResult pr = me.getPickResult();
-
-
-            ModelController.getInstance().mousePressed(mousePosX, mousePosY);
         });
 
         scene.setOnMouseDragged(me -> {
@@ -46,22 +38,22 @@ public class MouseController {
 
             if (me.isPrimaryButtonDown()) {
                 ModelController.getInstance().rotateWorld(mouseDeltaX, mouseDeltaY);
-                if (nanoSec + 20 < System.currentTimeMillis() && ClientThread.getSocket() != null) {
-                    ServerController.getInstance().sendString("setOnMouseDragged;" + ModelController.getInstance().getAffineString());
+                if (nanoSec + ServerInterface.MESSAGE_MILLIS_WAIT < System.currentTimeMillis()) {
+                    ServerController.getInstance().sendString(ServerInterface.MESSAGE_SETONMOUSEDRAGGED + ModelController.getInstance().getAffineToString());
                     nanoSec = System.currentTimeMillis();
                 }
             } else if (me.isSecondaryButtonDown()) {
                 if (mouseDeltaX != 0) {
                     ModelController.getInstance().translate(Rotate.X_AXIS, mouseDeltaX);
-                    if (nanoSec + 20 < System.currentTimeMillis() && ClientThread.getSocket() != null) {
-                        ServerController.getInstance().sendString("translateXAxis;" + ModelController.getInstance().getTranslationString());
+                    if (nanoSec + 20 < System.currentTimeMillis()) {
+                        ServerController.getInstance().sendString(ServerInterface.MESSAGE_TRANSLATE_X_AXIS + ModelController.getInstance().getTranslationString());
                         nanoSec = System.currentTimeMillis();
                     }
                 }
                 if (mouseDeltaY != 0) {
                     ModelController.getInstance().translate(Rotate.Y_AXIS, -mouseDeltaY);
-                    if (nanoSec + 20 < System.currentTimeMillis() && ClientThread.getSocket() != null) {
-                        ServerController.getInstance().sendString("translateYAxis;" + ModelController.getInstance().getTranslationString());
+                    if (nanoSec + 20 < System.currentTimeMillis()) {
+                        ServerController.getInstance().sendString(ServerInterface.MESSAGE_TRANSLATE_Y_AXIS + ModelController.getInstance().getTranslationString());
                         nanoSec = System.currentTimeMillis();
                     }
                 }
@@ -73,14 +65,8 @@ public class MouseController {
         });
 
         scene.setOnMouseReleased(mouseEvent -> {
-            if (ModelController.getInstance().getIsPicking()){
-                ModelController.getInstance().setPicking(false);
-            }
-        });
-    }
 
-    public static MouseController getInstance() {
-        return MouseControllerHolder.INSTANCE;
+        });
     }
 
     private static class MouseControllerHolder {

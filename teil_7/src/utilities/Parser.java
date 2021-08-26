@@ -25,10 +25,11 @@ public class Parser {
 
     /**
      * Liest eine Datei aus und überprüft, ob es sich dabei um ein ASCII oder Binary Format handelt
+     *
      * @param file
      */
     public static void ladeStlAusDatei(File file) {
-        try (FileInputStream inputStream = new FileInputStream(file)){
+        try (FileInputStream inputStream = new FileInputStream(file)) {
             DataInputStream input = new DataInputStream(inputStream);
 
             triangleNumber = 0;
@@ -50,7 +51,7 @@ public class Parser {
                     System.out.println("Startet nicht mit facet");
 
                 long lineCount = getLineCount(file);
-                triangleNumber = (int) ((lineCount - 2 ) / 7);
+                triangleNumber = (int) ((lineCount - 2) / 7);
                 PolyederController.getInstance().getTriangleAmountProperty().setValue(triangleNumber);
 
                 if ((triangleNumber * 7L + 2) != lineCount)
@@ -85,6 +86,7 @@ public class Parser {
 
     /**
      * Gibt die anzahl der Zeilen zurück
+     *
      * @param filePath
      * @return lineCounter
      * @throws Exception
@@ -116,8 +118,8 @@ public class Parser {
         try (FileInputStream inputStream = new FileInputStream(filePath);
              BufferedInputStream input = new BufferedInputStream(inputStream)) {
             byte[] header = new byte[80];
-            byte[] b4=new byte[4];
-            byte[] attribute=new byte[2];
+            byte[] b4 = new byte[4];
+            byte[] attribute = new byte[2];
             byte[] normal = new byte[12];
 
             input.read(header);
@@ -132,18 +134,23 @@ public class Parser {
                     vertices[i] = getVertex(normal);
                 }
                 PolyederController.getInstance().getPolyeder().constructTriangle(vertices);
-//                TriangleController.getInstance().constructTriangle(vertices);
 
                 input.read(attribute);
             }
         }
     }
 
+    private static Vertex getVertex(byte[] attribute) {
+        ByteBuffer bb = ByteBuffer.wrap(attribute).order(ByteOrder.LITTLE_ENDIAN);
+
+        return new Vertex(bb.getFloat(), bb.getFloat(), bb.getFloat());
+    }
+
     private static void readASCIIFile(File filePath) throws IOException {
         try (FileReader reader = new FileReader(filePath);
-            BufferedReader bufferedReader = new BufferedReader((reader))) {
+             BufferedReader bufferedReader = new BufferedReader((reader))) {
 //            Ausgabe.foundASCIIFile();
-            
+
             CountDownLatch countDownLatch = new CountDownLatch(AllgemeineKonstanten.THREAD_AMOUNT);
             ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(AllgemeineKonstanten.THREAD_AMOUNT);
 
@@ -161,15 +168,15 @@ public class Parser {
                 bufferedReader.readLine();
 
 //                for (int n = 0; n < 10; ++n)
-                    PolyederController.getInstance().getPolyeder().constructTriangle(vertices);
+                PolyederController.getInstance().getPolyeder().constructTriangle(vertices);
 //                    TriangleController.getInstance().constructTriangle(vertices);
 
-                if (i %250000 == 0)
-                        executor.submit(() -> {
+                if (i % 250000 == 0)
+                    executor.submit(() -> {
 //                            System.gc();
-                            countDownLatch.countDown();
-                            return null;
-                        });
+                        countDownLatch.countDown();
+                        return null;
+                    });
             }
             System.gc();
             System.gc();
@@ -185,17 +192,11 @@ public class Parser {
         return getVertex(line.stripLeading().substring(AllgemeineKonstanten.ASCII_TRIANGLE_PATTERN[2].length() + 1).stripLeading());
     }
 
-    private static Vertex getVertex(byte[] attribute) {
-        ByteBuffer bb = ByteBuffer.wrap(attribute).order(ByteOrder.LITTLE_ENDIAN);
-
-        return new Vertex(bb.getFloat(), bb.getFloat(),bb.getFloat());
-    }
-
     private static Vertex getVertex(String value) {
         index = new int[2];
         counter = 0;
-        for(int i = 0; i < value.length(); ++i)
-            if(Character.isWhitespace(value.charAt(i)))
+        for (int i = 0; i < value.length(); ++i)
+            if (Character.isWhitespace(value.charAt(i)))
                 index[counter++] = i;
 
         return new Vertex((float) Double.parseDouble(value.substring(0, index[0])), (float) Double.parseDouble(value.substring(index[0] + 1, index[1])), (float) Double.parseDouble(value.substring(index[1] + 1)));

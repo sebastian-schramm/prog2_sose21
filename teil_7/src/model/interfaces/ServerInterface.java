@@ -31,10 +31,13 @@ public interface ServerInterface {
     String SERVER_CLIENT_COULD_NOT_CLOSE = "Server client konnte nicht beendet werden!";
     String SERVER_COULD_NOT_CLOSE = "Server konnte nicht beendet werden!";
 
-    String MESSAGE_EXIT = "exit";
-    String MESSAGE_START_CLIENT = "startClient";
-    String MESSAGE_SETONMOUSEDRAGGED = "setOnMouseDragged";
-    String MESSAGE_UPDATEGUIELEMENTS = "updateGUIElements";
-    String MESSAGE_TRANSLATE_X_AXIS = "translateXAxis";
-    String MESSAGE_TRANSLATE_Y_AXIS = "translateYAxis";
+    String MESSAGE_TRENNUNG = ";";
+    String MESSAGE_EXIT = "exit" + MESSAGE_TRENNUNG;
+    String MESSAGE_START_CLIENT = "startClient" + MESSAGE_TRENNUNG;
+    String MESSAGE_SETONMOUSEDRAGGED = "setOnMouseDragged" + MESSAGE_TRENNUNG;
+    String MESSAGE_UPDATEGUIELEMENTS = "updateGUIElements" + MESSAGE_TRENNUNG;
+    String MESSAGE_TRANSLATE_Y_AXIS = "translateYAxis" + MESSAGE_TRENNUNG;
+    String MESSAGE_TRANSLATE_X_AXIS = "translateXAxis" + MESSAGE_TRENNUNG;
+
+    int MESSAGE_MILLIS_WAIT = 20;
 }

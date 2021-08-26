@@ -15,7 +15,7 @@ public interface MenuBarInterface {
     String MENU_CONTROL_Y_SELECT = "Select Y-Axis";
     String MENU_CONTROL_Z_SELECT = "Select Z-Axis";
 
-    String MENU_NETWORK= "Network";
+    String MENU_NETWORK = "Network";
     String MENU_NETWORK_CONNECT = "Connect";
 
     String MENU_HELP = "Help";

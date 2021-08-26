@@ -1,15 +1,11 @@
 package controller;
 
 import javafx.application.Platform;
-import javafx.beans.property.Property;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.collections.ObservableList;
-import javafx.scene.shape.TriangleMesh;
-import javafx.scene.transform.Affine;
-import javafx.scene.transform.Transform;
 import model.Triangle;
 import model.interfaces.ServerInterface;
+import utilities.ClientThread;
 import utilities.ServerThread;
 import view.Ausgabe;
 
@@ -20,8 +16,6 @@ import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-
-import utilities.ClientThread;
 
 public class ServerController {
 
@@ -54,19 +48,10 @@ public class ServerController {
         } catch (IOException e) {
             Ausgabe.print(ServerInterface.WEBSITE_IP_NOT_FOUND);
         }
+    }
 
-//        serverThread = new ServerThread();
-//        serverThread.setWaiting(true);
-//        serverThread.start();
-//        synchronized (serverThread) {
-//            serverThread.notify();
-//        }
-
-//        clientThread = new ClientThread();
-//        clientThread.start();
-//        synchronized (clientThread) {
-//            notify();
-//        }
+    public static ServerController getInstance() {
+        return ServerControllerHolder.INSTANCE;
     }
 
     public void startClient(String ip, String port) {
@@ -147,13 +132,13 @@ public class ServerController {
         }
     }
 
-    public void sendTriangleList(ArrayList<Triangle> triangleList){
+    public void sendTriangleList(ArrayList<Triangle> triangleList) {
         if (clientThread != null)
             clientThread.sendeMesh(triangleList);
     }
 
     public void sendString(String affine) {
-        if (clientThread != null)
+        if (clientThread != null && ClientThread.getSocket() != null)
             clientThread.sendeRotation(affine);
     }
 
@@ -173,9 +158,13 @@ public class ServerController {
         return this.serverIpAddress;
     }
 
-    public ServerThread getServerThread(){return this.serverThread;}
+    public ServerThread getServerThread() {
+        return this.serverThread;
+    }
 
-    public ClientThread getClientThread(){return this.clientThread;}
+    public ClientThread getClientThread() {
+        return this.clientThread;
+    }
 
     public void setConnectionStatus(String status) {
         Platform.runLater(() -> {
@@ -185,10 +174,6 @@ public class ServerController {
 
     public StringProperty getConnectionStatusProperty() {
         return this.connectionStatus;
-    }
-
-    public static ServerController getInstance() {
-        return ServerControllerHolder.INSTANCE;
     }
 
     private static class ServerControllerHolder {

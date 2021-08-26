@@ -8,21 +8,25 @@ import javafx.scene.transform.Translate;
 
 public class Xform extends Group {
 
-    //TODO Richtung Ende des Projekts die Klasse löschen, falls wir sie nicht benötigen.
-    public enum RotateOrder {
-        XYZ, XZY, YXZ, YZX, ZXY, ZYX
-    }
-
-    public Translate t  = new Translate();
-    public Translate p  = new Translate();
+    public Translate t = new Translate();
+    public Translate p = new Translate();
     public Translate ip = new Translate();
     public Rotate rx = new Rotate();
-    { rx.setAxis(Rotate.X_AXIS); }
     public Rotate ry = new Rotate();
-    { ry.setAxis(Rotate.Y_AXIS); }
     public Rotate rz = new Rotate();
-    { rz.setAxis(Rotate.Z_AXIS); }
     public Scale s = new Scale();
+
+    {
+        rx.setAxis(Rotate.X_AXIS);
+    }
+
+    {
+        ry.setAxis(Rotate.Y_AXIS);
+    }
+
+    {
+        rz.setAxis(Rotate.Z_AXIS);
+    }
 
     public Xform() {
         super();
@@ -70,9 +74,17 @@ public class Xform extends Group {
     // public void setTranslateY(double y) { t.setY(y); }
     // public void setTranslateZ(double z) { t.setZ(z); }
     // Use these methods instead:
-    public void setTx(double x) { t.setX(x); }
-    public void setTy(double y) { t.setY(y); }
-    public void setTz(double z) { t.setZ(z); }
+    public void setTx(double x) {
+        t.setX(x);
+    }
+
+    public void setTy(double y) {
+        t.setY(y);
+    }
+
+    public void setTz(double z) {
+        t.setZ(z);
+    }
 
     public void setRotate(double x, double y, double z) {
         rx.setAngle(x);
@@ -80,12 +92,29 @@ public class Xform extends Group {
         rz.setAngle(z);
     }
 
-    public void setRotateX(double x) { rx.setAngle(x); }
-    public void setRotateY(double y) { ry.setAngle(y); }
-    public void setRotateZ(double z) { rz.setAngle(z); }
-    public void setRx(double x) { rx.setAngle(x); }
-    public void setRy(double y) { ry.setAngle(y); }
-    public void setRz(double z) { rz.setAngle(z); }
+    public void setRotateX(double x) {
+        rx.setAngle(x);
+    }
+
+    public void setRotateY(double y) {
+        ry.setAngle(y);
+    }
+
+    public void setRotateZ(double z) {
+        rz.setAngle(z);
+    }
+
+    public void setRx(double x) {
+        rx.setAngle(x);
+    }
+
+    public void setRy(double y) {
+        ry.setAngle(y);
+    }
+
+    public void setRz(double z) {
+        rz.setAngle(z);
+    }
 
     public void setScale(double scaleFactor) {
         s.setX(scaleFactor);
@@ -104,9 +133,17 @@ public class Xform extends Group {
     // public void setScaleY(double y) { s.setY(y); }
     // public void setScaleZ(double z) { s.setZ(z); }
     // Use these methods instead:
-    public void setSx(double x) { s.setX(x); }
-    public void setSy(double y) { s.setY(y); }
-    public void setSz(double z) { s.setZ(z); }
+    public void setSx(double x) {
+        s.setX(x);
+    }
+
+    public void setSy(double y) {
+        s.setY(y);
+    }
+
+    public void setSz(double z) {
+        s.setZ(z);
+    }
 
     public void setPivot(double x, double y, double z) {
         p.setX(x);
@@ -171,5 +208,10 @@ public class Xform extends Group {
                 ip.getX() + ", " +
                 ip.getY() + ", " +
                 ip.getZ() + ")");
+    }
+
+    //TODO Richtung Ende des Projekts die Klasse löschen, falls wir sie nicht benötigen.
+    public enum RotateOrder {
+        XYZ, XZY, YXZ, YZX, ZXY, ZYX
     }
 }

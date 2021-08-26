@@ -2,13 +2,11 @@ package utilities;
 
 import controller.ServerController;
 import javafx.application.Platform;
-import javafx.scene.transform.Affine;
-import javafx.scene.transform.Transform;
 import model.Triangle;
+import model.interfaces.ServerInterface;
 import view.AlertMessage;
 import view.Ausgabe;
 
-import java.awt.geom.AffineTransform;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
@@ -21,14 +19,12 @@ import java.util.ArrayList;
 
 public class ClientThread extends Thread {
 
-    private boolean client_main_loop_running = true;
     private static Socket socket = null;
     private static PrintWriter printWriter = null;
+    private boolean client_main_loop_running = true;
 
-    public void sendeKommando(String message) {
-        System.out.println("Sende Message" + message);
-        if (printWriter != null)
-            printWriter.println(message);
+    public static Socket getSocket() {
+        return socket;
     }
 
     public void sendeMesh(ArrayList<Triangle> triangleArrayList) {
@@ -45,12 +41,12 @@ public class ClientThread extends Thread {
         }
     }
 
-    public void sendeRotation(String affine) {
+    public void sendeRotation(String message) {
         try {
             OutputStream outputStream = socket.getOutputStream();
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-            if (affine != null) {
-                objectOutputStream.writeObject(affine);
+            if (message != null) {
+                objectOutputStream.writeObject(message);
             }
         } catch (SocketException ex) {
             Ausgabe.print("Keine Verbindung mehr");
@@ -70,7 +66,7 @@ public class ClientThread extends Thread {
             try {
                 socket = new Socket(ServerController.getInstance().getServerIpAddress().getValue(), Integer.parseInt(ServerController.getInstance().getPort().getValue()));
 //            ServerController.getInstance().getPort().setValue(Integer.parseInt(ServerController.getInstance().getPort().getValue()) + "");
-//            ServerController.getInstance().setConnectionStatus(ServerInterface.CONNECTED_WITH_SERVER);
+                ServerController.getInstance().setConnectionStatus(ServerInterface.CONNECTED_WITH_SERVER);
             } catch (UnknownHostException e) {
                 e.printStackTrace();
                 System.out.println("Ausnahme Socket-Konstruktor.");
@@ -116,9 +112,5 @@ public class ClientThread extends Thread {
         }
         if (printWriter != null)
             printWriter.close();
-    }
-
-    public static Socket getSocket() {
-        return socket;
     }
 }

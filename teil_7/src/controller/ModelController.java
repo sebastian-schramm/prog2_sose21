@@ -7,19 +7,22 @@ import javafx.scene.*;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.*;
+import javafx.scene.shape.Box;
+import javafx.scene.shape.CullFace;
+import javafx.scene.shape.DrawMode;
+import javafx.scene.shape.MeshView;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
-import javafx.scene.transform.Translate;
 import model.interfaces.GUIKonstanten;
 import model.interfaces.ModelInterface;
+import model.interfaces.ServerInterface;
 import utilities.CreateAnchor;
 import utilities.XformBox;
 
 public class ModelController {
 
     private static final Group ROOT = new Group();
-    private static  XformBox STL_MODEL_XFORM = new XformBox();
+    private static final XformBox STL_MODEL_XFORM = new XformBox();
     private static final XformBox AXIS_MODEL_XFORM = new XformBox();
     private static final XformBox WORLD_XFORM = new XformBox();
     private static final XformBox CAMERA_XFORM = new XformBox();
@@ -32,9 +35,6 @@ public class ModelController {
     private static SubScene subScene;
     private static PerspectiveCamera camera;
     private static MeshView object;
-    private static Point3D vecIni, vecPos;
-    private volatile boolean isPicking=true;
-    private double distance;
 
     private static BooleanProperty isFill = new SimpleBooleanProperty(true);
     private static BooleanProperty isAxisVisible = new SimpleBooleanProperty(true);
@@ -66,6 +66,16 @@ public class ModelController {
         stackPane.getChildren().add(subScene);
     }
 
+    private static PhongMaterial createMaterial(Color diffuseColor, Color specularColor) {
+        PhongMaterial material = new PhongMaterial(diffuseColor);
+        material.setSpecularColor(specularColor);
+        return material;
+    }
+
+    public static ModelController getInstance() {
+        return ModelControllerHolder.INSTANCE;
+    }
+
     private void buildCamera() {
         ROOT.getChildren().add(camera);
         CAMERA_XFORM.getChildren().add(camera);
@@ -94,18 +104,8 @@ public class ModelController {
     public void buildModel() {
         object = new MeshView(PolyederController.getInstance().getPolyeder().getMesh());
 
-        build();
-    }
-
-    public void buildModel(TriangleMesh triangleMesh) {
-        System.out.println("lol2");
-        object = new MeshView(triangleMesh);
-        build();
-    }
-
-    private void build() {
         centerModel();
-        camera.setTranslateZ(-object.getBoundsInLocal().getHeight()-object.getBoundsInLocal().getDepth()-object.getBoundsInLocal().getWidth());
+        camera.setTranslateZ(-object.getBoundsInLocal().getHeight() - object.getBoundsInLocal().getDepth() - object.getBoundsInLocal().getWidth());
 
         object.setMaterial(new PhongMaterial(Color.BLUE));
         setDrawModeFill(isFill.getValue());
@@ -116,32 +116,17 @@ public class ModelController {
         STL_MODEL_XFORM.setVisible(true);
     }
 
-    private static PhongMaterial createMaterial(Color diffuseColor, Color specularColor) {
-        PhongMaterial material = new PhongMaterial(diffuseColor);
-        material.setSpecularColor(specularColor);
-        return material;
-    }
-
     public void centerModel() {
         object.setTranslateX(-object.getBoundsInLocal().getCenterX());
         object.setTranslateY(-object.getBoundsInLocal().getCenterY());
         object.setTranslateZ(-object.getBoundsInLocal().getCenterZ());
     }
 
+    //TODO vielleicht weg?
     public void centerModelOnPane() {
         object.setTranslateX(-object.getBoundsInLocal().getCenterX());
         object.setTranslateY(-object.getBoundsInLocal().getCenterY());
         object.setTranslateZ(-object.getBoundsInLocal().getCenterZ() + object.getBoundsInLocal().getCenterZ());
-    }
-
-    public void mousePressed(Double mousePosX, Double mousePosY) {
-        /*if(pr.getIntersectedNode() != null && pr.getIntersectedNode() instanceof BorderPane){
-            System.out.println("in Mousepressed");
-            distance=pr.getIntersectedDistance();
-            STL_MODEL_XFORM = (XformBox) pr.getIntersectedNode();
-            isPicking=true;*/
-            vecIni = unProjectDirection(mousePosX, mousePosY, subScene.getWidth(), subScene.getHeight());
-//        }
     }
 
     public void rotateWorld(Double mouseDeltaX, Double mouseDeltaY) {
@@ -153,23 +138,23 @@ public class ModelController {
         WORLD_XFORM.addRotation(mxx, mxy, mxz, tx, myx, myy, myz, ty, mzx, mzy, mzz, tz);
     }
 
-    public Transform getAffine() {
+    public Transform getWorldAffine() {
         return WORLD_XFORM.getTransforms().get(0);
     }
 
-    public String getAffineString() {
-        return getAffine().getMxx() + ";" + getAffine().getMxy() + ";" + getAffine().getMxz() + ";" + getAffine().getTx() + ";" + getAffine().getMyx() + ";" + getAffine().getMyy() + ";" + getAffine().getMyz() + ";" + getAffine().getTy() + ";" + getAffine().getMzx() + ";" + getAffine().getMzy() + ";" + getAffine().getMzz() + ";" + getAffine().getTz();
+    public String getAffineToString() {
+        return getWorldAffine().getMxx() + ServerInterface.MESSAGE_TRENNUNG + getWorldAffine().getMxy() + ServerInterface.MESSAGE_TRENNUNG + getWorldAffine().getMxz() + ServerInterface.MESSAGE_TRENNUNG + getWorldAffine().getTx() + ServerInterface.MESSAGE_TRENNUNG + getWorldAffine().getMyx() + ServerInterface.MESSAGE_TRENNUNG + getWorldAffine().getMyy() + ServerInterface.MESSAGE_TRENNUNG + getWorldAffine().getMyz() + ServerInterface.MESSAGE_TRENNUNG + getWorldAffine().getTy() + ServerInterface.MESSAGE_TRENNUNG + getWorldAffine().getMzx() + ServerInterface.MESSAGE_TRENNUNG + getWorldAffine().getMzy() + ServerInterface.MESSAGE_TRENNUNG + getWorldAffine().getMzz() + ServerInterface.MESSAGE_TRENNUNG + getWorldAffine().getTz();
     }
 
-    public String getTranslationString(){
-        return STL_MODEL_XFORM.getT().getX() + ";" + STL_MODEL_XFORM.getT().getY() + ";" + STL_MODEL_XFORM.getT().getZ();
+    public String getTranslationString() {
+        return STL_MODEL_XFORM.getT().getX() + ServerInterface.MESSAGE_TRENNUNG + STL_MODEL_XFORM.getT().getY() + ServerInterface.MESSAGE_TRENNUNG + STL_MODEL_XFORM.getT().getZ();
     }
 
     public void translate(Point3D axis, double mouseDelta) {
         STL_MODEL_XFORM.translate(axis.multiply(mouseDelta * ModelInterface.MOUSE_SPEED * ModelInterface.ROTATION_SPEED));
     }
 
-    public void translate(double x, double y, double z){
+    public void translate(double x, double y, double z) {
         STL_MODEL_XFORM.translate(x, y, z);
     }
 
@@ -177,31 +162,8 @@ public class ModelController {
         WORLD_XFORM.reset();
     }
 
-    public Point3D unProjectDirection(double sceneX, double sceneY, double sWidth, double sHeight) {
-        double tanHFov = Math.tan(Math.toRadians(camera.getFieldOfView()) * 0.5f);
-        Point3D vMouse = new Point3D(tanHFov*(2*sceneX/sWidth-1), tanHFov*(2*sceneY/sWidth-sHeight/sWidth), 1);
-
-        Point3D result = localToSceneDirection(vMouse);
-        return result.normalize();
-    }
-
-    public Point3D localToScene(Point3D pt) {
-        Point3D res = camera.localToParentTransformProperty().get().transform(pt);
-        if (camera.getParent() != null) {
-            res = camera.getParent().localToSceneTransformProperty().get().transform(res);
-        }
-        return res;
-    }
-
-    public Point3D localToSceneDirection(Point3D dir) {
-        Point3D res = localToScene(dir);
-        return res.subtract(localToScene(new Point3D(0, 0, 0)));
-    }
-
     public void zoomCamera(Double mouseDeltaY) {
-        double modifier = 1.0;
-
-        double newZ = camera.getTranslateZ() + mouseDeltaY * ModelInterface.MOUSE_SPEED * modifier;
+        double newZ = camera.getTranslateZ() + mouseDeltaY * ModelInterface.MOUSE_SPEED * ModelInterface.ZOOM_SPEED;
         if (newZ <= 0)
             camera.setTranslateZ(newZ);
     }
@@ -221,7 +183,6 @@ public class ModelController {
 
     public void setAxisVisible(Boolean isAxisVisible) {
         AXIS_MODEL_XFORM.setVisible(isAxisVisible);
-
         ModelController.isAxisVisible.set(isAxisVisible);
     }
 
@@ -231,18 +192,6 @@ public class ModelController {
 
     public StackPane getModelStackPane() {
         return stackPane;
-    }
-
-    public boolean getIsPicking(){
-        return isPicking;
-    }
-
-    public void setPicking(boolean isPicking){
-        this.isPicking = isPicking;
-    }
-
-    public static ModelController getInstance() {
-        return ModelControllerHolder.INSTANCE;
     }
 
     private static class ModelControllerHolder {

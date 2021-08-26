@@ -4,15 +4,14 @@ import controller.ModelController;
 import controller.PolyederController;
 import controller.ServerController;
 import javafx.application.Platform;
-import javafx.scene.shape.TriangleMesh;
-import javafx.scene.transform.Rotate;
-import model.Polyeder;
 import model.Triangle;
 import model.interfaces.ServerInterface;
 import view.Ausgabe;
 
-import java.awt.geom.AffineTransform;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -76,7 +75,7 @@ public class ServerThread extends Thread {
         System.out.println("ende loop");
     }
 
-    private void startObjectListener(){
+    private void startObjectListener() {
         if (client != null && client.isConnected()) {
             try {
                 objectInputStream = new ObjectInputStream(client.getInputStream());
@@ -85,7 +84,7 @@ public class ServerThread extends Thread {
                     while ((object = objectInputStream.readObject()) != null) {
                         if (object.getClass().isInstance(new String())) {
                             String zeile = (String) object;
-                            String[] lines = zeile.split(";");
+                            String[] lines = zeile.split(ServerInterface.MESSAGE_TRENNUNG);
                             switch (lines[0]) {
                                 case ServerInterface.MESSAGE_EXIT:
                                     ServerController.getInstance().disconnect();
@@ -111,27 +110,23 @@ public class ServerThread extends Thread {
                                     Ausgabe.print(zeile);
                             }
                         } else if (object.getClass().isInstance(new ArrayList<Triangle>())) {
-                                PolyederController.getInstance().getPolyeder().setTriangleList((ArrayList<Triangle>) object);
-                                Platform.runLater(() -> {
-                                    PolyederController.getInstance().getPolyeder().updatePolyederInfo();
-                                    ModelController.getInstance().buildModel();
-                                });
-                            }
+                            PolyederController.getInstance().getPolyeder().setTriangleList((ArrayList<Triangle>) object);
+                            Platform.runLater(() -> {
+                                PolyederController.getInstance().getPolyeder().updatePolyederInfo();
+                                ModelController.getInstance().buildModel();
+                            });
+                        }
                         try {
                             objectInputStream = new ObjectInputStream(client.getInputStream());
-                        }
-                        catch (SocketException e)
-                        {
+                        } catch (SocketException e) {
                             Ausgabe.print("Verbindung abgebrochen");
                             break;
                         }
                     }
-                }
-                catch (ClassNotFoundException e) {
+                } catch (ClassNotFoundException e) {
                     Ausgabe.print("classnotfoundexception");
                 }
-            }
-            catch (IOException e){
+            } catch (IOException e) {
                 Ausgabe.print("IOException in ServerThread");
                 e.printStackTrace();
             }
@@ -154,7 +149,7 @@ public class ServerThread extends Thread {
         this.waiting = waiting;
     }
 
-    public void closeAll(){
+    public void closeAll() {
         if (server != null)
             try {
                 server.close();

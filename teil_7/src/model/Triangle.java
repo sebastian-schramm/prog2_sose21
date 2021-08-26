@@ -3,8 +3,10 @@ package model;
 import java.io.Serializable;
 
 public class Triangle implements Comparable<Triangle>, Serializable {
+
     private final Vertex normal;
     private final Vertex[] vertices;
+
     private double area;
     private double volume;
 
@@ -35,13 +37,13 @@ public class Triangle implements Comparable<Triangle>, Serializable {
     }
 
     private void calcVolume(Vertex v1, Vertex v2, Vertex v3) {
-        double v321 = v3.getX()*v2.getY()*v1.getZ();
-        double v231 = v2.getX()*v3.getY()*v1.getZ();
-        double v312 = v3.getX()*v1.getY()*v2.getZ();
-        double v132 = v1.getX()*v3.getY()*v2.getZ();
-        double v213 = v2.getX()*v1.getY()*v3.getZ();
-        double v123 = v1.getX()*v2.getY()*v3.getZ();
-        this.volume = (1.0/6.0)*(-v321 + v231 + v312 - v132 - v213 + v123);
+        double v321 = v3.getX() * v2.getY() * v1.getZ();
+        double v231 = v2.getX() * v3.getY() * v1.getZ();
+        double v312 = v3.getX() * v1.getY() * v2.getZ();
+        double v132 = v1.getX() * v3.getY() * v2.getZ();
+        double v213 = v2.getX() * v1.getY() * v3.getZ();
+        double v123 = v1.getX() * v2.getY() * v3.getZ();
+        this.volume = (1.0 / 6.0) * (-v321 + v231 + v312 - v132 - v213 + v123);
     }
 
     public double getArea() {

@@ -2,7 +2,6 @@ package view;
 
 import javafx.scene.control.Alert;
 import model.interfaces.DialogKonstanten;
-import model.interfaces.MenuBarInterface;
 
 public class AlertMessage {
 
@@ -16,13 +15,13 @@ public class AlertMessage {
         alert.showAndWait();
     }
 
-    public static void errorMessage(String message){
+    public static void errorMessage(String message) {
         alert = new Alert(Alert.AlertType.ERROR);
         alert.setContentText(message);
         alert.showAndWait();
     }
 
-    public static void handbookMessage(){
+    public static void handbookMessage() {
         alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(DialogKonstanten.HANDBOOK_TITLE);
     }

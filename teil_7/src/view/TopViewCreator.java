@@ -5,8 +5,6 @@ import controller.ModelController;
 import controller.ServerController;
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.*;
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.interfaces.MenuBarInterface;
@@ -49,9 +47,9 @@ public final class TopViewCreator {
         CustomMenuItem menuItemPort = MenuTextFieldCreator.customMenuItem(ServerController.getInstance().getPort());
 
         MenuItem menuItemShowLocalIpAddress = new MenuItem();
-        menuItemShowLocalIpAddress.textProperty().bind(Bindings.concat(MenuBarInterface.LABEL_LOCALE , ServerController.getInstance().getLokaleIpAddress()));
+        menuItemShowLocalIpAddress.textProperty().bind(Bindings.concat(MenuBarInterface.LABEL_LOCALE, ServerController.getInstance().getLokaleIpAddress()));
         MenuItem menuItemShowPublicIpAddress = new MenuItem();
-        menuItemShowPublicIpAddress.textProperty().bind(Bindings.concat(MenuBarInterface.LABEL_SERVER , ServerController.getInstance().getPublicIpAddress()));
+        menuItemShowPublicIpAddress.textProperty().bind(Bindings.concat(MenuBarInterface.LABEL_SERVER, ServerController.getInstance().getPublicIpAddress()));
 
         menuFile.getItems().addAll(menuFileOpen);
 
@@ -98,8 +96,6 @@ public final class TopViewCreator {
         menuItemSelectXAxis.setOnAction(e -> {
 
         });
-
-
 
 
         menuItemConnectToServer.setOnAction(e -> {

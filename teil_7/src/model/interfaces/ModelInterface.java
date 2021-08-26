@@ -10,6 +10,7 @@ public interface ModelInterface {
     double AXIS_LENGTH = 2500000.0;
     double CONTROL_MULTIPLIER = 0.1;
     double SHIFT_MULTIPLIER = 10.0;
+    double ZOOM_SPEED = 1.0;
     double MOUSE_SPEED = 0.1;
     double ROTATION_SPEED = 2.0;
     double FIELD_OF_VEW = 60.0;

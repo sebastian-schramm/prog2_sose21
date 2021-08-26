@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import model.Polyeder;
 import model.interfaces.AllgemeineKonstanten;
 import model.interfaces.GUIKonstanten;
+import model.interfaces.ServerInterface;
 import utilities.Parser;
 import view.AlertMessage;
 
@@ -16,18 +17,21 @@ import java.io.File;
 
 public class PolyederController {
 
+    private static Stage stage;
     private final DoubleProperty surfaceProperty = new SimpleDoubleProperty();
     private final DoubleProperty volumeProperty = new SimpleDoubleProperty();
     private final IntegerProperty triangleAmountProperty = new SimpleIntegerProperty();
-
-    private static Stage stage;
-    private Polyeder polyeder;
+    private final Polyeder polyeder;
 
     private PolyederController() {
-        polyeder = new Polyeder();
+        this.polyeder = new Polyeder();
         this.surfaceProperty.set(0.0);
         this.volumeProperty.set(0.0);
         this.triangleAmountProperty.set(0);
+    }
+
+    public static PolyederController getInstance() {
+        return PolyederControllerHolder.INSTANCE;
     }
 
     public Polyeder getPolyeder() {
@@ -35,7 +39,7 @@ public class PolyederController {
     }
 
     public void setStage(Stage stage) {
-        this.stage = stage;
+        PolyederController.stage = stage;
     }
 
     public void loadFile(File file) {
@@ -49,7 +53,7 @@ public class PolyederController {
                         updateGuiProperties(file.getName());
 
                         ServerController.getInstance().sendTriangleList(polyeder.getTriangleList());
-                        ServerController.getInstance().sendString("updateGUIElements;" + file.getName());
+                        ServerController.getInstance().sendString(ServerInterface.MESSAGE_UPDATEGUIELEMENTS + file.getName());
 
                         ModelController.getInstance().buildModel();
                         AlertMessage.showMessage(GUIKonstanten.LOADING_FILE_COMPLETE);
@@ -60,10 +64,10 @@ public class PolyederController {
         }
     }
 
-    public void updateGuiProperties(String filename){
+    public void updateGuiProperties(String filename) {
         getTriangleAmountProperty().setValue(polyeder.getTriangleList().size());
-        getVolumeProperty().set(Math.round(polyeder.getVolume() * AllgemeineKonstanten.ROUND_KOMMASTELLE)/AllgemeineKonstanten.ROUND_KOMMASTELLE);
-        getSurfaceProperty().set(Math.round(polyeder.getArea() * AllgemeineKonstanten.ROUND_KOMMASTELLE)/AllgemeineKonstanten.ROUND_KOMMASTELLE);
+        getVolumeProperty().set(Math.round(polyeder.getVolume() * AllgemeineKonstanten.ROUND_KOMMASTELLE) / AllgemeineKonstanten.ROUND_KOMMASTELLE);
+        getSurfaceProperty().set(Math.round(polyeder.getArea() * AllgemeineKonstanten.ROUND_KOMMASTELLE) / AllgemeineKonstanten.ROUND_KOMMASTELLE);
         stage.setTitle(GUIKonstanten.MY_TITLE + filename);
     }
 
@@ -77,10 +81,6 @@ public class PolyederController {
 
     public IntegerProperty getTriangleAmountProperty() {
         return this.triangleAmountProperty;
-    }
-
-    public static PolyederController getInstance() {
-        return PolyederControllerHolder.INSTANCE;
     }
 
     private static class PolyederControllerHolder {

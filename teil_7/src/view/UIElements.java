@@ -1,7 +1,6 @@
 package view;
 
 import controller.Main;
-//import controller.MouseController;
 import controller.MouseController;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
