@@ -39,21 +39,21 @@ public class MouseController {
             if (me.isPrimaryButtonDown()) {
                 ModelController.getInstance().rotateWorld(mouseDeltaX, mouseDeltaY);
                 if (nanoSec + ServerInterface.MESSAGE_MILLIS_WAIT < System.currentTimeMillis()) {
-                    ServerController.getInstance().sendString(ServerInterface.MESSAGE_SETONMOUSEDRAGGED + ModelController.getInstance().getAffineToString());
+                    ServerController.getInstance().sendString(ServerInterface.MESSAGE_SETONMOUSEDRAGGED + ServerInterface.MESSAGE_TRENNUNG + ModelController.getInstance().getAffineToString());
                     nanoSec = System.currentTimeMillis();
                 }
             } else if (me.isSecondaryButtonDown()) {
                 if (mouseDeltaX != 0) {
                     ModelController.getInstance().translate(Rotate.X_AXIS, mouseDeltaX);
-                    if (nanoSec + 20 < System.currentTimeMillis()) {
-                        ServerController.getInstance().sendString(ServerInterface.MESSAGE_TRANSLATE_X_AXIS + ModelController.getInstance().getTranslationString());
+                    if (nanoSec + ServerInterface.MESSAGE_MILLIS_WAIT_TRANSLATE < System.currentTimeMillis()) {
+                        ServerController.getInstance().sendString(ServerInterface.MESSAGE_TRANSLATE_X_AXIS + ServerInterface.MESSAGE_TRENNUNG + ModelController.getInstance().getTranslationString());
                         nanoSec = System.currentTimeMillis();
                     }
                 }
                 if (mouseDeltaY != 0) {
                     ModelController.getInstance().translate(Rotate.Y_AXIS, -mouseDeltaY);
-                    if (nanoSec + 20 < System.currentTimeMillis()) {
-                        ServerController.getInstance().sendString(ServerInterface.MESSAGE_TRANSLATE_Y_AXIS + ModelController.getInstance().getTranslationString());
+                    if (nanoSec + ServerInterface.MESSAGE_MILLIS_WAIT_TRANSLATE < System.currentTimeMillis()) {
+                        ServerController.getInstance().sendString(ServerInterface.MESSAGE_TRANSLATE_Y_AXIS + ServerInterface.MESSAGE_TRENNUNG + ModelController.getInstance().getTranslationString());
                         nanoSec = System.currentTimeMillis();
                     }
                 }

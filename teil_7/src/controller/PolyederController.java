@@ -53,7 +53,7 @@ public class PolyederController {
                         updateGuiProperties(file.getName());
 
                         ServerController.getInstance().sendTriangleList(polyeder.getTriangleList());
-                        ServerController.getInstance().sendString(ServerInterface.MESSAGE_UPDATEGUIELEMENTS + file.getName());
+                        ServerController.getInstance().sendString(ServerInterface.MESSAGE_UPDATEGUIELEMENTS + ServerInterface.MESSAGE_TRENNUNG + file.getName());
 
                         ModelController.getInstance().buildModel();
                         AlertMessage.showMessage(GUIKonstanten.LOADING_FILE_COMPLETE);

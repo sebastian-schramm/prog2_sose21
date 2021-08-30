@@ -15,8 +15,9 @@ public class AlertMessage {
         alert.showAndWait();
     }
 
-    public static void errorMessage(String message) {
+    public static void errorMessage(String message, String header) {
         alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText(header);
         alert.setContentText(message);
         alert.showAndWait();
     }

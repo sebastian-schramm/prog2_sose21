@@ -17,9 +17,11 @@ public interface ServerInterface {
     String SERVER_START = "Server Startet";
     String SERVER_WAIT_FOR_CONNECTION = "Warte auf Verbindung";
     String SERVER_CONNECTION_DETECTED = "Verbindung aufgebaut";
+    String SERVER_CONNECTION_FAILED = "Verbindung fehlgeschlagen!";
     String SERVER_CLIENT_CONNECTED = "Client Verbunden";
     String SERVER_CLOSING = "Server wird beendet";
     String CONNECTED_WITH_SERVER = "Mit Server verbunden";
+    String SERVER_PORT_ALREADY_USED = "Port schon vergeben!";
 
     //Error messages
     String WEBSITE_COULD_NOT_BE_FOUND = "Webseite für die Public IP Adresse konnte nicht aufgerufen werden!";
@@ -31,13 +33,17 @@ public interface ServerInterface {
     String SERVER_CLIENT_COULD_NOT_CLOSE = "Server client konnte nicht beendet werden!";
     String SERVER_COULD_NOT_CLOSE = "Server konnte nicht beendet werden!";
 
-    String MESSAGE_TRENNUNG = ";";
-    String MESSAGE_EXIT = "exit" + MESSAGE_TRENNUNG;
-    String MESSAGE_START_CLIENT = "startClient" + MESSAGE_TRENNUNG;
-    String MESSAGE_SETONMOUSEDRAGGED = "setOnMouseDragged" + MESSAGE_TRENNUNG;
-    String MESSAGE_UPDATEGUIELEMENTS = "updateGUIElements" + MESSAGE_TRENNUNG;
-    String MESSAGE_TRANSLATE_Y_AXIS = "translateYAxis" + MESSAGE_TRENNUNG;
-    String MESSAGE_TRANSLATE_X_AXIS = "translateXAxis" + MESSAGE_TRENNUNG;
+    String CONNECTION_CLOSED = "Verbindung wurde abgebrochen";
+    String CONNECTION_CLOSED_BY_CLIENT = "Client disconnect";
 
-    int MESSAGE_MILLIS_WAIT = 20;
+    String MESSAGE_TRENNUNG = ";";
+    String MESSAGE_EXIT = "exit";
+    String MESSAGE_START_CLIENT = "startClient";
+    String MESSAGE_SETONMOUSEDRAGGED = "setOnMouseDragged";
+    String MESSAGE_UPDATEGUIELEMENTS = "updateGUIElements";
+    String MESSAGE_TRANSLATE_Y_AXIS = "translateYAxis";
+    String MESSAGE_TRANSLATE_X_AXIS = "translateXAxis";
+
+    int MESSAGE_MILLIS_WAIT = 50;
+    int MESSAGE_MILLIS_WAIT_TRANSLATE = 20;
 }

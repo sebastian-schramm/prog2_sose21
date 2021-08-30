@@ -69,11 +69,9 @@ public class ClientThread extends Thread {
                 ServerController.getInstance().setConnectionStatus(ServerInterface.CONNECTED_WITH_SERVER);
             } catch (UnknownHostException e) {
                 e.printStackTrace();
-                System.out.println("Ausnahme Socket-Konstruktor.");
             } catch (ConnectException e) {
-                System.out.println("con ref");
                 Platform.runLater(() -> {
-                    AlertMessage.errorMessage("Port stimmt nicht");
+                    AlertMessage.errorMessage(ServerInterface.CONNECTION_CLOSED, ServerInterface.CONNECTION_CLOSED_BY_CLIENT);
                 });
                 break;
 

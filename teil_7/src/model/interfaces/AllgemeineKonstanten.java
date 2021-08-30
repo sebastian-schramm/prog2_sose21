@@ -3,7 +3,7 @@ package model.interfaces;
 public interface AllgemeineKonstanten {
 
     String DEFAULT_RESOURCES_LOCATION = "src/resources/";
-    String DEFAULT_APPLICATION_ICON = "file:src/resources/icons/test.jpg";
+    String DEFAULT_APPLICATION_ICON = "file:src/resources/icons/img2.png";
     int THREAD_AMOUNT = 12;
     int TRIANGLE_VERTICES = 4;
     String ASCII_STL_START_LINE = "solid";

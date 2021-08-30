@@ -18,24 +18,9 @@ public final class TopViewCreator {
         MenuBar menuBar = new MenuBar();
 
         Menu menuFile = new Menu(MenuBarInterface.MENU_FILE);
-        MenuItem menuFileOpen = new MenuItem(MenuBarInterface.MENU_FILE_OPEN);
-
-        Menu menuViewPoint = new Menu(MenuBarInterface.MENU_VIEWPOINT);
-
-        Menu menuControls = new Menu(MenuBarInterface.MENU_CONTROL);
+        MenuItem menuFileOpen = new MenuItem(MenuBarInterface.MENU_FILE_OPEN);Menu menuControls = new Menu(MenuBarInterface.MENU_CONTROL);
         CheckMenuItem menuItemShowFaces = new CheckMenuItem(MenuBarInterface.MENU_CONTROL_FACES);
         CheckMenuItem menuItemShowAxis = new CheckMenuItem(MenuBarInterface.MENU_CONTROL_AXIS);
-        Menu menuItemSelectAxis = new Menu(MenuBarInterface.MENU_CONTROL_SELECT_AXIS);
-        RadioMenuItem menuItemSelectXAxis = new RadioMenuItem(MenuBarInterface.MENU_CONTROL_X_SELECT);
-        RadioMenuItem menuItemSelectYAxis = new RadioMenuItem(MenuBarInterface.MENU_CONTROL_Y_SELECT);
-        RadioMenuItem menuItemSelectZAxis = new RadioMenuItem(MenuBarInterface.MENU_CONTROL_Z_SELECT);
-
-        ToggleGroup toggleGroup = new ToggleGroup();
-        toggleGroup.getToggles().addAll(
-                menuItemSelectXAxis,
-                menuItemSelectYAxis,
-                menuItemSelectZAxis
-        );
 
         Menu menuHelp = new Menu(MenuBarInterface.MENU_HELP);
         MenuItem menuItemAbout = new MenuItem(MenuBarInterface.MENU_ABOUT);
@@ -53,18 +38,9 @@ public final class TopViewCreator {
 
         menuFile.getItems().addAll(menuFileOpen);
 
-        menuViewPoint.getItems().addAll();
-
         menuControls.getItems().addAll(
                 menuItemShowFaces,
-                menuItemShowAxis,
-                menuItemSelectAxis
-        );
-
-        menuItemSelectAxis.getItems().addAll(
-                menuItemSelectXAxis,
-                menuItemSelectYAxis,
-                menuItemSelectZAxis
+                menuItemShowAxis
         );
 
         menuHelp.getItems().addAll(menuItemAbout);
@@ -79,7 +55,6 @@ public final class TopViewCreator {
 
         menuBar.getMenus().addAll(
                 menuFile,
-                menuViewPoint,
                 menuControls,
                 menuNetwork,
                 menuHelp
@@ -92,11 +67,6 @@ public final class TopViewCreator {
 
         menuItemShowAxis.setSelected(ModelController.getInstance().isAxisVisible().getValue());
         menuItemShowAxis.setOnAction(e -> ModelController.getInstance().setAxisVisible(!ModelController.getInstance().isAxisVisible().getValue()));
-
-        menuItemSelectXAxis.setOnAction(e -> {
-
-        });
-
 
         menuItemConnectToServer.setOnAction(e -> {
             if (menuItemConnectToServer.isSelected()) {

@@ -122,13 +122,6 @@ public class ModelController {
         object.setTranslateZ(-object.getBoundsInLocal().getCenterZ());
     }
 
-    //TODO vielleicht weg?
-    public void centerModelOnPane() {
-        object.setTranslateX(-object.getBoundsInLocal().getCenterX());
-        object.setTranslateY(-object.getBoundsInLocal().getCenterY());
-        object.setTranslateZ(-object.getBoundsInLocal().getCenterZ() + object.getBoundsInLocal().getCenterZ());
-    }
-
     public void rotateWorld(Double mouseDeltaX, Double mouseDeltaY) {
         WORLD_XFORM.addRotation(mouseDeltaX * ModelInterface.MOUSE_SPEED * ModelInterface.ROTATION_SPEED, Rotate.Y_AXIS);
         WORLD_XFORM.addRotation(mouseDeltaY * ModelInterface.MOUSE_SPEED * ModelInterface.ROTATION_SPEED, Rotate.X_AXIS);
@@ -169,11 +162,12 @@ public class ModelController {
     }
 
     public void setDrawModeFill(Boolean isFill) {
-        if (isFill)
-            object.setDrawMode(DrawMode.FILL);
-        else
-            object.setDrawMode(DrawMode.LINE);
-
+        if (object != null) {
+            if (isFill)
+                object.setDrawMode(DrawMode.FILL);
+            else
+                object.setDrawMode(DrawMode.LINE);
+        }
         ModelController.isFill.set(isFill);
     }
 

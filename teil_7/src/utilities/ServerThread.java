@@ -8,10 +8,7 @@ import model.Triangle;
 import model.interfaces.ServerInterface;
 import view.Ausgabe;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -44,7 +41,7 @@ public class ServerThread extends Thread {
 //                        e.printStackTrace();
 //                    }
 //                }
-                if (serverMainLoopRunning) {
+                if (waiting) {
 //                    server = null;
                     client = null;
 
@@ -53,20 +50,26 @@ public class ServerThread extends Thread {
                         try {
                             Ausgabe.print("Starte server...");
                             server = new ServerSocket(Integer.parseInt(ServerController.getInstance().getPort().getValue()));
+
+                            ServerController.getInstance().setConnectionStatus(ServerInterface.SERVER_WAIT_FOR_CONNECTION);
+
+                            try {
+                                System.out.println("Warte auf client...");
+                                client = server.accept();
+                                ServerController.getInstance().setConnectionStatus(ServerInterface.SERVER_CONNECTION_DETECTED);
+                            } catch (IOException e) {
+                                Ausgabe.print(ServerInterface.SERVER_ACCEPT_ERROR);
+                                ServerController.getInstance().setConnectionStatus(ServerInterface.SERVER_CONNECTION_FAILED);
+                            }
+                            System.out.println("Client verbunden...");
+
                         } catch (IOException e) {
                             Ausgabe.print(ServerInterface.SERVER_INIT_ERROR);
+                            ServerController.getInstance().setConnectionStatus(ServerInterface.SERVER_PORT_ALREADY_USED);
                         }
-                    ServerController.getInstance().setConnectionStatus(ServerInterface.SERVER_WAIT_FOR_CONNECTION);
-
-                    try {
-                        System.out.println("Warte auf client...");
-                        client = server.accept();
-                    } catch (IOException e) {
-                        Ausgabe.print(ServerInterface.SERVER_ACCEPT_ERROR);
-                    }
-                    System.out.println("Client verbunden...");
 
                     startObjectListener();
+
 
                     Ausgabe.print("... Ende");
                 }
@@ -84,6 +87,7 @@ public class ServerThread extends Thread {
                     while ((object = objectInputStream.readObject()) != null) {
                         if (object.getClass().isInstance(new String())) {
                             String zeile = (String) object;
+                            Ausgabe.print(zeile);
                             String[] lines = zeile.split(ServerInterface.MESSAGE_TRENNUNG);
                             switch (lines[0]) {
                                 case ServerInterface.MESSAGE_EXIT:
@@ -106,8 +110,7 @@ public class ServerThread extends Thread {
                                     break;
                                 case ServerInterface.MESSAGE_TRANSLATE_Y_AXIS:
                                     ModelController.getInstance().translate(Double.parseDouble(lines[1]), Double.parseDouble(lines[2]), Double.parseDouble(lines[3]));
-                                default:
-                                    Ausgabe.print(zeile);
+                                    break;
                             }
                         } else if (object.getClass().isInstance(new ArrayList<Triangle>())) {
                             PolyederController.getInstance().getPolyeder().setTriangleList((ArrayList<Triangle>) object);
