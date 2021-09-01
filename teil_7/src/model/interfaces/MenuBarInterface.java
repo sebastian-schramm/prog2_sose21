@@ -27,4 +27,6 @@ public interface MenuBarInterface {
     String ABOUT_MESSAGE = "Diese Applikation wurde von Sebastian Schramm, Joel Pitzler, Christoph Senft entwickelt.\nIm Sommersemester 2021 wurde sie fertiggestellt.";
     String ABOUT_HEADER = "STL-Viewer™";
 
+    String MENU_HANDBOOK = "Guide";
+
 }

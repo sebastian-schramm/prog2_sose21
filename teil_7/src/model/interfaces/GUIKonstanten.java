@@ -20,4 +20,5 @@ public interface GUIKonstanten {
     String LOADING_FILE_COMPLETE = "Datei wurde erfolgreich geladen!";
     String LOADING_FILE_FAILED = "Beim laden der Datei ist ein Fehler aufgetreten!";
 
+
 }

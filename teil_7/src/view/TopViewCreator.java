@@ -24,6 +24,7 @@ public final class TopViewCreator {
 
         Menu menuHelp = new Menu(MenuBarInterface.MENU_HELP);
         MenuItem menuItemAbout = new MenuItem(MenuBarInterface.MENU_ABOUT);
+        MenuItem menuItemHandbook = new MenuItem(MenuBarInterface.MENU_HANDBOOK);
 
         //Network control bla
         Menu menuNetwork = new Menu(MenuBarInterface.MENU_NETWORK);
@@ -43,7 +44,10 @@ public final class TopViewCreator {
                 menuItemShowAxis
         );
 
-        menuHelp.getItems().addAll(menuItemAbout);
+        menuHelp.getItems().addAll(
+                menuItemHandbook,
+                menuItemAbout
+        );
 
         menuNetwork.getItems().addAll(
                 menuItemConnectToServer,
@@ -90,6 +94,10 @@ public final class TopViewCreator {
 
         menuItemAbout.setOnAction(actionEvent -> {
             AlertMessage.aboutMessage(MenuBarInterface.ABOUT_MESSAGE, MenuBarInterface.ABOUT_HEADER, MenuBarInterface.MENU_ABOUT);
+        });
+
+        menuItemHandbook.setOnAction(actionEvent -> {
+            AlertMessage.handbookMessage();
         });
 
         vBox.getChildren().add(menuBar);

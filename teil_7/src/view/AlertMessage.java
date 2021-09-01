@@ -25,6 +25,9 @@ public class AlertMessage {
     public static void handbookMessage() {
         alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(DialogKonstanten.HANDBOOK_TITLE);
+        alert.setContentText(DialogKonstanten.HANDBOOK_TEXT);
+        alert.setHeaderText(DialogKonstanten.HANDBOOK_HEADER);
+        alert.showAndWait();
     }
 
     public static void showMessage(String message) {
