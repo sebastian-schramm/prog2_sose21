@@ -14,6 +14,12 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 
+/**
+ * ServerThread Class of the STL-Viewer
+ *
+ * @author Sebastian Schramm, Joel Pitzler, Christoph Senft
+ * @version 1.0
+ */
 public class ServerThread extends Thread {
 
     private boolean serverMainLoopRunning = true;
@@ -97,17 +103,15 @@ public class ServerThread extends Thread {
                                 case ServerInterface.MESSAGE_START_CLIENT:
                                     ServerController.getInstance().startClient(lines[1], lines[2]);
                                     break;
-                                case ServerInterface.MESSAGE_SETONMOUSEDRAGGED:
+                                case ServerInterface.MESSAGE_SET_ON_MOUSE_DRAGGED:
                                     ModelController.getInstance().rotateWorld(Double.parseDouble(lines[1]), Double.parseDouble(lines[2]), Double.parseDouble(lines[3]), Double.parseDouble(lines[4]), Double.parseDouble(lines[5]), Double.parseDouble(lines[6]), Double.parseDouble(lines[7]), Double.parseDouble(lines[8]), Double.parseDouble(lines[9]), Double.parseDouble(lines[10]), Double.parseDouble(lines[11]), Double.parseDouble(lines[12]));
                                     break;
-                                case ServerInterface.MESSAGE_UPDATEGUIELEMENTS:
+                                case ServerInterface.MESSAGE_UPDATE_GUI_ELEMENTS:
                                     Platform.runLater(() -> {
                                         PolyederController.getInstance().updateGuiProperties(lines[1]);
                                     });
                                     break;
                                 case ServerInterface.MESSAGE_TRANSLATE_X_AXIS:
-                                    ModelController.getInstance().translate(Double.parseDouble(lines[1]), Double.parseDouble(lines[2]), Double.parseDouble(lines[3]));
-                                    break;
                                 case ServerInterface.MESSAGE_TRANSLATE_Y_AXIS:
                                     ModelController.getInstance().translate(Double.parseDouble(lines[1]), Double.parseDouble(lines[2]), Double.parseDouble(lines[3]));
                                     break;

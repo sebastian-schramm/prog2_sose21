@@ -3,7 +3,12 @@ package controller;
 import javafx.scene.layout.StackPane;
 import javafx.scene.transform.Rotate;
 import model.interfaces.ServerInterface;
-
+/**
+ * MouseController Class of the STL-Viewer
+ *
+ * @author Sebastian Schramm, Joel Pitzler, Christoph Senft
+ * @version 1.0
+ */
 public class MouseController {
 
     private double mousePosX, mousePosY;
@@ -39,7 +44,7 @@ public class MouseController {
             if (me.isPrimaryButtonDown()) {
                 ModelController.getInstance().rotateWorld(mouseDeltaX, mouseDeltaY);
                 if (nanoSec + ServerInterface.MESSAGE_MILLIS_WAIT < System.currentTimeMillis()) {
-                    ServerController.getInstance().sendString(ServerInterface.MESSAGE_SETONMOUSEDRAGGED + ServerInterface.MESSAGE_TRENNUNG + ModelController.getInstance().getAffineToString());
+                    ServerController.getInstance().sendString(ServerInterface.MESSAGE_SET_ON_MOUSE_DRAGGED + ServerInterface.MESSAGE_TRENNUNG + ModelController.getInstance().getAffineToString());
                     nanoSec = System.currentTimeMillis();
                 }
             } else if (me.isSecondaryButtonDown()) {

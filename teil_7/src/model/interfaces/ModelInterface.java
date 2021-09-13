@@ -1,5 +1,10 @@
 package model.interfaces;
-
+/**
+ * ModelInterface Interface of the STL-Viewer
+ *
+ * @author Sebastian Schramm, Joel Pitzler, Christoph Senft
+ * @version 1.0
+ */
 public interface ModelInterface {
 
     double CAMERA_INITIAL_DISTANCE = -450;

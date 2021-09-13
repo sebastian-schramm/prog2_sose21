@@ -6,7 +6,12 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import utilities.CreateAnchor;
-
+/**
+ * UIElements Class of the STL-Viewer
+ *
+ * @author Sebastian Schramm, Joel Pitzler, Christoph Senft
+ * @version 1.0
+ */
 public final class UIElements {
 
     public static StackPane getStackPane(Stage stage, Main main) {

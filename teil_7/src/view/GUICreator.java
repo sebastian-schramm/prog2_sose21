@@ -7,7 +7,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import model.interfaces.AllgemeineKonstanten;
 import model.interfaces.GUIKonstanten;
-
+/**
+ * GUICreator Class of the STL-Viewer
+ *
+ * @author Sebastian Schramm, Joel Pitzler, Christoph Senft
+ * @version 1.0
+ */
 public class GUICreator {
 
     public static AnchorPane createMainFrame(Stage stage, Main main) {

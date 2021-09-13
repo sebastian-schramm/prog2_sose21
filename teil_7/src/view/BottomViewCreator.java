@@ -10,7 +10,12 @@ import javafx.stage.Stage;
 import model.interfaces.BottomBarInterface;
 import model.interfaces.GUIKonstanten;
 import utilities.LabelCreator;
-
+/**
+ * BottomViewCreator Class of the STL-Viewer
+ *
+ * @author Sebastian Schramm, Joel Pitzler, Christoph Senft
+ * @version 1.0
+ */
 public class BottomViewCreator {
 
     public static HBox createBottomView(Stage stage, Main main) {

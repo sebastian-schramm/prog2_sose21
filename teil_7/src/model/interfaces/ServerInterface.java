@@ -1,5 +1,10 @@
 package model.interfaces;
-
+/**
+ * ServerInterface Interface of the STL-Viewer
+ *
+ * @author Sebastian Schramm, Joel Pitzler, Christoph Senft
+ * @version 1.0
+ */
 public interface ServerInterface {
 
     String SERVER_IP = "";
@@ -39,8 +44,8 @@ public interface ServerInterface {
     String MESSAGE_TRENNUNG = ";";
     String MESSAGE_EXIT = "exit";
     String MESSAGE_START_CLIENT = "startClient";
-    String MESSAGE_SETONMOUSEDRAGGED = "setOnMouseDragged";
-    String MESSAGE_UPDATEGUIELEMENTS = "updateGUIElements";
+    String MESSAGE_SET_ON_MOUSE_DRAGGED = "setOnMouseDragged";
+    String MESSAGE_UPDATE_GUI_ELEMENTS = "updateGUIElements";
     String MESSAGE_TRANSLATE_Y_AXIS = "translateYAxis";
     String MESSAGE_TRANSLATE_X_AXIS = "translateXAxis";
 

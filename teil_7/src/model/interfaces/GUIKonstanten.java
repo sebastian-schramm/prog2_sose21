@@ -1,5 +1,10 @@
 package model.interfaces;
-
+/**
+ * GUIKonstanten Interface of the STL-Viewer
+ *
+ * @author Sebastian Schramm, Joel Pitzler, Christoph Senft
+ * @version 1.0
+ */
 public interface GUIKonstanten {
 
     String MY_TITLE = "STL-Viewer: ";

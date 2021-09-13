@@ -10,7 +10,12 @@ import javafx.stage.Stage;
 import model.interfaces.MenuBarInterface;
 import utilities.ClipboardCreator;
 import utilities.MenuTextFieldCreator;
-
+/**
+ * TopViewCreator Class of the STL-Viewer
+ *
+ * @author Sebastian Schramm, Joel Pitzler, Christoph Senft
+ * @version 1.0
+ */
 public final class TopViewCreator {
 
     public static VBox createTopView(Stage stage, Main main) {

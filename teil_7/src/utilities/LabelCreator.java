@@ -8,7 +8,12 @@ import javafx.scene.control.Label;
 import javafx.scene.text.Font;
 import model.interfaces.GUIKonstanten;
 
-
+/**
+ * LabelCreator Class of the STL-Viewer
+ *
+ * @author Sebastian Schramm, Joel Pitzler, Christoph Senft
+ * @version 1.0
+ */
 public class LabelCreator {
 
     public static Label createLabel(ObservableValue<String> property, int fontSize, String message) {

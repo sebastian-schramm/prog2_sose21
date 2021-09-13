@@ -5,6 +5,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.scene.shape.TriangleMesh;
 import javafx.stage.Stage;
 import model.Polyeder;
 import model.interfaces.AllgemeineKonstanten;
@@ -14,7 +15,12 @@ import utilities.Parser;
 import view.AlertMessage;
 
 import java.io.File;
-
+/**
+ * PolyederController Class of the STL-Viewer
+ *
+ * @author Sebastian Schramm, Joel Pitzler, Christoph Senft
+ * @version 1.0
+ */
 public class PolyederController {
 
     private static Stage stage;
@@ -53,7 +59,7 @@ public class PolyederController {
                         updateGuiProperties(file.getName());
 
                         ServerController.getInstance().sendTriangleList(polyeder.getTriangleList());
-                        ServerController.getInstance().sendString(ServerInterface.MESSAGE_UPDATEGUIELEMENTS + ServerInterface.MESSAGE_TRENNUNG + file.getName());
+                        ServerController.getInstance().sendString(ServerInterface.MESSAGE_UPDATE_GUI_ELEMENTS + ServerInterface.MESSAGE_TRENNUNG + file.getName());
 
                         ModelController.getInstance().buildModel();
                         AlertMessage.showMessage(GUIKonstanten.LOADING_FILE_COMPLETE);
@@ -73,6 +79,32 @@ public class PolyederController {
 
     public DoubleProperty getSurfaceProperty() {
         return this.surfaceProperty;
+    }
+
+    public TriangleMesh getMesh() {
+        TriangleMesh mesh = new TriangleMesh();
+
+        int faceCnt = 0;
+        for (int x = 0; x < polyeder.getTriangleList().size(); x++) {
+            for (int y = 0; y < 3; y++) {
+                mesh.getTexCoords().addAll((float) ((polyeder.getTriangleList().get(x).getNormal().getX() + 1) / -2));
+                mesh.getTexCoords().addAll((float) ((polyeder.getTriangleList().get(x).getNormal().getY() + 1) / -2));
+                mesh.getTexCoords().addAll((float) ((polyeder.getTriangleList().get(x).getNormal().getZ() + 1) / -2));
+            }
+
+            for (int y = 0; y < 3; y++) {
+                mesh.getPoints().addAll((float) polyeder.getTriangleList().get(x).getVertex(y).getX());
+                mesh.getPoints().addAll((float) polyeder.getTriangleList().get(x).getVertex(y).getY());
+                mesh.getPoints().addAll((float) polyeder.getTriangleList().get(x).getVertex(y).getZ());
+            }
+
+            mesh.getFaces().addAll(faceCnt, faceCnt, faceCnt + 1, faceCnt + 1, faceCnt + 2, faceCnt + 2);
+            faceCnt += 3;
+            if (x % 250000 == 0) {
+                System.gc();
+            }
+        }
+        return mesh;
     }
 
     public DoubleProperty getVolumeProperty() {

@@ -1,5 +1,10 @@
 package model.interfaces;
-
+/**
+ * BottomBarInterface Interface of the STL-Viewer
+ *
+ * @author Sebastian Schramm, Joel Pitzler, Christoph Senft
+ * @version 1.0
+ */
 public interface BottomBarInterface {
 
     String LABEL_VOLUME = "Volume: ";

@@ -6,6 +6,12 @@ import model.interfaces.GUIKonstanten;
 
 import java.io.File;
 
+/**
+ * FileOpenDialog Class of the STL-Viewer
+ *
+ * @author Sebastian Schramm, Joel Pitzler, Christoph Senft
+ * @version 1.0
+ */
 public class FileOpenDialog {
     public static File openFileChooser(Stage stage) {
         FileChooser fileChooser = new FileChooser();

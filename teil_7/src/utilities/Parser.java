@@ -17,6 +17,12 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
+/**
+ * Parser Class of the STL-Viewer
+ *
+ * @author Sebastian Schramm, Joel Pitzler, Christoph Senft
+ * @version 1.0
+ */
 public class Parser {
 
     private static int[] index;
@@ -24,7 +30,7 @@ public class Parser {
     private static int triangleNumber;
 
     /**
-     * Liest eine Datei aus und überprüft, ob es sich dabei um ein ASCII oder Binary Format handelt
+     * Liest eine Datei aus und überprüft, ob es sich dabei um ein ASCII oder Binary Format handelt.
      *
      * @param file
      */

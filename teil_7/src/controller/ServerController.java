@@ -16,7 +16,12 @@ import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-
+/**
+ * ServerController Class of the STL-Viewer
+ *
+ * @author Sebastian Schramm, Joel Pitzler, Christoph Senft
+ * @version 1.0
+ */
 public class ServerController {
 
     private final StringProperty serverIpAddress = new SimpleStringProperty();
@@ -48,10 +53,6 @@ public class ServerController {
         } catch (IOException e) {
             Ausgabe.print(ServerInterface.WEBSITE_IP_NOT_FOUND);
         }
-    }
-
-    public static ServerController getInstance() {
-        return ServerControllerHolder.INSTANCE;
     }
 
     public void startClient(String ip, String port) {
@@ -174,6 +175,10 @@ public class ServerController {
 
     public StringProperty getConnectionStatusProperty() {
         return this.connectionStatus;
+    }
+
+    public static ServerController getInstance() {
+        return ServerControllerHolder.INSTANCE;
     }
 
     private static class ServerControllerHolder {

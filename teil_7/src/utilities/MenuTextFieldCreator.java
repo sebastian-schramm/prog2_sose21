@@ -5,6 +5,12 @@ import javafx.scene.control.CustomMenuItem;
 import javafx.scene.control.TextField;
 import model.interfaces.GUIKonstanten;
 
+/**
+ * MenuTextFieldCreator Class of the STL-Viewer
+ *
+ * @author Sebastian Schramm, Joel Pitzler, Christoph Senft
+ * @version 1.0
+ */
 public class MenuTextFieldCreator {
 
     public static CustomMenuItem customMenuItem(StringProperty property) {

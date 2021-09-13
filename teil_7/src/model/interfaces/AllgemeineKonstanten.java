@@ -1,5 +1,10 @@
 package model.interfaces;
-
+/**
+ * AllgemeineKonstanten Interface of the STL-Viewer
+ *
+ * @author Sebastian Schramm, Joel Pitzler, Christoph Senft
+ * @version 1.0
+ */
 public interface AllgemeineKonstanten {
 
     String DEFAULT_RESOURCES_LOCATION = "src/resources/";

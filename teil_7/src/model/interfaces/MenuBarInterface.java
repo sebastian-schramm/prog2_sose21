@@ -1,5 +1,10 @@
 package model.interfaces;
-
+/**
+ * MenuBarInterface Interface of the STL-Viewer
+ *
+ * @author Sebastian Schramm, Joel Pitzler, Christoph Senft
+ * @version 1.0
+ */
 public interface MenuBarInterface {
 
     String MENU_FILE = "File";

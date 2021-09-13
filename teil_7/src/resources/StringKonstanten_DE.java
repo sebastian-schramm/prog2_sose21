@@ -1,5 +1,10 @@
 package resources;
-
+/**
+ * StringKonstanten_DE Interface of the STL-Viewer
+ *
+ * @author Sebastian Schramm, Joel Pitzler, Christoph Senft
+ * @version 1.0
+ */
 public interface StringKonstanten_DE {
 
     public static final String FILE_LOADING = "wird eingelesen!";

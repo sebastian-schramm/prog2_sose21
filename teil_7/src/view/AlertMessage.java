@@ -3,6 +3,12 @@ package view;
 import javafx.scene.control.Alert;
 import model.interfaces.DialogKonstanten;
 
+/**
+ * AlertMessage Class of the STL-Viewer
+ *
+ * @author Sebastian Schramm, Joel Pitzler, Christoph Senft
+ * @version 1.0
+ */
 public class AlertMessage {
 
     private static Alert alert;

@@ -19,6 +19,12 @@ import model.interfaces.ServerInterface;
 import utilities.CreateAnchor;
 import utilities.XformBox;
 
+/**
+ * ModelController Class of the STL-Viewer
+ *
+ * @author Sebastian Schramm, Joel Pitzler, Christoph Senft
+ * @version 1.0
+ */
 public class ModelController {
 
     private static final Group ROOT = new Group();
@@ -66,16 +72,25 @@ public class ModelController {
         stackPane.getChildren().add(subScene);
     }
 
+    public static ModelController getInstance() {
+        return ModelControllerHolder.INSTANCE;
+    }
+
+    /**
+     * Erzeugt ein PhongMaterial zur Farblichen darstellung der Objekte.
+     * @param diffuseColor
+     * @param specularColor
+     * @return PhongMaterial
+     */
     private static PhongMaterial createMaterial(Color diffuseColor, Color specularColor) {
         PhongMaterial material = new PhongMaterial(diffuseColor);
         material.setSpecularColor(specularColor);
         return material;
     }
 
-    public static ModelController getInstance() {
-        return ModelControllerHolder.INSTANCE;
-    }
-
+    /**
+     * Erzeugt die Kamera und positioniert Sie an eine vordefinierte Position
+     */
     private void buildCamera() {
         ROOT.getChildren().add(camera);
         CAMERA_XFORM.getChildren().add(camera);
@@ -88,6 +103,12 @@ public class ModelController {
         CAMERA_XFORM.addRotation(ModelInterface.CAMERA_INITIAL_Y_ANGLE, Rotate.Y_AXIS);
     }
 
+    /**
+     * Erzeugt ein Koordinatensystem welches die X,Y und Z Achse im Raum darstellt.
+     * X ist Rot
+     * Y ist Gruen
+     * Z ist Blau
+     */
     private void buildAxes() {
         final Box xAxis = new Box(ModelInterface.AXIS_LENGTH, 1, 1);
         final Box yAxis = new Box(1, ModelInterface.AXIS_LENGTH, 1);
@@ -101,8 +122,11 @@ public class ModelController {
         AXIS_MODEL_XFORM.setVisible(true);
     }
 
+    /**
+     * Generiert eine MeshView aus den Dreiecken.
+     */
     public void buildModel() {
-        object = new MeshView(PolyederController.getInstance().getPolyeder().getMesh());
+        object = new MeshView(PolyederController.getInstance().getMesh());
 
         centerModel();
         camera.setTranslateZ(-object.getBoundsInLocal().getHeight() - object.getBoundsInLocal().getDepth() - object.getBoundsInLocal().getWidth());
@@ -116,15 +140,27 @@ public class ModelController {
         STL_MODEL_XFORM.setVisible(true);
     }
 
+    /**
+     * Zentriert das generierte Object anhand der Hoehe, Laenge und Breite am Nullpunkt.
+     */
     public void centerModel() {
         object.setTranslateX(-object.getBoundsInLocal().getCenterX());
         object.setTranslateY(-object.getBoundsInLocal().getCenterY());
         object.setTranslateZ(-object.getBoundsInLocal().getCenterZ());
     }
 
+    /**
+     *
+     * @param mouseDeltaX
+     * @param mouseDeltaY
+     */
     public void rotateWorld(Double mouseDeltaX, Double mouseDeltaY) {
-        WORLD_XFORM.addRotation(mouseDeltaX * ModelInterface.MOUSE_SPEED * ModelInterface.ROTATION_SPEED, Rotate.Y_AXIS);
-        WORLD_XFORM.addRotation(mouseDeltaY * ModelInterface.MOUSE_SPEED * ModelInterface.ROTATION_SPEED, Rotate.X_AXIS);
+        rotateWorld(Rotate.X_AXIS, mouseDeltaY * ModelInterface.MOUSE_SPEED * ModelInterface.ROTATION_SPEED);
+        rotateWorld(Rotate.Y_AXIS, mouseDeltaX * ModelInterface.MOUSE_SPEED * ModelInterface.ROTATION_SPEED);
+    }
+
+    public void rotateWorld(Point3D axis, double angle) {
+        WORLD_XFORM.setRotation(axis, angle);
     }
 
     public void rotateWorld(double mxx, double mxy, double mxz, double tx, double myx, double myy, double myz, double ty, double mzx, double mzy, double mzz, double tz) {
@@ -135,6 +171,10 @@ public class ModelController {
         return WORLD_XFORM.getTransforms().get(0);
     }
 
+    /**
+     * Gibt einen String zurueck mit allen werten von Affine
+     * @return String
+     */
     public String getAffineToString() {
         return getWorldAffine().getMxx() + ServerInterface.MESSAGE_TRENNUNG + getWorldAffine().getMxy() + ServerInterface.MESSAGE_TRENNUNG + getWorldAffine().getMxz() + ServerInterface.MESSAGE_TRENNUNG + getWorldAffine().getTx() + ServerInterface.MESSAGE_TRENNUNG + getWorldAffine().getMyx() + ServerInterface.MESSAGE_TRENNUNG + getWorldAffine().getMyy() + ServerInterface.MESSAGE_TRENNUNG + getWorldAffine().getMyz() + ServerInterface.MESSAGE_TRENNUNG + getWorldAffine().getTy() + ServerInterface.MESSAGE_TRENNUNG + getWorldAffine().getMzx() + ServerInterface.MESSAGE_TRENNUNG + getWorldAffine().getMzy() + ServerInterface.MESSAGE_TRENNUNG + getWorldAffine().getMzz() + ServerInterface.MESSAGE_TRENNUNG + getWorldAffine().getTz();
     }
@@ -184,6 +224,10 @@ public class ModelController {
         return isAxisVisible;
     }
 
+    /**
+     * Gibt die StackPane vom ModelController zurueck
+     * @return stackPane
+     */
     public StackPane getModelStackPane() {
         return stackPane;
     }

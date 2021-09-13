@@ -5,8 +5,15 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import view.FileOpenDialog;
 import view.GUICreator;
-
+/**
+ * Main Class of the STL-Viewer
+ *
+ * @author Sebastian Schramm, Joel Pitzler, Christoph Senft
+ * @version 1.0
+ */
 public class Main extends Application {
+
+
 
     public static void main(String[] args) {
         launch(args);
