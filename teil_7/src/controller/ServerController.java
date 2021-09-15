@@ -16,6 +16,7 @@ import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+
 /**
  * ServerController Class of the STL-Viewer
  *
@@ -62,18 +63,15 @@ public class ServerController {
     /**
      * Die Methode startClient() baut fuer eine Verbindung von zwei Applikationen die Clients auf.
      * Des Weiteren werden die String Properties, die in der GUI Informationen ueber die Verbindung zeigen, gesetzt.
-     * @param ip Die IP-Adressen String, der in der GUI angezeigt wird.
+     *
+     * @param ip   Die IP-Adressen String, der in der GUI angezeigt wird.
      * @param port Der Ziel Port String, der in der GUI angezeigt wird.
      **/
     public void startClient(String ip, String port) {
-        System.out.println("Try to start Client");
-        System.out.println(ip);
-        System.out.println(port);
         this.serverIpAddress.setValue(ip);
         this.port.setValue(port);
 
         if (clientThread == null) {
-            System.out.println("Start ClientThread");
             clientThread = new ClientThread();
             clientThread.start();
         }
@@ -83,13 +81,10 @@ public class ServerController {
      * Die Methode startServer() baut fuer eine Verbindung von zwei Applikationen die Server auf. Des Weiteren werden die
      * String Properties, die in der GUI Informationen ueber die Verbindung zeigen, gesetzt.
      *
-     * @param ip Die IP-Adresse String, der in der GUI angezeigt wird.
+     * @param ip   Die IP-Adresse String, der in der GUI angezeigt wird.
      * @param port Der Ziel Port String, der in der GUI angezeigt wird.
      **/
     public void startServer(String ip, String port) {
-        System.out.println("Try to start Client");
-        System.out.println(ip);
-        System.out.println(port);
         this.serverIpAddress.setValue(ip);
         this.port.setValue(port);
 
@@ -98,6 +93,7 @@ public class ServerController {
             serverThread.start();
         }
     }
+
     /**
      * Die Methode connect() baut eine Verbindung von zwei Applikationen auf.
      **/
@@ -127,18 +123,6 @@ public class ServerController {
                 serverThread.notify();
             }
             setConnectionStatus(ServerInterface.OFFLINE);
-        }
-    }
-
-    public void close() {
-        if (serverThread != null) {
-            serverThread.setServerMainLoopRunning(false);
-            serverThread.setWaiting(false);
-            serverThread.closeAll();
-
-            synchronized (serverThread) {
-                serverThread.notify();
-            }
         }
     }
 
@@ -207,10 +191,6 @@ public class ServerController {
         return this.serverThread;
     }
 
-    public ClientThread getClientThread() {
-        return this.clientThread;
-    }
-
     /**
      * Die setConnectionStatus() Methode setzt eine String Property, ob eine Verbindung aufgebaut wurde.
      *
@@ -242,7 +222,7 @@ public class ServerController {
 
     /**
      * Private Klasse, die die Instanz der ServerController Klasse erstellt.
-     * */
+     */
     private static class ServerControllerHolder {
         private static final ServerController INSTANCE = new ServerController();
     }

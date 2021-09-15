@@ -27,10 +27,20 @@ public class ClientThread extends Thread {
     private static PrintWriter printWriter = null;
     private boolean client_main_loop_running = true;
 
+    /**
+     * Die Methode getSocket() gibt den socket zurueck.
+     *
+     * @return socket von Client
+     */
     public static Socket getSocket() {
         return socket;
     }
 
+    /**
+     * Die Methode sendeMesh() sendet eine ArrayList mit den Dreiecken ueber den Socket.
+     *
+     * @param triangleArrayList Liste der Dreiecke, die weitergegeben wird.
+     */
     public void sendeMesh(ArrayList<Triangle> triangleArrayList) {
         try {
             OutputStream outputStream = socket.getOutputStream();
@@ -43,6 +53,11 @@ public class ClientThread extends Thread {
         }
     }
 
+    /**
+     * Die Methode sendeMessage() sendet den Befehl ueber den Socket.
+     *
+     * @param message Der Befehl der gesendet werden soll.
+     **/
     public void sendeMessage(String message) {
         try {
             OutputStream outputStream = socket.getOutputStream();
@@ -57,6 +72,9 @@ public class ClientThread extends Thread {
         }
     }
 
+    /**
+     * Die run() Methode versucht eine Verbindung zum Server herzustellen. Bei einer erfolgreichen verbindung wird intern ein Server gestartet und die IP und der Port werden an die andere Application uebermittelt.
+     */
     @Override
     public void run() {
         while (client_main_loop_running) {
@@ -98,6 +116,9 @@ public class ClientThread extends Thread {
         }
     }
 
+    /**
+     * Die closeAll() Methode schliesst den Socket und den PrintWriter.
+     */
     public void closeAll() {
         if (socket != null) {
             try {

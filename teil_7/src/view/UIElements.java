@@ -13,7 +13,13 @@ import utilities.CreateAnchor;
  * @version 1.0
  */
 public final class UIElements {
-
+    /**
+     * Beherbergt alle visuellen Objekte des Programms wie z.B. Top und BottomView.
+     *
+     * @param stage
+     * @param main
+     * @return StackPane
+     */
     public static StackPane getStackPane(Stage stage, Main main) {
         StackPane stackPane = new StackPane();
         BorderPane borderPane = new BorderPane();

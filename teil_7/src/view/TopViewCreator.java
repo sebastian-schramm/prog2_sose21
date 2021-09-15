@@ -17,6 +17,14 @@ import utilities.MenuTextFieldCreator;
  * @version 1.0
  */
 public final class TopViewCreator {
+    /**
+     * Erzeugt die komplette Menuleiste am oberen Rand des Programms mit den vier Menupunkten und
+     * den da drunter liegenden Unterpunkten.
+     *
+     * @param stage
+     * @param main
+     * @return VBox
+     */
 
     public static VBox createTopView(Stage stage, Main main) {
         VBox vBox = new VBox();

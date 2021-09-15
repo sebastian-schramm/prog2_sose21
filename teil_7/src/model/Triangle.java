@@ -15,6 +15,7 @@ public class Triangle implements Comparable<Triangle>, Serializable {
 
     private double area;
     private double volume;
+
     /**
      * Der Polyeder Konstruktor initialisiert alle Attribute der Klasse.
      *

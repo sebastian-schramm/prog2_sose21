@@ -31,9 +31,11 @@ public class ServerThread extends Thread {
 
     private ObjectInputStream objectInputStream;
 
+    /**
+     * Die run() Methode startet den ServerSocket und wartet auf eine eingehende verbindung.
+     */
     @Override
     public void run() {
-
         while (serverMainLoopRunning) {
             synchronized (this) {
                 if (waiting) {
@@ -42,8 +44,6 @@ public class ServerThread extends Thread {
                     ServerController.getInstance().setConnectionStatus(ServerInterface.SERVER_START);
                     if (server == null)
                         try {
-
-                            Ausgabe.print("Starte server...");
                             server = new ServerSocket(Integer.parseInt(ServerController.getInstance().getPort().getValue()));
 
                             ServerController.getInstance().setConnectionStatus(ServerInterface.SERVER_WAIT_FOR_CONNECTION);
@@ -54,14 +54,12 @@ public class ServerThread extends Thread {
                         }
 
                     try {
-                        System.out.println("Warte auf client...");
                         client = server.accept();
                         ServerController.getInstance().setConnectionStatus(ServerInterface.SERVER_CONNECTION_DETECTED);
                     } catch (IOException e) {
                         Ausgabe.print(ServerInterface.SERVER_ACCEPT_ERROR);
                         ServerController.getInstance().setConnectionStatus(ServerInterface.SERVER_CONNECTION_FAILED);
                     }
-                    System.out.println("Client verbunden...");
 
                     startObjectListener();
                 }
@@ -69,6 +67,11 @@ public class ServerThread extends Thread {
         }
     }
 
+    /**
+     * Die startObjectListener() Methode wertet die empfangenen Nachrichten aus.
+     * Handelt es sich um ein String, so wird geprueft welcher Befehl am Anfang steht und die entsprechende Methode aufgerufen.
+     * Wenn es eine ArrayList ist, wird diese dem Polyeder uebergeben und neu dargestellt.
+     */
     private void startObjectListener() {
         if (client != null && client.isConnected()) {
             try {
@@ -122,22 +125,18 @@ public class ServerThread extends Thread {
         }
     }
 
-    public Socket getClient() {
-        return client;
-    }
-
-    public ServerSocket getServer() {
-        return server;
-    }
-
+    /**
+     * Die setServerMainLoopRunning() Methode setzt einen boolean Wert fuer den MainLoop des Servers.
+     *
+     * @param serverMainLoopRunning Der Status des MainLoops vom Server.
+     **/
     public void setServerMainLoopRunning(boolean serverMainLoopRunning) {
         this.serverMainLoopRunning = serverMainLoopRunning;
     }
 
-    public void setWaiting(boolean waiting) {
-        this.waiting = waiting;
-    }
-
+    /**
+     * Die closeAll() Methode schliesst den Server und den Client.
+     */
     public void closeAll() {
         if (server != null)
             try {

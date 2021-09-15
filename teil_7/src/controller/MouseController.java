@@ -28,7 +28,7 @@ public class MouseController {
      * Die getInstance() Methode gibt eine Instanz der MouseController Klasse zurueck.
      *
      * @return Instanz wird zurueckgegeben.
-     * */
+     **/
     public static MouseController getInstance() {
         return MouseControllerHolder.INSTANCE;
     }
@@ -111,7 +111,6 @@ public class MouseController {
      * Private Klasse, die die Instanz der MouseController Klasse erstellt.
      * */
     private static class MouseControllerHolder {
-
         private static final MouseController INSTANCE = new MouseController();
     }
 }

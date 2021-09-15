@@ -13,6 +13,13 @@ import java.io.File;
  * @version 1.0
  */
 public class FileOpenDialog {
+    /**
+     * Oeffnet den Explorer damit eine Datei ausgewählt werden kann, die eingeladen werden soll.
+     * Dabei werden nur STL-Dateien als valide Auswahlmoeglichkeit erlaubt.
+     *
+     * @param stage
+     * @return File
+     */
     public static File openFileChooser(Stage stage) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(GUIKonstanten.FILE_CHOOSER_TITLE);

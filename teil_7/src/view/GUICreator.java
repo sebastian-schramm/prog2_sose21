@@ -14,7 +14,13 @@ import model.interfaces.GUIKonstanten;
  * @version 1.0
  */
 public class GUICreator {
-
+    /**
+     * Erzeugt das gesamte Fenster in dem alle Elemente des Programms eingepflegt sind.
+     *
+     * @param stage
+     * @param main
+     * @return AnchorPane
+     */
     public static AnchorPane createMainFrame(Stage stage, Main main) {
         stage.setTitle(GUIKonstanten.MY_TITLE);
         stage.setWidth(GUIKonstanten.WINDOW_SIZE_X);

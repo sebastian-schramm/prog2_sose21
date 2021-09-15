@@ -18,6 +18,14 @@ import utilities.LabelCreator;
  */
 public class BottomViewCreator {
 
+    /**
+     * Erzeugt den unteren Teil der View, in dem vier informationen ausgeben werden,
+     * die Laufend aktualisiert werden können.
+     *
+     * @param stage
+     * @param main
+     * @return HBox
+     */
     public static HBox createBottomView(Stage stage, Main main) {
         HBox hBox = new HBox();
         hBox.setAlignment(Pos.CENTER);

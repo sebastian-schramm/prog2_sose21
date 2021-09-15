@@ -13,10 +13,17 @@ import view.GUICreator;
  */
 public class Main extends Application {
 
+    /**
+     * Startet die GUI Applikation
+     * @param args Umgebungsvarabeln des Systems
+     **/
     public static void main(String[] args) {
         launch(args);
     }
 
+    /**
+     * Die Methode start() ist eine ueberschriebene Methode aus der JavaFX Libary und baut die Scene auf der Applikation.
+     **/
     @Override
     public void start(Stage stage) {
         init(stage);
@@ -29,10 +36,19 @@ public class Main extends Application {
         });
     }
 
+    /**
+     * Die Methode init() baut die stage mit ihrem Inhalt auf.
+     *
+     * @param stage Die stage in der sich die Applikation befinden soll.
+     **/
     public void init(Stage stage) {
         PolyederController.getInstance().setStage(stage);
     }
 
+    /**
+     * Die Methode loadFile() wird ausgeführt, wenn der Datei Auswaehlen Dialog gestartet werden soll in der Stage.
+     * @param stage Die aktuelle Stage des Programms.
+     **/
     public void loadFile(Stage stage) {
         PolyederController.getInstance().loadFile(FileOpenDialog.openFileChooser(stage));
     }

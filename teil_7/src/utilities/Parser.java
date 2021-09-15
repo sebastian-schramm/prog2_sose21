@@ -1,7 +1,6 @@
 package utilities;
 
 import controller.PolyederController;
-import javafx.application.Platform;
 import model.Vertex;
 import model.interfaces.AllgemeineKonstanten;
 import model.interfaces.GUIKonstanten;
@@ -176,7 +175,6 @@ public class Parser {
     private static void readASCIIFile(File filePath) throws IOException {
         try (FileReader reader = new FileReader(filePath);
              BufferedReader bufferedReader = new BufferedReader((reader))) {
-//            Ausgabe.foundASCIIFile();
 
             CountDownLatch countDownLatch = new CountDownLatch(AllgemeineKonstanten.THREAD_AMOUNT);
             ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(AllgemeineKonstanten.THREAD_AMOUNT);
@@ -194,13 +192,11 @@ public class Parser {
                 bufferedReader.readLine();
                 bufferedReader.readLine();
 
-//                for (int n = 0; n < 10; ++n)
                 PolyederController.getInstance().getPolyeder().constructTriangle(vertices);
-//                    TriangleController.getInstance().constructTriangle(vertices);
 
                 if (i % 250000 == 0)
                     executor.submit(() -> {
-//                            System.gc();
+                        System.gc();
                         countDownLatch.countDown();
                         return null;
                     });

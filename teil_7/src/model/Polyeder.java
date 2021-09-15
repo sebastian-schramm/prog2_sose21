@@ -161,6 +161,7 @@ public class Polyeder {
     public Double getVolume() {
         return volume;
     }
+
     /**
      * Methode zur Rueckgabe des Oberflaecheninhalts.
      * @return area Das private Attribut area wird zurueckgegeben.
