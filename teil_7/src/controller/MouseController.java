@@ -2,8 +2,8 @@ package controller;
 
 import javafx.scene.layout.StackPane;
 import javafx.scene.transform.Rotate;
-import model.interfaces.ModelInterface;
 import model.interfaces.ServerInterface;
+import model.interfaces.ModelInterface;
 /**
  * MouseController Class of the STL-Viewer
  *
@@ -108,8 +108,8 @@ public class MouseController {
     }
 
     /**
-     * Private Klasse MouseControllerHolder, die die Instanz der MouseController Klasse erstellt.
-     **/
+     * Private Klasse, die die Instanz der MouseController Klasse erstellt.
+     * */
     private static class MouseControllerHolder {
 
         private static final MouseController INSTANCE = new MouseController();

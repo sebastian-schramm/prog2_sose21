@@ -29,6 +29,10 @@ public class PolyederController {
     private final IntegerProperty triangleAmountProperty = new SimpleIntegerProperty();
     private final Polyeder polyeder;
 
+    /**
+     * Privater Konstruktor der PolyederController Klasse, um diese Controller Klasse als Singelton zu realisieren.
+     * Ausserdem werden im privaten Konstruktor die privaten Attribute des Objekts initialisiert.
+     **/
     private PolyederController() {
         this.polyeder = new Polyeder();
         this.surfaceProperty.set(0.0);
@@ -36,18 +40,39 @@ public class PolyederController {
         this.triangleAmountProperty.set(0);
     }
 
+    /**
+     * Die getInstance() Methode gibt eine Instanz der PolyederController Klasse zurueck.
+     *
+     * @return Instanz wird zurueckgegeben.
+     **/
     public static PolyederController getInstance() {
         return PolyederControllerHolder.INSTANCE;
     }
 
+    /**
+     * Die getPolyeder() Methode gibt ein Objekt der Polyeder Klasse zurueck.
+     *
+     * @return polyeder - Objekt der Polyeder Klasse wird zurueckgegeben.
+     **/
     public Polyeder getPolyeder() {
         return polyeder;
     }
 
+    /**
+     * Die getStage() Methode setzt das GUI Attribut Stage.
+     *
+     * @param stage Die Stage, die verwendet werden soll für den Polyeder.
+     **/
     public void setStage(Stage stage) {
         PolyederController.stage = stage;
     }
 
+    /**
+     * Die loadFile() Methode wird verwendet um die Informationen aus dem Datei Auswaehlen Dialog, dem Polyeder hinzuzufuegen
+     * und diesen zu erstellem.
+     *
+     * @param file Die STL-Datei, die eingelsen werden soll.
+     **/
     public void loadFile(File file) {
         if (file != null) {
             Thread loadingThread = new Thread() {
@@ -69,6 +94,12 @@ public class PolyederController {
         }
     }
 
+    /**
+     * Die updateGuiProperties() Methode wird verwendet um die Informationen ueber den Polyeder, der GUI mitzuteilen und
+     * diese entsprechend zu aktualisieren.
+     *
+     * @param filename Der Name der STL-Datei, die in der Applikation dargestellt werden soll.
+     **/
     public void updateGuiProperties(String filename) {
         getTriangleAmountProperty().setValue(polyeder.getTriangleList().size());
         getVolumeProperty().set(Math.round(polyeder.getVolume() * AllgemeineKonstanten.ROUND_KOMMASTELLE) / AllgemeineKonstanten.ROUND_KOMMASTELLE);
@@ -76,10 +107,20 @@ public class PolyederController {
         stage.setTitle(GUIKonstanten.MY_TITLE + filename);
     }
 
+    /**
+     * Die getSurfaceProperty() Methode gibt eine GUI Property zurueck, in der der Oberflaecheninhalt des Polyeders steht
+     *
+     * @return surfaceProperty - Attribut des Objekts.
+     **/
     public DoubleProperty getSurfaceProperty() {
         return this.surfaceProperty;
     }
 
+    /**
+     * Die getMesh() Methode generiert und gibt ein TriangleMesh zurueck, welches den Koerper des Polyeders in der GUI repraesentiert.
+     *
+     * @return mesh - Ist das Trianglemesh des Polyeders.
+     **/
     public TriangleMesh getMesh() {
         TriangleMesh mesh = new TriangleMesh();
 
@@ -106,14 +147,27 @@ public class PolyederController {
         return mesh;
     }
 
+    /**
+     * Die getVolumeProperty() Methode gibt eine GUI Property zurueck, in der das Volumen des Polyeders steht
+     *
+     * @return volumeProperty - Attribut des Objekts.
+     **/
     public DoubleProperty getVolumeProperty() {
         return this.volumeProperty;
     }
 
+    /**
+     * Die getTriangleAmountProperty() Methode gibt eine GUI Property zurueck, in der die Anzahl der Dreiecke des Polyeders steht.
+     *
+     * @return volumeProperty - IntegerProperty Attribut des Objekts.
+     **/
     public IntegerProperty getTriangleAmountProperty() {
         return this.triangleAmountProperty;
     }
 
+    /**
+     * Private Klasse, die die Instanz der PolyederController Klasse erstellt.
+     * */
     private static class PolyederControllerHolder {
         private static final PolyederController INSTANCE = new PolyederController();
     }
