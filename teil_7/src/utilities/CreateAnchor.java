@@ -9,6 +9,11 @@ import javafx.scene.layout.AnchorPane;
  * @version 1.0
  */
 public class CreateAnchor {
+    /**
+     * Die setConstraintsZero() Methode baut die Margin Einstellungen für ein AnchorPane auf.
+     *
+     * @param node Ist der GUI Pane, der uebergeben wird.
+     **/
     public static void setConstraintsZero(Node node) {
         AnchorPane.setTopAnchor(node, 0.0);
         AnchorPane.setBottomAnchor(node, 0.0);

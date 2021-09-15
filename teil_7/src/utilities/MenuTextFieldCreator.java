@@ -13,6 +13,12 @@ import model.interfaces.GUIKonstanten;
  */
 public class MenuTextFieldCreator {
 
+    /**
+     * Die Methode customMenuItem() baut ein eigenes Menu Item auf.
+     *
+     * @param property Der Wert, der im Textfield dargestellt wird.
+     * @return menuItem - Das selbst erstellte MenuItem.
+     **/
     public static CustomMenuItem customMenuItem(StringProperty property) {
         CustomMenuItem menuItem = new CustomMenuItem();
         TextField menuTextField = new TextField();

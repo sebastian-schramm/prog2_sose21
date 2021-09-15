@@ -111,12 +111,24 @@ public class Parser {
         return lineCounter;
     }
 
+    /**
+     * Liest einen Byte Block aus einer Datei aus und wandelt die Daten in Strings um.
+     *
+     * @param firstBlock Der Byteblock der ausgelesen werden soll.
+     * @return Der dekodierte Inhalt des ausgelesenen Blocks als String.
+     */
     private static String readBlock(byte[] firstBlock) {
         Charset charset = StandardCharsets.UTF_8;
         CharBuffer decode = charset.decode(ByteBuffer.wrap(firstBlock, 0, firstBlock.length));
         return decode.toString().toLowerCase();
     }
 
+    /**
+     * Liest eine STL-Datei aus, die im Binaerformat vorhanden ist.
+     *
+     * @param filePath Der Dateipfad zur STL-Datei
+     * @throws IOException
+     */
     private static void readBinaryFile(File filePath) throws IOException {
         try (FileInputStream inputStream = new FileInputStream(filePath);
              BufferedInputStream input = new BufferedInputStream(inputStream)) {
@@ -143,12 +155,24 @@ public class Parser {
         }
     }
 
+    /**
+     * Diese ueberladene Methode getVertex() liesst aus einen Byte Block die Koordinaten eines Vertex aus und baut diesen auf.
+     *
+     * @param attribute Der Byteblock, der interpretiert wird.
+     * @return Ein neues Vertex Objekt.
+     **/
     private static Vertex getVertex(byte[] attribute) {
         ByteBuffer bb = ByteBuffer.wrap(attribute).order(ByteOrder.LITTLE_ENDIAN);
 
         return new Vertex(bb.getFloat(), bb.getFloat(), bb.getFloat());
     }
 
+    /**
+     * Liest eine STL-Datei aus, die im Asciiformat vorhanden ist.
+     *
+     * @param filePath Der Dateipfad zur STL-Datei
+     * @throws IOException
+     */
     private static void readASCIIFile(File filePath) throws IOException {
         try (FileReader reader = new FileReader(filePath);
              BufferedReader bufferedReader = new BufferedReader((reader))) {
@@ -187,14 +211,32 @@ public class Parser {
         }
     }
 
+    /**
+     * Baut einen String auf, der die Normale eines Dreiecks enthaelt.
+     *
+     * @param line Der String aus der ASCII Datei, der die Normale enthaelt.
+     * @return Gibt den fertiggestellten Vertex zurueck.
+     **/
     private static Vertex stringToVertexNormal(String line) {
         return getVertex(line.stripLeading().substring(AllgemeineKonstanten.ASCII_TRIANGLE_PATTERN[0].length() + 1).stripLeading());
     }
 
+    /**
+     * Baut einen String auf, der den Vertex eines Dreiecks enthaelt.
+     *
+     * @param line Der String aus der ASCII Datei, der die Normale enthaelt.
+     * @return Gibt den fertiggestellten Vertex zurueck.
+     **/
     private static Vertex stringToVertexFacet(String line) {
         return getVertex(line.stripLeading().substring(AllgemeineKonstanten.ASCII_TRIANGLE_PATTERN[2].length() + 1).stripLeading());
     }
 
+    /**
+     * Diese ueberladene Methode getVertex() liesst aus einen String die Koordinaten eines Vertex aus und baut diesen auf.
+     *
+     * @param value Der String, der interpretiert wird.
+     * @return Ein neues Vertex Objekt.
+     **/
     private static Vertex getVertex(String value) {
         index = new int[2];
         counter = 0;
