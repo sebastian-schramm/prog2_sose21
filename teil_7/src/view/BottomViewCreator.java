@@ -22,11 +22,9 @@ public class BottomViewCreator {
      * Erzeugt den unteren Teil der View, in dem vier informationen ausgeben werden,
      * die Laufend aktualisiert werden können.
      *
-     * @param stage
-     * @param main
-     * @return HBox
+     * @return hBox - Enthaelt den kompletten Inhalt der Statusbar.
      */
-    public static HBox createBottomView(Stage stage, Main main) {
+    public static HBox createBottomView() {
         HBox hBox = new HBox();
         hBox.setAlignment(Pos.CENTER);
         hBox.setPrefHeight(BottomBarInterface.HBOX_HEIGHT);

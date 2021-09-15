@@ -21,9 +21,9 @@ public final class TopViewCreator {
      * Erzeugt die komplette Menuleiste am oberen Rand des Programms mit den vier Menupunkten und
      * den da drunter liegenden Unterpunkten.
      *
-     * @param stage
-     * @param main
-     * @return VBox
+     * @param stage Aktuelle Stage des Programms
+     * @param main Instanz der Main Klasse
+     * @return vBox - Enthaelt die komplette MenuBar.
      */
 
     public static VBox createTopView(Stage stage, Main main) {

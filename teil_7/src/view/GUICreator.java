@@ -17,9 +17,9 @@ public class GUICreator {
     /**
      * Erzeugt das gesamte Fenster in dem alle Elemente des Programms eingepflegt sind.
      *
-     * @param stage
-     * @param main
-     * @return AnchorPane
+     * @param stage Aktuelle Stage des Programms
+     * @param main Instanz der Main Klasse
+     * @return root - Erstelltes AnchorPane
      */
     public static AnchorPane createMainFrame(Stage stage, Main main) {
         stage.setTitle(GUIKonstanten.MY_TITLE);

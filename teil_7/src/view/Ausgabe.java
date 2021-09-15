@@ -8,9 +8,9 @@ package view;
  */
 public class Ausgabe {
     /**
-     * Diese Methode ist in der Lage Nachrichten in der Console auszugeben.
+     * Diese Methode ist in der Lage Nachrichten in der Konsole auszugeben.
      *
-     * @param message
+     * @param message String der in die Konsole ausgegeben werden soll.
      */
     public static void print(String message) {
         System.out.println(message);

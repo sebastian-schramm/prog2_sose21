@@ -16,9 +16,9 @@ public final class UIElements {
     /**
      * Beherbergt alle visuellen Objekte des Programms wie z.B. Top und BottomView.
      *
-     * @param stage
-     * @param main
-     * @return StackPane
+     * @param stage Aktuelle Stage des Programms
+     * @param main Instanz der Main Klasse
+     * @return stackPane - Fertig aufgebautes Stackpane mit allen visuellen Objekten.
      */
     public static StackPane getStackPane(Stage stage, Main main) {
         StackPane stackPane = new StackPane();
@@ -27,7 +27,7 @@ public final class UIElements {
         CreateAnchor.setConstraintsZero(stackPane);
 
         borderPane.setTop(TopViewCreator.createTopView(stage, main));
-        borderPane.setBottom(BottomViewCreator.createBottomView(stage, main));
+        borderPane.setBottom(BottomViewCreator.createBottomView());
 
         MouseController.getInstance().handleMouseEvents(stackPane);
 

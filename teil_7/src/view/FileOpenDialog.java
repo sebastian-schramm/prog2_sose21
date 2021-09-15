@@ -17,8 +17,8 @@ public class FileOpenDialog {
      * Oeffnet den Explorer damit eine Datei ausgewählt werden kann, die eingeladen werden soll.
      * Dabei werden nur STL-Dateien als valide Auswahlmoeglichkeit erlaubt.
      *
-     * @param stage
-     * @return File
+     * @param stage Aktuelle Stage des Programms.
+     * @return Ausgewaehlte Datei
      */
     public static File openFileChooser(Stage stage) {
         FileChooser fileChooser = new FileChooser();
