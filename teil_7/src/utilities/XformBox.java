@@ -20,6 +20,7 @@ public class XformBox extends Group {
     private final Rotate rx = new Rotate();
     private final Rotate ry = new Rotate();
     private double angleX, angleY;
+    private double tx, ty, tz;
 
     private final Point3D position = new Point3D(0.0, 0.0, 0.0);
 
@@ -33,7 +34,7 @@ public class XformBox extends Group {
         ry.setAxis(Rotate.Y_AXIS);
     }
 
-    public void addRotation(double angle, Point3D axis) {
+    public void addRotation(Point3D axis, double angle) {
         Rotate r = new Rotate(angle, axis);
         getTransforms().set(0, r.createConcatenation(getTransforms().get(0)));
     }

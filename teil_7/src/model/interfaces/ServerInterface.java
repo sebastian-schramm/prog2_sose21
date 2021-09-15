@@ -32,11 +32,14 @@ public interface ServerInterface {
     String WEBSITE_COULD_NOT_BE_FOUND = "Webseite für die Public IP Adresse konnte nicht aufgerufen werden!";
     String WEBSITE_IP_NOT_FOUND = "Die Public IP konnte nicht ermittelt werden!";
 
+    String SERVER_ERROR = "";
+
     String SERVER_INIT_ERROR = "Server Instanz kann nicht angelegt werden!";
     String SERVER_ACCEPT_ERROR = "Verbindungsaufbau zum Client fehlgeschlagen!";
     String SERVER_INPUT_ERROR = "Eingabe vom Client konnte nicht gelesen werden!";
     String SERVER_CLIENT_COULD_NOT_CLOSE = "Server client konnte nicht beendet werden!";
     String SERVER_COULD_NOT_CLOSE = "Server konnte nicht beendet werden!";
+    String SERVER_COULD_NOT_SEND_TRIANGLES = "Ein Fehler beim senden der Datei ist aufgetreten!";
 
     String CONNECTION_CLOSED = "Verbindung wurde abgebrochen";
     String CONNECTION_CLOSED_BY_CLIENT = "Client disconnect";

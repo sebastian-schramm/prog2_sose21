@@ -13,6 +13,7 @@ import javafx.scene.shape.DrawMode;
 import javafx.scene.shape.MeshView;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
+import javafx.scene.transform.Translate;
 import model.interfaces.GUIKonstanten;
 import model.interfaces.ModelInterface;
 import model.interfaces.ServerInterface;
@@ -99,8 +100,8 @@ public class ModelController {
         camera.setTranslateZ(ModelInterface.CAMERA_INITIAL_DISTANCE);
         camera.setTranslateZ(ModelInterface.CAMERA_INITIAL_DISTANCE);
         camera.setFieldOfView(ModelInterface.FIELD_OF_VEW);
-        CAMERA_XFORM.addRotation(ModelInterface.CAMERA_INITIAL_X_ANGLE, Rotate.X_AXIS);
-        CAMERA_XFORM.addRotation(ModelInterface.CAMERA_INITIAL_Y_ANGLE, Rotate.Y_AXIS);
+        CAMERA_XFORM.addRotation(Rotate.X_AXIS, ModelInterface.CAMERA_INITIAL_X_ANGLE);
+        CAMERA_XFORM.addRotation(Rotate.Y_AXIS, ModelInterface.CAMERA_INITIAL_Y_ANGLE);
     }
 
     /**
@@ -129,6 +130,7 @@ public class ModelController {
         object = new MeshView(PolyederController.getInstance().getMesh());
 
         centerModel();
+        translate(0, 0, 0);
         camera.setTranslateZ(-object.getBoundsInLocal().getHeight() - object.getBoundsInLocal().getDepth() - object.getBoundsInLocal().getWidth());
 
         object.setMaterial(new PhongMaterial(Color.BLUE));
@@ -149,25 +151,15 @@ public class ModelController {
         object.setTranslateZ(-object.getBoundsInLocal().getCenterZ());
     }
 
-    /**
-     *
-     * @param mouseDeltaX
-     * @param mouseDeltaY
-     */
-    public void rotateWorld(Double mouseDeltaX, Double mouseDeltaY) {
-        rotateWorld(Rotate.X_AXIS, mouseDeltaY * ModelInterface.MOUSE_SPEED * ModelInterface.ROTATION_SPEED);
-        rotateWorld(Rotate.Y_AXIS, mouseDeltaX * ModelInterface.MOUSE_SPEED * ModelInterface.ROTATION_SPEED);
-    }
-
     public void rotateWorld(Point3D axis, double angle) {
-        WORLD_XFORM.setRotation(axis, angle);
+        WORLD_XFORM.addRotation(axis, angle);
     }
 
     public void rotateWorld(double mxx, double mxy, double mxz, double tx, double myx, double myy, double myz, double ty, double mzx, double mzy, double mzz, double tz) {
         WORLD_XFORM.addRotation(mxx, mxy, mxz, tx, myx, myy, myz, ty, mzx, mzy, mzz, tz);
     }
 
-    public Transform getWorldAffine() {
+    private Transform getWorldAffine() {
         return WORLD_XFORM.getTransforms().get(0);
     }
 
@@ -189,10 +181,6 @@ public class ModelController {
 
     public void translate(double x, double y, double z) {
         STL_MODEL_XFORM.translate(x, y, z);
-    }
-
-    public void resetRotation() {
-        WORLD_XFORM.reset();
     }
 
     public void zoomCamera(Double mouseDeltaY) {

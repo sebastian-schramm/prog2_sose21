@@ -3,6 +3,8 @@ package view;
 import javafx.scene.control.Alert;
 import model.interfaces.DialogKonstanten;
 
+import java.awt.*;
+
 /**
  * AlertMessage Class of the STL-Viewer
  *
@@ -38,7 +40,6 @@ public class AlertMessage {
 
     public static void showMessage(String message) {
         alert = new Alert(Alert.AlertType.INFORMATION);
-//        alert.setHeaderText(MenuBarInterface.MENU_ABOUT);
         alert.setContentText(message);
         alert.showAndWait();
     }

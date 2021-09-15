@@ -56,52 +56,33 @@ public class ServerController {
     }
 
     public void startClient(String ip, String port) {
-        System.out.println("Try to start Client");
-        System.out.println(ip);
-        System.out.println(port);
         this.serverIpAddress.setValue(ip);
         this.port.setValue(port);
 
         if (clientThread == null) {
-            System.out.println("Start ClientThread");
             clientThread = new ClientThread();
             clientThread.start();
         }
     }
 
     public void startServer(String ip, String port) {
-        System.out.println("Try to start Client");
-        System.out.println(ip);
-        System.out.println(port);
         this.serverIpAddress.setValue(ip);
         this.port.setValue(port);
 
         if (serverThread == null) {
-            System.out.println("Start ClientThread");
             serverThread = new ServerThread();
             serverThread.start();
         }
     }
 
     public void connect() {
-        Ausgabe.print(ServerInterface.CHECK_IF_IP_IS_SET);
-
         if (this.serverIpAddress.getValue().equals("")) {
-            Ausgabe.print(ServerInterface.CHECK_NO_IP_FOUND);
             serverThread = new ServerThread();
             serverThread.start();
             serverThread.setServerMainLoopRunning(true);
-//            serverThread.setWaiting(false);
-
-//            synchronized (serverThread) {
-//                serverThread.notify();
-//            }
-
         } else {
             setConnectionStatus(ServerInterface.SERVER_START);
-            Ausgabe.print(ServerInterface.CHECK_IP_FOUND);
             clientThread = new ClientThread();
-
             clientThread.start();
         }
     }
@@ -110,7 +91,6 @@ public class ServerController {
         if (serverThread != null) {
             setConnectionStatus(ServerInterface.SERVER_CLOSING);
             serverThread.setServerMainLoopRunning(false);
-//        serverThread.setWaiting(true);
             serverThread.closeAll();
             clientThread.closeAll();
 
@@ -140,7 +120,7 @@ public class ServerController {
 
     public void sendString(String affine) {
         if (clientThread != null && ClientThread.getSocket() != null)
-            clientThread.sendeRotation(affine);
+            clientThread.sendeMessage(affine);
     }
 
     public StringProperty getLokaleIpAddress() {

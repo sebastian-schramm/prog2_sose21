@@ -13,8 +13,6 @@ import view.GUICreator;
  */
 public class Main extends Application {
 
-
-
     public static void main(String[] args) {
         launch(args);
     }
@@ -27,7 +25,7 @@ public class Main extends Application {
         stage.show();
 
         stage.setOnCloseRequest(e -> {
-            ServerController.getInstance().close();
+            ServerController.getInstance().disconnect();
         });
     }
 

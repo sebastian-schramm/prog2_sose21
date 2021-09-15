@@ -62,7 +62,6 @@ public class PolyederController {
                         ServerController.getInstance().sendString(ServerInterface.MESSAGE_UPDATE_GUI_ELEMENTS + ServerInterface.MESSAGE_TRENNUNG + file.getName());
 
                         ModelController.getInstance().buildModel();
-                        AlertMessage.showMessage(GUIKonstanten.LOADING_FILE_COMPLETE);
                     });
                 }
             };
@@ -87,9 +86,9 @@ public class PolyederController {
         int faceCnt = 0;
         for (int x = 0; x < polyeder.getTriangleList().size(); x++) {
             for (int y = 0; y < 3; y++) {
-                mesh.getTexCoords().addAll((float) ((polyeder.getTriangleList().get(x).getNormal().getX() + 1) / -2));
-                mesh.getTexCoords().addAll((float) ((polyeder.getTriangleList().get(x).getNormal().getY() + 1) / -2));
-                mesh.getTexCoords().addAll((float) ((polyeder.getTriangleList().get(x).getNormal().getZ() + 1) / -2));
+                mesh.getTexCoords().addAll((float) polyeder.getTriangleList().get(x).getNormal().getX());
+                mesh.getTexCoords().addAll((float) polyeder.getTriangleList().get(x).getNormal().getY());
+                mesh.getTexCoords().addAll((float) polyeder.getTriangleList().get(x).getNormal().getZ());
             }
 
             for (int y = 0; y < 3; y++) {

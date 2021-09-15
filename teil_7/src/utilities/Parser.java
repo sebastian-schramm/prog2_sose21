@@ -1,6 +1,7 @@
 package utilities;
 
 import controller.PolyederController;
+import javafx.application.Platform;
 import model.Vertex;
 import model.interfaces.AllgemeineKonstanten;
 import model.interfaces.GUIKonstanten;
@@ -42,8 +43,6 @@ public class Parser {
             long fileSize = file.length();
             byte[] firstBlock = new byte[80];
 
-            System.out.println("Filesize in Bytes : " + fileSize);
-
             //Liest die ersten 6 Bytes aus der Datei aus
             input.read(firstBlock);
             String block = readBlock(firstBlock);
@@ -51,10 +50,9 @@ public class Parser {
 
             if (block.contains(AllgemeineKonstanten.ASCII_STL_START_LINE)) {
                 input.readLine();
-                System.out.println("Solid am anfang gefunden, könnte ASCII sein!");
                 line = input.readLine();
                 if (line.toLowerCase().startsWith(AllgemeineKonstanten.ASCII_TRIANGLE_PATTERN[0]))
-                    System.out.println("Startet nicht mit facet");
+                    throw new Exception(StringKonstanten_DE.FILE_FIRST_LINE_NOT_VALID);
 
                 long lineCount = getLineCount(file);
                 triangleNumber = (int) ((lineCount - 2) / 7);
@@ -66,7 +64,6 @@ public class Parser {
                 PolyederController.getInstance().getPolyeder().initTriangleList(triangleNumber);
                 readASCIIFile(file);
             } else {
-                System.out.println("Kein Solid am anfang gefunden, könnte Binary sein!");
                 triangleNumber = Integer.reverseBytes(input.readInt());
                 PolyederController.getInstance().getTriangleAmountProperty().setValue(triangleNumber);
 
@@ -76,7 +73,7 @@ public class Parser {
                 PolyederController.getInstance().getPolyeder().initTriangleList(triangleNumber);
                 readBinaryFile(file);
             }
-            System.out.println(triangleNumber + " Dreiecke gefunden");
+            AlertMessage.showMessage(GUIKonstanten.LOADING_FILE_COMPLETE);
 
             return;
         } catch (FileNotFoundException e) {
@@ -84,7 +81,7 @@ public class Parser {
         } catch (IOException e) {
             AlertMessage.showMessage(GUIKonstanten.LOADING_FILE_FAILED);
         } catch (Exception e) {
-            e.printStackTrace();
+            AlertMessage.showMessage(GUIKonstanten.LOADING_FILE_FAILED);
         }
 
         PolyederController.getInstance().getPolyeder().initTriangleList(triangleNumber);
@@ -201,8 +198,8 @@ public class Parser {
     private static Vertex getVertex(String value) {
         index = new int[2];
         counter = 0;
-        for (int i = 0; i < value.length(); ++i)
-            if (Character.isWhitespace(value.charAt(i)))
+        for (int i = 0; i < value.length() && counter < index.length; ++i)
+            if (Character.isWhitespace(value.charAt(i)) && !(Character.isWhitespace(value.charAt(i + 1))))
                 index[counter++] = i;
 
         return new Vertex((float) Double.parseDouble(value.substring(0, index[0])), (float) Double.parseDouble(value.substring(index[0] + 1, index[1])), (float) Double.parseDouble(value.substring(index[1] + 1)));

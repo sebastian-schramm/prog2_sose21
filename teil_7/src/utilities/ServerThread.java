@@ -6,6 +6,7 @@ import controller.ServerController;
 import javafx.application.Platform;
 import model.Triangle;
 import model.interfaces.ServerInterface;
+import view.AlertMessage;
 import view.Ausgabe;
 
 import java.io.*;
@@ -28,60 +29,44 @@ public class ServerThread extends Thread {
     private Socket client = null;
     private ServerSocket server = null;
 
-    private BufferedReader inputData;
-    private PrintWriter outputData;
     private ObjectInputStream objectInputStream;
 
     @Override
     public void run() {
-        long counter = 0;
 
         while (serverMainLoopRunning) {
-            Ausgabe.print("Laufen... " + ++counter);
             synchronized (this) {
-//                while (waiting) {
-//                    Ausgabe.print("Wait... " + ++counter);
-//                    try {
-//                        wait();
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
                 if (waiting) {
-//                    server = null;
                     client = null;
 
                     ServerController.getInstance().setConnectionStatus(ServerInterface.SERVER_START);
                     if (server == null)
                         try {
+
                             Ausgabe.print("Starte server...");
                             server = new ServerSocket(Integer.parseInt(ServerController.getInstance().getPort().getValue()));
 
                             ServerController.getInstance().setConnectionStatus(ServerInterface.SERVER_WAIT_FOR_CONNECTION);
-
-                            try {
-                                System.out.println("Warte auf client...");
-                                client = server.accept();
-                                ServerController.getInstance().setConnectionStatus(ServerInterface.SERVER_CONNECTION_DETECTED);
-                            } catch (IOException e) {
-                                Ausgabe.print(ServerInterface.SERVER_ACCEPT_ERROR);
-                                ServerController.getInstance().setConnectionStatus(ServerInterface.SERVER_CONNECTION_FAILED);
-                            }
-                            System.out.println("Client verbunden...");
 
                         } catch (IOException e) {
                             Ausgabe.print(ServerInterface.SERVER_INIT_ERROR);
                             ServerController.getInstance().setConnectionStatus(ServerInterface.SERVER_PORT_ALREADY_USED);
                         }
 
+                    try {
+                        System.out.println("Warte auf client...");
+                        client = server.accept();
+                        ServerController.getInstance().setConnectionStatus(ServerInterface.SERVER_CONNECTION_DETECTED);
+                    } catch (IOException e) {
+                        Ausgabe.print(ServerInterface.SERVER_ACCEPT_ERROR);
+                        ServerController.getInstance().setConnectionStatus(ServerInterface.SERVER_CONNECTION_FAILED);
+                    }
+                    System.out.println("Client verbunden...");
+
                     startObjectListener();
-
-
-                    Ausgabe.print("... Ende");
                 }
             }
         }
-        System.out.println("ende loop");
     }
 
     private void startObjectListener() {
@@ -93,12 +78,10 @@ public class ServerThread extends Thread {
                     while ((object = objectInputStream.readObject()) != null) {
                         if (object.getClass().isInstance(new String())) {
                             String zeile = (String) object;
-                            Ausgabe.print(zeile);
                             String[] lines = zeile.split(ServerInterface.MESSAGE_TRENNUNG);
                             switch (lines[0]) {
                                 case ServerInterface.MESSAGE_EXIT:
                                     ServerController.getInstance().disconnect();
-                                    Ausgabe.print("Server wird geschlossen, Verbindung getrennt");
                                     break;
                                 case ServerInterface.MESSAGE_START_CLIENT:
                                     ServerController.getInstance().startClient(lines[1], lines[2]);
@@ -126,16 +109,15 @@ public class ServerThread extends Thread {
                         try {
                             objectInputStream = new ObjectInputStream(client.getInputStream());
                         } catch (SocketException e) {
-                            Ausgabe.print("Verbindung abgebrochen");
+                            Platform.runLater(() -> {
+                                AlertMessage.errorMessage(ServerInterface.CONNECTION_CLOSED, ServerInterface.CONNECTION_CLOSED_BY_CLIENT);
+                            });
                             break;
                         }
                     }
                 } catch (ClassNotFoundException e) {
-                    Ausgabe.print("classnotfoundexception");
                 }
             } catch (IOException e) {
-                Ausgabe.print("IOException in ServerThread");
-                e.printStackTrace();
             }
         }
     }
@@ -169,15 +151,5 @@ public class ServerThread extends Thread {
             } catch (IOException e) {
                 Ausgabe.print(ServerInterface.SERVER_CLIENT_COULD_NOT_CLOSE);
             }
-        if (inputData != null) {
-            try {
-                inputData.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        if (outputData != null) {
-            outputData.close();
-        }
     }
 }

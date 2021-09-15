@@ -2,6 +2,7 @@ package controller;
 
 import javafx.scene.layout.StackPane;
 import javafx.scene.transform.Rotate;
+import model.interfaces.ModelInterface;
 import model.interfaces.ServerInterface;
 /**
  * MouseController Class of the STL-Viewer
@@ -16,14 +17,27 @@ public class MouseController {
     private double mouseDeltaX, mouseDeltaY;
     private long nanoSec = System.currentTimeMillis();
 
+    /**
+     * Privater Konstruktor der MouseController Klasse, um diese Controller Klasse als Singelton zu realisieren.
+     * */
     private MouseController() {
 
     }
 
+    /**
+     * Die getInstance() Methode gibt eine Instanz der MouseController Klasse zurueck.
+     *
+     * @return Instanz wird zurueckgegeben.
+     * */
     public static MouseController getInstance() {
         return MouseControllerHolder.INSTANCE;
     }
 
+    /**
+     * Die handleMouseEvents() Methode verwaltet die Events, die gefeuert werden wenn man in der GUI die Maus verwendet.
+     *
+     * @param scene Ist das GUI Element in der die Mouse Events abfeuert.
+     * */
     public void handleMouseEvents(StackPane scene) {
 
         scene.setOnMousePressed(me -> {
@@ -41,8 +55,20 @@ public class MouseController {
             mouseDeltaX = (mousePosX - mouseOldX);
             mouseDeltaY = (mousePosY - mouseOldY);
 
+            if (me.isShiftDown() && me.isControlDown())
+                ;
+            else if (me.isShiftDown()) {
+                mouseDeltaX *= ModelInterface.SHIFT_MULTIPLIER;
+                mouseDeltaY *= ModelInterface.SHIFT_MULTIPLIER;
+            } else if (me.isControlDown()) {
+                mouseDeltaX *= ModelInterface.CONTROL_MULTIPLIER;
+                mouseDeltaY *= ModelInterface.CONTROL_MULTIPLIER;
+            }
+
             if (me.isPrimaryButtonDown()) {
-                ModelController.getInstance().rotateWorld(mouseDeltaX, mouseDeltaY);
+                ModelController.getInstance().rotateWorld(Rotate.X_AXIS, mouseDeltaY * ModelInterface.MOUSE_SPEED * ModelInterface.ROTATION_SPEED);
+                ModelController.getInstance().rotateWorld(Rotate.Y_AXIS, mouseDeltaX * ModelInterface.MOUSE_SPEED * ModelInterface.ROTATION_SPEED);
+
                 if (nanoSec + ServerInterface.MESSAGE_MILLIS_WAIT < System.currentTimeMillis()) {
                     ServerController.getInstance().sendString(ServerInterface.MESSAGE_SET_ON_MOUSE_DRAGGED + ServerInterface.MESSAGE_TRENNUNG + ModelController.getInstance().getAffineToString());
                     nanoSec = System.currentTimeMillis();
@@ -66,7 +92,14 @@ public class MouseController {
         });
 
         scene.setOnScroll(me -> {
-            ModelController.getInstance().zoomCamera(me.getDeltaY());
+            if (me.isShiftDown() && me.isControlDown())
+                ModelController.getInstance().zoomCamera(me.getDeltaY());
+            else if (me.isShiftDown()) {
+                ModelController.getInstance().zoomCamera(me.getDeltaY() * ModelInterface.SHIFT_MULTIPLIER);
+            } else if (me.isControlDown()) {
+                ModelController.getInstance().zoomCamera(me.getDeltaY() * ModelInterface.CONTROL_MULTIPLIER);
+            } else
+                ModelController.getInstance().zoomCamera(me.getDeltaY());
         });
 
         scene.setOnMouseReleased(mouseEvent -> {
@@ -74,6 +107,9 @@ public class MouseController {
         });
     }
 
+    /**
+     * Private Klasse MouseControllerHolder, die die Instanz der MouseController Klasse erstellt.
+     **/
     private static class MouseControllerHolder {
 
         private static final MouseController INSTANCE = new MouseController();
